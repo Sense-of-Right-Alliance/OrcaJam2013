@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Islander.Objects
 {
-    class Island
+    class Island : Entity
     {
         public enum Colour
         {

@@ -35,7 +35,7 @@ namespace Islander.Objects
         public void Initialize(Player[] players, Island.Colour colour)
         {
             Players = players;
-            Boat = new Boat();
+            //Boat = new Boat();
         }
 
         public virtual void HandleInput()

@@ -5,8 +5,7 @@ using System.Text;
 
 namespace Islander.Objects
 {
-    class Bullet : Entity
+    class PowerUp : Entity
     {
-
     }
 }
