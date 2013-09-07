@@ -10,7 +10,7 @@ namespace Islander.Entity
     class Entity
     {
         protected Texture2D sprite;
-        protected Vector2 position;
+        public Vector2 position;
 
         public Entity(Texture2D sprite)
         {

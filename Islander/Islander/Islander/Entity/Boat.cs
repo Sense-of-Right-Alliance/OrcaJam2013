@@ -25,7 +25,7 @@ namespace Islander.Entity
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
-        public static Boat FromColour(Colour colour, ContentManager content)
+        public static Boat InitializeFromColour(Colour colour, ContentManager content)
         {
             // retrieve texture name matching specified colour
             string textureName = "";
