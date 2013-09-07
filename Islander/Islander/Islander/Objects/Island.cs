@@ -7,5 +7,14 @@ namespace Islander.Objects
 {
     class Island
     {
+        public enum Colour
+        {
+            Blue,
+            Yellow,
+            Red,
+            Green
+        }
+
+        public Colour Colour { get; protected set; }
     }
 }
