@@ -28,6 +28,8 @@ namespace Islander
             SkipToNextScreen
         }
 
+        private const float BULLET_SPEED = 30;
+
         public Colour Colour { get; protected set; }
         public PlayerIndex PlayerIndex { get; protected set; }
 
@@ -37,6 +39,8 @@ namespace Islander
         public Island Island { get; protected set; }
 
         public Player[] Players { get; set; }
+        public List<Bullet> bullets { get; set; }
+        Texture2D bulletSprite;
 
         protected ContentManager content;
 
@@ -44,6 +48,26 @@ namespace Islander
         {
             PlayerIndex = playerIndex;
             this.content = content;
+            //Creates the list of bullets
+            bullets = new List<Bullet>();
+            //Bullet load
+            String bulletFilename = "Default";
+            switch (Colour)
+            {
+                case Colour.Blue:
+                    bulletFilename += "Blue";
+                    break;
+                case Colour.Yellow:
+                    bulletFilename += "Yellow";
+                    break;
+                case Colour.Red:
+                    bulletFilename += "Red";
+                    break;
+                case Colour.Green:
+                    bulletFilename += "Green";
+                    break;
+            }
+            bulletSprite = content.Load<Texture2D>("Bullets/" + bulletFilename);
             Players = null;
         }
 
@@ -86,9 +110,20 @@ namespace Islander
                     Message = InputMessage.SkipToNextScreen;
                 else if (gameState == Islander.GameState.RunningGame)
                 {
+                    if (gamePadState.ThumbSticks.Right.Length() >= 0.5f)
+                        ShootBullet(gamePadState.ThumbSticks.Right);
+
+
                     Boat.HandleInput(gamePadState.ThumbSticks.Left, gamePadState.ThumbSticks.Right);
                 }
             }
+        }
+
+        private void ShootBullet(Vector2 direction)
+        {
+            direction.Normalize();
+            bullets.Add(new Bullet(bulletSprite, direction, BULLET_SPEED));
+            
         }
 
         public virtual void Update(GameTime gameTime, Islander.GameState gameState)

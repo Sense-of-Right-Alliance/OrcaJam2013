@@ -88,6 +88,11 @@ namespace Islander.Screen
             {
                 player.Island.Draw(spriteBatch);
                 player.Boat.Draw(spriteBatch);
+                //DrawBullets tells the player to 
+                foreach (var bullet in player.bullets)
+                {
+                    bullet.Draw(spriteBatch);
+                }
             }
         }
     }
