@@ -11,18 +11,19 @@ namespace Islander.Screen
     {
         public enum State
         {
-            None,
+            Uninitialized,
+            Initialized,
             Running,
             Finished
         }
 
+        public State CurrentState { get; private set; }
 
         protected Texture2D background;
-        protected ContentManager Content;
-        protected SpriteBatch SpriteBatch;
-        protected int Width;
-        protected int Height;
-        bool initialized = false;
+        protected ContentManager content;
+        protected SpriteBatch spriteBatch;
+        protected int width;
+        protected int height;
 
         public BaseScreen()
         {
@@ -31,13 +32,14 @@ namespace Islander.Screen
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch, int width, int height)
         {
-            initialized = true;
-            Content = content;
-            SpriteBatch = spriteBatch;
-            Width = width;
-            Height = height;
+            this.content = content;
+            this.spriteBatch = spriteBatch;
+            this.width = width;
+            this.height = height;
 
             LoadContent();
+
+            CurrentState = State.Initialized;
         }
 
         protected virtual void LoadContent()
