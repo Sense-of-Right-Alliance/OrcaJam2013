@@ -86,10 +86,20 @@ namespace Islander.Objects
 
         public void HandleShoot(Vector2 right)
         {
+            double x = right.X;
+            double y = right.Y;
 
+            double mag = Math.Sqrt((Math.Pow(x,2.0) + Math.Pow(y,2.0)));
+            if (mag > 0.5)
+            {
+                ShootBullet(right);
+            }
         }
 
+        private void ShootBullet(Vector2 dir)
+        {
 
+        }
 
         /*public void HandleInput(InputState input, int index)
         {
