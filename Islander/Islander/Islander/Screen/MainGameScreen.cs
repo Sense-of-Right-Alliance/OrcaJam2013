@@ -37,7 +37,7 @@ namespace Islander.Screen
                 Vector2 islandVector = new Vector2();
                 switch (player.Colour)
                 {
-                    //TODO: Place boats and cities where they belong
+                    //Places boats and cities in positions matching an xbox controller
                     
                     case (Colour.Blue):
                         islandVector.X = width / 4;
@@ -56,7 +56,7 @@ namespace Islander.Screen
                         break;
                     case (Colour.Yellow):
                         islandVector.X = width / 2;
-                        islandVector.Y = width / 4;
+                        islandVector.Y = height / 4;
                         player.Boat.position.Y = islandVector.Y + 75;
                         break;
                 }
