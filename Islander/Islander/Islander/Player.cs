@@ -36,7 +36,8 @@ namespace Islander
         public Boat Boat { get; protected set; }
         public Island Island { get; protected set; }
 
-        public Player[] Players { get; set; }
+        public Player[] PlayersByColour { get; set; }
+        public bool[] HostileToPlayer { get; protected set; }
 
         protected ContentManager content;
 
@@ -44,7 +45,8 @@ namespace Islander
         {
             PlayerIndex = playerIndex;
             this.content = content;
-            Players = null;
+            PlayersByColour = null;
+            HostileToPlayer = null;
         }
 
         public void SetGameColour(Colour colour)
@@ -52,6 +54,10 @@ namespace Islander
             Colour = colour;
             Boat = Boat.InitializeFromColour(colour, content);
             Island = Island.InitializeFromColour(colour, content);
+
+            // initially hostile to all players except self
+            HostileToPlayer = new bool[] { true, true, true, true };
+            HostileToPlayer[(int)Colour] = false;
         }
 
         public virtual void HandleInput(Islander.GameState gameState)

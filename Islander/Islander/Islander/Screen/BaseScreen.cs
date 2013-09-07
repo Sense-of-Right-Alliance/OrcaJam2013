@@ -19,6 +19,7 @@ namespace Islander.Screen
             Finished
         }
         public ScreenState CurrentState { get; protected set; }
+        public Player[] PlayersByColour { get; set; }
 
         protected Texture2D background;
         protected ContentManager content;
@@ -34,7 +35,6 @@ namespace Islander.Screen
             CurrentState = ScreenState.Uninitialized;
         }
 
-        // 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch, int width, int height, List<Player> players)
         {
             this.content = content;
@@ -42,6 +42,8 @@ namespace Islander.Screen
             this.width = width;
             this.height = height;
             this.players = players;
+
+            PlayersByColour = null;
 
             LoadContent();
         }

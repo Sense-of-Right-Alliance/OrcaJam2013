@@ -23,9 +23,14 @@ namespace Islander.Entity
             scale = new Vector2(1.0f);
         }
 
+        public bool CollidesWith(Entity otherEntity)
+        {
+            return HitBox().Intersects(otherEntity.HitBox());
+        }
+
         public Rectangle HitBox()
         {
-            return new Rectangle((int)position.X - sprite.Width/2, (int)position.Y - sprite.Height/2, sprite.Width, sprite.Height);
+            return new Rectangle((int)(position.X - sprite.Width * scale.X / 2), (int)(position.Y - sprite.Height * scale.Y / 2), (int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
         }
 
         public Rectangle DrawRect()

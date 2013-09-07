@@ -8,13 +8,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Screen
 {
+    using Entity;
+
     class MainGameScreen : BaseScreen
     {
+        protected List<Boat> boats;
+        protected List<Island> islands;
+        protected List<Resource> droppedResources;
+        protected new Dictionary<Colour, List<Bullet>> bulletLists;
+
         public MainGameScreen()
         {
             /*This line should be unnecessary, because All of the screens are created in Islander.Initialize*/
             gameState = Islander.GameState.RunningGame;
-      
         }
 
         protected override void LoadContent()
@@ -29,6 +35,18 @@ namespace Islander.Screen
         {
             base.StartRunning();
             PositionPlayers();
+
+            // initialize collections of boats, islands, bullets
+            boats = new List<Boat>();
+            islands = new List<Island>();
+            bulletLists = new Dictionary<Colour, List<Bullet>>();
+            droppedResources = new List<Resource>();
+            foreach (var player in players)
+            {
+                boats.Add(player.Boat);
+                islands.Add(player.Island);
+                bulletLists.Add(player.Bullets);
+            }
         }
 
         private void PositionPlayers()
@@ -73,9 +91,62 @@ namespace Islander.Screen
             if (timeElapsed.TotalSeconds > 0.25)
                 base.HandleInput();
 
+            CheckCollisions();
+
             // pass Update to players
             foreach (var player in players)
                 player.Update(gameTime, gameState);
+        }
+
+        // checks entities for collisions with other entities
+        protected void CheckCollisions()
+        {
+            CheckBoatCollisions();
+
+            CheckBulletCollisions();
+        }
+
+        // check each boat for collisions with islands and resources
+        protected void CheckBoatCollisions()
+        {
+            foreach (var boat in boats)
+            {
+                foreach (var island in islands)
+                    if (boat.CollidesWith(island))
+                        BoatIslandCollision(boat, island);
+                foreach (var resource in droppedResources)
+                    if (boat.CollidesWith(resource))
+                        BoatResourceCollision(boat, resource);
+            }
+        }
+
+        // check each bullet for collisions with boats
+        protected void CheckBulletCollisions()
+        {
+            foreach (var colourBulletList in bulletLists)
+            {
+                //foreach (var boat in boats)
+                //    if (colourBulletList.Key
+                //    foreach (var colourBulletList in bulletList)
+                //        if (PlayersByColour[colourBulletList
+                //        if (bullet.CollidesWith(boat))
+                //            BulletBoatCollision(bullet, boat);
+            }
+        }
+
+        protected void BoatIslandCollision(Boat boat, Island island)
+        {
+            // TODO
+        }
+
+        protected void BoatResourceCollision(Boat boat, Resource resource)
+        {
+            // TODO
+        }
+
+        protected void BulletBoatCollision(Bullet bullet, Boat boat)
+        {
+            // TODO
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)

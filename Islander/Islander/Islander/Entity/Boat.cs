@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input;
 
 /* score from bringing artifacts to base, not being hostile hostile to player for 10 seconds, lose points when cargo is dropped */
 
-
 namespace Islander.Entity
 {
     class Boat : Entity
@@ -23,10 +22,13 @@ namespace Islander.Entity
         private Vector2 acceleration;
         private Vector2 dir = Vector2.Zero;
 
+        public Resource CarriedResource { get; set; }
+
         public Boat(Texture2D sprite, Colour colour) : base(sprite)
         {
             Colour = colour;
             scale = new Vector2(0.5f);
+            CarriedResource = null;
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager

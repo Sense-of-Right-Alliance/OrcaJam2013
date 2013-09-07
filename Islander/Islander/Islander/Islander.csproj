@@ -112,6 +112,7 @@
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\Island.cs" />
     <Compile Include="Entity\PowerUp.cs" />
+    <Compile Include="Entity\Resource.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

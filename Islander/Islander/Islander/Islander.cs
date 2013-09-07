@@ -177,9 +177,10 @@ namespace Islander
                 playersByColour[order].SetGameColour((Colour)order);
             }
 
-            // provide each player with a means to reference the other players by colour
+            // provide each player and the game screen with a means to reference the other players by colour
             foreach (var player in players)
-                player.Players = playersByColour;
+                player.PlayersByColour = playersByColour;
+            currentScreen.PlayersByColour = playersByColour;
         }
 
         /// <summary>
