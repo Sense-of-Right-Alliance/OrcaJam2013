@@ -69,9 +69,7 @@ namespace Islander.Screen
 
         public virtual void Update(GameTime gameTime)
         {
-<<<<<<< HEAD
             HandleInput();
-=======
             timeElapsed += gameTime.ElapsedGameTime;
 
             if (timeElapsed.TotalSeconds > 0.25) // don't respond to input for first quarter second after creation
@@ -80,7 +78,6 @@ namespace Islander.Screen
             // pass Update to players
             foreach (var player in players)
                 player.Update(gameTime, gameState);
->>>>>>> f3bfaac79a95fbbec6d1ccac5a43a4064a9b4ab5
         }
 
         public virtual void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
