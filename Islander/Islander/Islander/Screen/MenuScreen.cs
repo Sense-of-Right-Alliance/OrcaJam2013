@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Islander.Screen
 {
@@ -33,6 +34,12 @@ namespace Islander.Screen
         {
             Vector2 textDimensions = font.MeasureString(text);
             spriteBatch.DrawString(font, text, new Vector2(width/2 - textDimensions.X, height/2 - textDimensions.Y), Color.White);
+        }
+
+        protected override void HandleInput()
+        {
+            if(Keyboard.GetState().IsKeyDown(Keys.Enter))
+                CurrentState = State.Finished;
         }
 
     }
