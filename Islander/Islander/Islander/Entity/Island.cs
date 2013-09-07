@@ -39,6 +39,7 @@ namespace Islander.Entity
         public Island(Texture2D sprite, Colour colour) : base(sprite)
         {
             Colour = colour;
+            scale = new Vector2(0.5f);
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -66,7 +67,7 @@ namespace Islander.Entity
 
             // load the texture specified from a folder named Islands
             Texture2D sprite = content.Load<Texture2D>("Islands/" + textureName);
-
+            
             Debug.WriteLine("Island Content Loaded: " + textureName);
 
             // create a new entity using the loaded sprite

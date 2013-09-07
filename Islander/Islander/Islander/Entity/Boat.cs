@@ -26,6 +26,7 @@ namespace Islander.Entity
         public Boat(Texture2D sprite, Colour colour) : base(sprite)
         {
             Colour = colour;
+            scale = new Vector2(0.5f);
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -60,7 +61,6 @@ namespace Islander.Entity
         {
             base.Update(gameTime);
 
-
             position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (VectorMagnitude(velocity) > 0)
@@ -78,17 +78,14 @@ namespace Islander.Entity
                 velocity += acceleration;
             else
             {
-
                 velocity -= 1 * dir;
             }
-
 
             rotation = GetRotation();
         }
 
         private float GetRotation()
         {
-
             Vector2 up = new Vector2(0.0f, -1.0f);
             up.Normalize();
 
@@ -127,11 +124,11 @@ namespace Islander.Entity
             }
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                moveDir.Y -= 1.0f;
+                moveDir.Y += 1.0f;
             }
             if (keyboardState.IsKeyDown(Keys.S))
             {
-                moveDir.Y += 1.0f;
+                moveDir.Y -= 1.0f;
             }
             
             if (keyboardState.IsKeyDown(Keys.Left))
