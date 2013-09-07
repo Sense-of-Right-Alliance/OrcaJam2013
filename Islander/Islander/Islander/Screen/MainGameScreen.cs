@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Screen
 {
-    class MainMenuScreen : MenuScreen
+    class MainGameScreen : BaseScreen
     {
-        public MainMenuScreen()
+        public MainGameScreen()
         {
-            gameState = Islander.GameState.OnMainMenu;
+            gameState = Islander.GameState.RunningGame;
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
         {
-            base.Draw(gameTime, GraphicsDevice);
+            GraphicsDevice.Clear(Color.Wheat);
 
-            DrawString("Start");
+            base.Draw(gameTime, GraphicsDevice);
         }
     }
 }
