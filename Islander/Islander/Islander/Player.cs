@@ -100,6 +100,9 @@ namespace Islander
             }
         }
 
+        /*TODO:Should this need the gamestate? I think the only time draw is getting calle on Players should be explicitly 
+         * in MainGameScreen, which is only ever in the running state.
+        */
         public virtual void Draw(GameTime gameTime, Islander.GameState gameState, SpriteBatch spriteBatch)
         {
             if (gameState == Islander.GameState.RunningGame)
