@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Screen
 {
+    /*THIS IS BASE SCREEN*/
     class BaseScreen
     {
         public enum ScreenState
@@ -69,7 +70,6 @@ namespace Islander.Screen
 
         public virtual void Update(GameTime gameTime)
         {
-            HandleInput();
             timeElapsed += gameTime.ElapsedGameTime;
 
             if (timeElapsed.TotalSeconds > 0.25) // don't respond to input for first quarter second after creation
