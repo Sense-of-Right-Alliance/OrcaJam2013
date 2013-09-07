@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,6 +11,7 @@ namespace Islander.Entity
     class Entity
     {
         protected Texture2D sprite;
+
         //Dylbro set this to public to allow the screens to manipulate it. Correct me if I'm wrong.
         public Vector2 position;
 

@@ -50,8 +50,8 @@ namespace Islander
         public void SetGameColour(Colour colour)
         {
             Colour = colour;
-            //Boat = Boat.FromColour(colour, content);
-            //Island = Island.FromColour(colour, content);
+            Boat = Boat.InitializeFromColour(colour, content);
+            Island = Island.InitializeFromColour(colour, content);
         }
 
         public virtual void HandleInput(Islander.GameState gameState)
@@ -77,7 +77,7 @@ namespace Islander
 
             if (!gamePadState.IsConnected)
             {
-                Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
+                //Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
                 return;
             }
             else
@@ -95,8 +95,8 @@ namespace Islander
         {
             if (gameState == Islander.GameState.RunningGame)
             {
-                //Boat.Update(gameTime);
-                //Island.Update(gameTime);
+                Boat.Update(gameTime);
+                Island.Update(gameTime);
             }
         }
 
@@ -107,8 +107,8 @@ namespace Islander
         {
             if (gameState == Islander.GameState.RunningGame)
             {
-                //Boat.Draw(spriteBatch);
-                //Island.Draw(spriteBatch);
+                Boat.Draw(spriteBatch);
+                Island.Draw(spriteBatch);
             }
         }
     }
