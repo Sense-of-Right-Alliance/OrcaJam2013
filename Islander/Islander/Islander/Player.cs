@@ -72,7 +72,7 @@ namespace Islander
             }
             else if (gameState == Islander.GameState.RunningGame)
             {
-                //Boat.HandleInput(keyboardState);
+                Boat.HandleInput(keyboardState);
             }
 
             if (!gamePadState.IsConnected)

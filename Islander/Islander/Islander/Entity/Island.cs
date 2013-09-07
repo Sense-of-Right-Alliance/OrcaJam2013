@@ -66,7 +66,7 @@ namespace Islander.Entity
 
             // load the texture specified from a folder named Islands
             Texture2D sprite = content.Load<Texture2D>("Islands/" + textureName);
-
+            
             Debug.WriteLine("Island Content Loaded: " + textureName);
 
             // create a new entity using the loaded sprite
@@ -76,6 +76,16 @@ namespace Islander.Entity
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Vector2 scale = new Vector2(0.5f, 0.5f);
+            Vector2 drawPosition = new Vector2(position.X - (sprite.Width * scale.X / 2), position.Y - (sprite.Height * scale.Y / 2));
+            Vector2 origin = new Vector2(0, 0);
+            float rotation = 0.0f;
+            float layerDepth = 0.0f;
+            spriteBatch.Draw(sprite, drawPosition, null, Color.White, rotation, origin, scale, SpriteEffects.None, layerDepth);
         }
     }
 }
