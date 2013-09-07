@@ -25,7 +25,7 @@ namespace Islander.Screen
         public override void Draw()
         {
             base.Draw();
-
+            //stupid comment
 
         }
 
