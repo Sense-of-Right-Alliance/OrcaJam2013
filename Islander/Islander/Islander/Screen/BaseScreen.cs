@@ -69,7 +69,6 @@ namespace Islander.Screen
 
         public virtual void Update(GameTime gameTime)
         {
-            HandleInput();
             timeElapsed += gameTime.ElapsedGameTime;
 
             if (timeElapsed.TotalSeconds > 0.25) // don't respond to input for first quarter second after creation
