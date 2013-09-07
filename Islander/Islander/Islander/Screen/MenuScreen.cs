@@ -19,20 +19,20 @@ namespace Islander.Screen
         {
             base.LoadContent();
 
-            font = Content.Load<SpriteFont>("Menu");
+            font = content.Load<SpriteFont>("Menu");
         }
 
         public override void Draw()
         {
             base.Draw();
-
+            //stupid comment
 
         }
 
         protected void DrawString(string text)
         {
             Vector2 textDimensions = font.MeasureString(text);
-            SpriteBatch.DrawString(font, text, new Vector2(Width/2 - textDimensions.X, Height/2 - textDimensions.Y), Color.White);
+            spriteBatch.DrawString(font, text, new Vector2(width/2 - textDimensions.X, height/2 - textDimensions.Y), Color.White);
         }
 
     }

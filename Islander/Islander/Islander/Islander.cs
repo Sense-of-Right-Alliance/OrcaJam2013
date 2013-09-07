@@ -20,13 +20,11 @@ namespace Islander
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-
         Screen.BaseScreen currentScreen;
         Screen.GameScreen gameScreen;
         Screen.MainMenuScreen mainMenuScreen;
         Screen.GameOverScreen gameOverScreen;
         
-
         public Islander()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -88,13 +86,27 @@ namespace Islander
 
             currentScreen.Update();
 
+            CheckForScreenChanges();
+
             base.Update(gameTime);
         }
 
-
-        private void ChangeScreen()
+        private void CheckForScreenChanges()
         {
+            // process screen changes
+            if (currentScreen.CurrentState == Screen.State.Finished)
+            {
+                currentScreen.Reset();
 
+                if (currentScreen == mainMenuScreen)
+                    currentScreen = gameScreen;
+                else if (currentScreen == gameScreen)
+                    currentScreen = gameOverScreen;
+                else if (currentScreen == gameOverScreen)
+                    currentScreen = mainMenuScreen;
+
+                currentScreen.StartRunning();
+            }
         }
 
         /// <summary>
