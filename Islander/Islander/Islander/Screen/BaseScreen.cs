@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Screen
 {
+    /*THIS IS BASE SCREEN*/
     class BaseScreen
     {
         public enum ScreenState
