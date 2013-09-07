@@ -6,8 +6,16 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Islander.Objects
+namespace Islander
 {
+    enum Colour
+    {
+        Blue,
+        Yellow,
+        Red,
+        Green
+    }
+
     class Player
     {
         public enum Message
@@ -16,12 +24,12 @@ namespace Islander.Objects
             Start
         }
 
-        public Island.Colour Colour { get; protected set; }
+        public Colour Colour { get; protected set; }
         public PlayerIndex PlayerIndex { get; protected set; }
-        public Boat Boat { get; protected set; }
+        public Entity.Boat Boat { get; protected set; }
+        public Entity.Island Island { get; protected set; }
 
         protected Player[] Players { get; set; }
-        protected Player[] PlayersByColour { get; protected set; }
 
         public Message CurrentMessage;
 
@@ -29,13 +37,13 @@ namespace Islander.Objects
         {
             PlayerIndex = playerIndex;
             Players = new Player[4];
-            PlayersByColour = new Player[4];
         }
 
-        public void Initialize(Player[] players, Island.Colour colour)
+        public void SetGameColour(Colour colour)
         {
-            Players = players;
-            //Boat = new Boat();
+            Colour = colour;
+            //Boat = new Boat(colour);
+            //Island = new Island(colour);
         }
 
         public virtual void HandleInput()

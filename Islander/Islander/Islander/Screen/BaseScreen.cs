@@ -22,6 +22,7 @@ namespace Islander.Screen
         protected Texture2D background;
         protected ContentManager content;
         protected SpriteBatch spriteBatch;
+        protected List<Player> players;
         protected int width;
         protected int height;
 
@@ -30,10 +31,11 @@ namespace Islander.Screen
             CurrentState = State.Uninitialized;
         }
 
-        public void Initialize(ContentManager content, SpriteBatch spriteBatch, int width, int height)
+        public void Initialize(ContentManager content, SpriteBatch spriteBatch, List<Player> players, int width, int height)
         {
             this.content = content;
             this.spriteBatch = spriteBatch;
+            this.players = players;
             this.width = width;
             this.height = height;
 
