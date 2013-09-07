@@ -7,16 +7,16 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Islander.Screen
 {
+    enum State
+    {
+        Uninitialized,
+        Initialized,
+        Running,
+        Finished
+    }
+
     class BaseScreen
     {
-        public enum State
-        {
-            Uninitialized,
-            Initialized,
-            Running,
-            Finished
-        }
-
         public State CurrentState { get; private set; }
 
         protected Texture2D background;
@@ -27,7 +27,7 @@ namespace Islander.Screen
 
         public BaseScreen()
         {
-
+            CurrentState = State.Uninitialized;
         }
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch, int width, int height)
@@ -39,6 +39,17 @@ namespace Islander.Screen
 
             LoadContent();
 
+            CurrentState = State.Initialized;
+        }
+
+        public void StartRunning()
+        {
+            CurrentState = State.Running;
+        }
+
+        public void Reset()
+        {
+            UnloadContent();
             CurrentState = State.Initialized;
         }
 
@@ -54,7 +65,8 @@ namespace Islander.Screen
 
         public virtual void Update()
         {
-
+            //if done
+            //  CurrentState = State.Finished;
         }
 
         public virtual void Draw()
