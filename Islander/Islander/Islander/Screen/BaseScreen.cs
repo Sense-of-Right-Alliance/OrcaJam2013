@@ -59,5 +59,10 @@ namespace Islander.Screen
         {
 
         }
+
+        protected virtual void HandleInput()
+        {
+
+        }
     }
 }
