@@ -50,8 +50,8 @@ namespace Islander
         public void SetGameColour(Colour colour)
         {
             Colour = colour;
-            Boat = Boat.InitializeFromColour(colour, content);
-            Island = Island.InitializeFromColour(colour, content);
+            //Boat = Boat.FromColour(colour, content);
+            //Island = Island.FromColour(colour, content);
         }
 
         public virtual void HandleInput(Islander.GameState gameState)
@@ -77,7 +77,7 @@ namespace Islander
 
             if (!gamePadState.IsConnected)
             {
-                //Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
+                Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
                 return;
             }
             else
@@ -95,20 +95,20 @@ namespace Islander
         {
             if (gameState == Islander.GameState.RunningGame)
             {
-                Boat.Update(gameTime);
-                Island.Update(gameTime);
+                //Boat.Update(gameTime);
+                //Island.Update(gameTime);
             }
         }
 
-        /*TODO:Should this need the gamestate? I think the only time draw is getting calle on Players should be explicitly 
-         * in MainGameScreen, which is only ever in the running state.
+        /*TODO:Should this need the gamestate? I think the only time draw is getting calle on Players should be explicity 
+         * in MainGameScreen
         */
         public virtual void Draw(GameTime gameTime, Islander.GameState gameState, SpriteBatch spriteBatch)
         {
             if (gameState == Islander.GameState.RunningGame)
             {
-                Boat.Draw(spriteBatch);
-                Island.Draw(spriteBatch);
+                //Boat.Draw(spriteBatch);
+                //Island.Draw(spriteBatch);
             }
         }
     }
