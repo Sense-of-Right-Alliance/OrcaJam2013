@@ -111,7 +111,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Islander.cs" />
     <Compile Include="Screen\BaseScreen.cs" />
+    <Compile Include="Screen\GameOverScreen.cs" />
     <Compile Include="Screen\GameScreen.cs" />
+    <Compile Include="Screen\MainMenuScreen.cs" />
     <Compile Include="Screen\MenuScreen.cs" />
   </ItemGroup>
   <ItemGroup>

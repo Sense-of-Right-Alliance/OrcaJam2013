@@ -21,9 +21,10 @@ namespace Islander
         SpriteBatch spriteBatch;
 
 
-        Screen.BaseScreen currentSreen;
+        Screen.BaseScreen currentScreen;
         Screen.GameScreen gameScreen;
-        Screen.MenuScreen mainMenuScreen;
+        Screen.MainMenuScreen mainMenuScreen;
+        Screen.GameOverScreen gameOverScreen;
         
 
         public Islander()
@@ -40,7 +41,9 @@ namespace Islander
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            gameOverScreen = new Screen.GameOverScreen();
+            mainMenuScreen = new Screen.MainMenuScreen();
+            gameScreen = new Screen.GameScreen();
            
             base.Initialize();
         }
@@ -53,6 +56,12 @@ namespace Islander
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            gameOverScreen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height);
+            mainMenuScreen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height);
+            gameScreen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height);
+
+            currentScreen = mainMenuScreen;
 
             // TODO: use this.Content to load your game content here
         }
@@ -77,7 +86,7 @@ namespace Islander
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            currentScreen.Update();
 
             base.Update(gameTime);
         }
@@ -96,7 +105,12 @@ namespace Islander
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            currentScreen.Draw();
+
+            spriteBatch.End();
+
 
             base.Draw(gameTime);
         }

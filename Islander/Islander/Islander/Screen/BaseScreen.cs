@@ -36,6 +36,8 @@ namespace Islander.Screen
             SpriteBatch = spriteBatch;
             Width = width;
             Height = height;
+
+            LoadContent();
         }
 
         protected virtual void LoadContent()
@@ -44,6 +46,11 @@ namespace Islander.Screen
         }
 
         protected virtual void UnloadContent()
+        {
+
+        }
+
+        public virtual void Update()
         {
 
         }
