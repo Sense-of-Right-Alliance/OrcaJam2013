@@ -16,7 +16,7 @@ namespace Islander.Objects
 
         public Entity(Texture2D sprite)
         {
-
+            this.sprite = sprite;
         }
 
         public Rectangle HitBox()
