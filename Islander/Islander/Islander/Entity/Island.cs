@@ -5,10 +5,12 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Islander.Objects
+namespace Islander.Entity
 {
     class Island : Entity
     {
+        public Colour Colour { get; protected set; }
+
         public Island(Texture2D sprite):base(sprite)
         {
 
@@ -18,5 +20,6 @@ namespace Islander.Objects
         {
             base.Update(gameTime);
         }
+
     }
 }
