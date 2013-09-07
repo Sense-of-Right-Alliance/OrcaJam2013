@@ -17,6 +17,7 @@ namespace Islander.Entity
         static List<string> blueIslands = new List<string>()
         {
             "Bubble",
+            "Fantasy",
             // etc.
         };
         static List<string> yellowIslands = new List<string>()
@@ -26,12 +27,12 @@ namespace Islander.Entity
         };
         static List<string> redIslands = new List<string>()
         {
-            "Fantasy",
+            "Trident",
             // etc.
         };
         static List<string> greenIslands = new List<string>()
         {
-            "Trident",
+            "Fantasy", // todo: replace with a real green island
             // etc.
         };
 
