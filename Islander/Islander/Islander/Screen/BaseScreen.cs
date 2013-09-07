@@ -65,8 +65,7 @@ namespace Islander.Screen
 
         public virtual void Update()
         {
-            //if done
-            //  CurrentState = State.Finished;
+            HandleInput();
         }
 
         public virtual void Draw()
