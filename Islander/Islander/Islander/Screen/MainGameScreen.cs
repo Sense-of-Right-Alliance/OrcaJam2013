@@ -13,8 +13,15 @@ namespace Islander.Screen
         public MainGameScreen()
         {
             /*This line should be unnecessary, because All of the screens are created in Islander.Initialize*/
-            //gameState = Islander.GameState.RunningGame;
+            gameState = Islander.GameState.RunningGame;
       
+        }
+
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+
+            background = content.Load<Texture2D>("Background");
         }
         
         public void StartGame()
@@ -71,12 +78,15 @@ namespace Islander.Screen
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
         {
             GraphicsDevice.Clear(Color.Wheat);
-            foreach (var player in players)
+
+            base.Draw(gameTime, GraphicsDevice);
+
+            /*foreach (var player in players)
             {
                 player.Draw(gameTime,gameState,spriteBatch);
-            }
+            }*/
            
-            base.Draw(gameTime, GraphicsDevice);
+            
         }
     }
 }
