@@ -11,8 +11,6 @@ namespace Islander.Entity
     {
         protected Texture2D sprite;
         protected Vector2 position;
-        protected int width;
-        protected int height;
 
         public Entity(Texture2D sprite)
         {
@@ -21,7 +19,7 @@ namespace Islander.Entity
 
         public Rectangle HitBox()
         {
-            return new Rectangle((int)position.X, (int)position.Y, width, height);
+            return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
         }
 
         public virtual void Update(GameTime gameTime)
