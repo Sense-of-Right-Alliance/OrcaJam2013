@@ -14,7 +14,7 @@ namespace Islander.Objects
         protected int width;
         protected int height;
 
-        public Entity()
+        public Entity(Texture2D sprite)
         {
 
         }
