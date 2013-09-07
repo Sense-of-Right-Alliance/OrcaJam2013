@@ -47,7 +47,7 @@ namespace Islander.Screen
         }
 
         // informs the screen that it is about to be displayed
-        public void StartRunning()
+        public virtual void StartRunning()
         {
             timeElapsed = TimeSpan.Zero;
         }
@@ -84,10 +84,6 @@ namespace Islander.Screen
         {
             if (background != null)
                 spriteBatch.Draw(background, new Rectangle(0, 0, width, height), Color.White);
-
-            // pass Draw to players
-            foreach (var player in players)
-                player.Draw(gameTime, gameState, spriteBatch);
         }
 
         protected virtual void HandleInput()
