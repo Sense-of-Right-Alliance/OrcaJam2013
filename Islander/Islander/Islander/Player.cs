@@ -50,8 +50,8 @@ namespace Islander
         public void SetGameColour(Colour colour)
         {
             Colour = colour;
-            //Boat = Boat.FromColour(colour, content);
-            //Island = Island.FromColour(colour, content);
+            Boat = Boat.InitializeFromColour(colour, content);
+            Island = Island.InitializeFromColour(colour, content);
         }
 
         public virtual void HandleInput(Islander.GameState gameState)
@@ -95,8 +95,8 @@ namespace Islander
         {
             if (gameState == Islander.GameState.RunningGame)
             {
-                //Boat.Update(gameTime);
-                //Island.Update(gameTime);
+                Boat.Update(gameTime);
+                Island.Update(gameTime);
             }
         }
 

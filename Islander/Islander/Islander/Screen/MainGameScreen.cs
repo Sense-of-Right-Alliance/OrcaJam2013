@@ -34,7 +34,7 @@ namespace Islander.Screen
         {
             foreach (var player in players)
             {
-                Vector2 islandVector = new Vector2();
+                Vector2 islandVector = new Vector2(0.0f,0.0f);
                 switch (player.Colour)
                 {
                     //Places boats and cities in positions matching an xbox controller
