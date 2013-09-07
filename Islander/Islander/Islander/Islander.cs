@@ -40,6 +40,10 @@ namespace Islander
         public Islander()
         {
             graphics = new GraphicsDeviceManager(this);
+
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
+
             Content.RootDirectory = "Content";
             SetGameState(GameState.Uninitialized);
         }
