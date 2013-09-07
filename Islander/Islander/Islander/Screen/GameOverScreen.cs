@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Screen
 {
     class GameOverScreen : MenuScreen
     {
-
-        public override void Draw()
+        public GameOverScreen()
         {
-            base.Draw();
+            gameState = Islander.GameState.OnGameOver;
+        }
+
+        public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
+        {
+            base.Draw(gameTime, GraphicsDevice);
 
             DrawString("Game Over");
         }

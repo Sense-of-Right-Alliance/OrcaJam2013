@@ -9,29 +9,39 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-
 namespace Islander
 {
+    using Screen;
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class Islander : Microsoft.Xna.Framework.Game
     {
+        public enum GameState
+        {
+            Uninitialized,
+            OnMainMenu,
+            RunningGame,
+            OnGameOver
+        }
+        GameState currentState;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         List<Player> players;
 
-        Screen.BaseScreen currentScreen;
-
-        Screen.GameScreen gameScreen;
-        Screen.MainMenuScreen mainMenuScreen;
-        Screen.GameOverScreen gameOverScreen;
-        List<Screen.BaseScreen> screens;
+        BaseScreen currentScreen;
+        MainMenuScreen mainMenuScreen;
+        MainGameScreen mainGameScreen;
+        GameOverScreen gameOverScreen;
+        Dictionary<GameState, BaseScreen> screens;
         
         public Islander()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            SetGameState(GameState.Uninitialized);
         }
 
         /// <summary>
@@ -42,25 +52,26 @@ namespace Islander
         /// </summary>
         protected override void Initialize()
         {
+            // collection of players
             players = new List<Player>()
             {
-                new Player(PlayerIndex.One),
-                new Player(PlayerIndex.Two),
-                new Player(PlayerIndex.Three),
-                new Player(PlayerIndex.Four)
+                new Player(PlayerIndex.One, Content),
+                new Player(PlayerIndex.Two, Content),
+                new Player(PlayerIndex.Three, Content),
+                new Player(PlayerIndex.Four, Content)
             };
 
-            gameOverScreen = new Screen.GameOverScreen();
-            mainMenuScreen = new Screen.MainMenuScreen();
-            gameScreen = new Screen.GameScreen();
-
-            screens = new List<Screen.BaseScreen>()
+            // collection of screens
+            mainMenuScreen = new MainMenuScreen();
+            mainGameScreen = new MainGameScreen();
+            gameOverScreen = new GameOverScreen();
+            screens = new Dictionary<GameState, BaseScreen>()
             {
-                gameOverScreen,
-                mainMenuScreen,
-                gameScreen
+                {GameState.OnMainMenu, mainMenuScreen},
+                {GameState.RunningGame, mainGameScreen},
+                {GameState.OnGameOver, gameOverScreen}
             };
-           
+            
             base.Initialize();
         }
 
@@ -74,12 +85,12 @@ namespace Islander
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // initialize all screens
-            foreach (Screen.BaseScreen screen in screens)
-                screen.Initialize(Content, spriteBatch, players, Window.ClientBounds.Width, Window.ClientBounds.Height);
-
-            currentScreen = mainMenuScreen;
+            foreach (BaseScreen screen in screens.Values)
+                screen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height, players);
 
             // TODO: use this.Content to load your game content here
+            SetGameState(GameState.OnMainMenu);
+            currentScreen.StartRunning();
         }
 
         /// <summary>
@@ -102,29 +113,69 @@ namespace Islander
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            currentScreen.Update();
+            currentScreen.Update(gameTime);
 
             CheckForScreenChanges();
 
             base.Update(gameTime);
         }
 
-        private void CheckForScreenChanges()
+        // checks if the screen's state has changed
+        protected void CheckForScreenChanges()
         {
             // process screen changes
-            if (currentScreen.CurrentState == Screen.State.Finished)
+            if (currentScreen.CurrentState == BaseScreen.ScreenState.Finished)
             {
                 currentScreen.Reset();
 
                 if (currentScreen == mainMenuScreen)
-                    currentScreen = gameScreen;
-                else if (currentScreen == gameScreen)
-                    currentScreen = gameOverScreen;
+                    SetGameState(GameState.RunningGame);
+                else if (currentScreen == mainGameScreen)
+                    SetGameState(GameState.OnGameOver);
                 else if (currentScreen == gameOverScreen)
-                    currentScreen = mainMenuScreen;
-
-                currentScreen.StartRunning();
+                    SetGameState(GameState.OnMainMenu);
             }
+        }
+
+        // changes between game states
+        protected void SetGameState(GameState gameState)
+        {
+            if (gameState == GameState.Uninitialized)
+                currentScreen = null;
+            else
+                currentScreen = screens[gameState];
+
+            if (gameState == GameState.RunningGame)
+            {
+                AssignRandomColoursToPlayers();
+            }
+
+            this.currentState = gameState;
+
+            if (currentScreen != null)
+                currentScreen.StartRunning();
+        }
+
+        protected void AssignRandomColoursToPlayers()
+        {
+            // generate a random ordering of the players
+            var rng = new Random();
+            var ordering = Enumerable.Range(0, players.Count).OrderBy(x => rng.Next()).ToList();
+
+            // create array to index players by their assigned colours
+            Player[] playersByColour = new Player[players.Count];
+
+            // assign player colours according to ordering
+            int index = 0;
+            foreach (var order in ordering)
+            {
+                playersByColour[order] = players[index++];
+                playersByColour[order].SetGameColour((Colour)order);
+            }
+
+            // provide each player with a means to reference the other players by colour
+            foreach (var player in players)
+                player.Players = playersByColour;
         }
 
         /// <summary>
@@ -137,7 +188,7 @@ namespace Islander
 
             spriteBatch.Begin();
 
-            currentScreen.Draw();
+            currentScreen.Draw(gameTime, GraphicsDevice);
 
             spriteBatch.End();
 

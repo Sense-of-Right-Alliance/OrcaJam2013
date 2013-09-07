@@ -2,62 +2,64 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Screen
 {
-    enum State
-    {
-        Uninitialized,
-        Initialized,
-        Running,
-        Finished
-    }
-
     class BaseScreen
     {
-        public State CurrentState { get; protected set; }
+        public enum ScreenState
+        {
+            Uninitialized,
+            Initialized,
+            Running,
+            Finished
+        }
+        public ScreenState CurrentState { get; protected set; }
 
         protected Texture2D background;
         protected ContentManager content;
         protected SpriteBatch spriteBatch;
-        protected List<Player> players;
         protected int width;
         protected int height;
+        protected List<Player> players;
+        protected Islander.GameState gameState;
+        protected TimeSpan timeElapsed;
 
         public BaseScreen()
         {
-            CurrentState = State.Uninitialized;
+            CurrentState = ScreenState.Uninitialized;
         }
 
-        public void Initialize(ContentManager content, SpriteBatch spriteBatch, List<Player> players, int width, int height)
+        // 
+        public void Initialize(ContentManager content, SpriteBatch spriteBatch, int width, int height, List<Player> players)
         {
             this.content = content;
             this.spriteBatch = spriteBatch;
-            this.players = players;
             this.width = width;
             this.height = height;
+            this.players = players;
 
             LoadContent();
-
-            CurrentState = State.Initialized;
         }
 
+        // informs the screen that it is about to be displayed
         public void StartRunning()
         {
-            CurrentState = State.Running;
+            timeElapsed = TimeSpan.Zero;
         }
 
         public void Reset()
         {
             UnloadContent();
-            CurrentState = State.Initialized;
+            LoadContent();
         }
 
         protected virtual void LoadContent()
         {
-
+            CurrentState = ScreenState.Initialized;
         }
 
         protected virtual void UnloadContent()
@@ -65,19 +67,47 @@ namespace Islander.Screen
 
         }
 
-        public virtual void Update()
+        public virtual void Update(GameTime gameTime)
         {
+<<<<<<< HEAD
             HandleInput();
+=======
+            timeElapsed += gameTime.ElapsedGameTime;
+
+            if (timeElapsed.TotalSeconds > 0.25) // don't respond to input for first quarter second after creation
+                HandleInput();
+
+            // pass Update to players
+            foreach (var player in players)
+                player.Update(gameTime, gameState);
+>>>>>>> f3bfaac79a95fbbec6d1ccac5a43a4064a9b4ab5
         }
 
-        public virtual void Draw()
+        public virtual void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
         {
+            if (background != null)
+                spriteBatch.Draw(background, new Rectangle(0, 0, width, height), Color.White);
 
+            // pass Draw to players
+            foreach (var player in players)
+                player.Draw(gameTime, gameState, spriteBatch);
         }
 
         protected virtual void HandleInput()
         {
-            
+            // handle each player's input
+            foreach (var player in players)
+            {
+                player.HandleInput(gameState);
+                
+                // check if the player has any messages to pass on
+                switch (player.Message)
+                {
+                    case Player.InputMessage.SkipToNextScreen:
+                        CurrentState = ScreenState.Finished;
+                        break;
+                }
+            }
         }
     }
 }

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Islander
 {
+    using Entity;
+
     enum Colour
     {
         Blue,
@@ -18,35 +22,39 @@ namespace Islander
 
     class Player
     {
-        public enum Message
+        public enum InputMessage
         {
             NoMessage,
-            Start
+            SkipToNextScreen
         }
 
         public Colour Colour { get; protected set; }
         public PlayerIndex PlayerIndex { get; protected set; }
-        public Entity.Boat Boat { get; protected set; }
-        public Entity.Island Island { get; protected set; }
 
-        protected Player[] Players { get; set; }
+        public InputMessage Message { get; protected set; }
 
-        public Message CurrentMessage;
+        public Boat Boat { get; protected set; }
+        public Island Island { get; protected set; }
 
-        public Player(PlayerIndex playerIndex)
+        public Player[] Players { get; set; }
+
+        protected ContentManager content;
+
+        public Player(PlayerIndex playerIndex, ContentManager content)
         {
             PlayerIndex = playerIndex;
-            Players = new Player[4];
+            this.content = content;
+            Players = null;
         }
 
         public void SetGameColour(Colour colour)
         {
             Colour = colour;
-            //Boat = new Boat(colour);
-            //Island = new Island(colour);
+            //Boat = Boat.FromColour(colour, content);
+            //Island = Island.FromColour(colour, content);
         }
 
-        public virtual void HandleInput()
+        public virtual void HandleInput(Islander.GameState gameState)
         {
             // get the keyboard state
             KeyboardState keyboardState = Keyboard.GetState();
@@ -54,10 +62,17 @@ namespace Islander
             // get the current player's gamepad state
             GamePadState gamePadState = GamePad.GetState(PlayerIndex);
 
-            CurrentMessage = Message.NoMessage;
+            // if no input detected, there is no message to send
+            Message = InputMessage.NoMessage;
+
+
             if (keyboardState.IsKeyDown(Keys.Enter))
             {
-                CurrentMessage = Message.Start;
+                Message = InputMessage.SkipToNextScreen;
+            }
+            else if (gameState == Islander.GameState.RunningGame)
+            {
+                //Boat.HandleInput(keyboardState);
             }
 
             if (!gamePadState.IsConnected)
@@ -68,7 +83,29 @@ namespace Islander
             else
             {
                 if (gamePadState.Buttons.Start == ButtonState.Pressed)
-                    CurrentMessage = Message.Start;
+                    Message = InputMessage.SkipToNextScreen;
+                else if (gameState == Islander.GameState.RunningGame)
+                {
+                    Boat.HandleInput(gamePadState.ThumbSticks.Left, gamePadState.ThumbSticks.Right);
+                }
+            }
+        }
+
+        public virtual void Update(GameTime gameTime, Islander.GameState gameState)
+        {
+            if (gameState == Islander.GameState.RunningGame)
+            {
+                //Boat.Update(gameTime);
+                //Island.Update(gameTime);
+            }
+        }
+
+        public virtual void Draw(GameTime gameTime, Islander.GameState gameState, SpriteBatch spriteBatch)
+        {
+            if (gameState == Islander.GameState.RunningGame)
+            {
+                //Boat.Draw(spriteBatch);
+                //Island.Draw(spriteBatch);
             }
         }
     }
