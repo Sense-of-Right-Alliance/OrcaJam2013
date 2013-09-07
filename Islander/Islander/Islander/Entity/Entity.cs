@@ -11,15 +11,16 @@ namespace Islander.Entity
     class Entity
     {
         protected Texture2D sprite;
+        protected Vector2 scale;
         protected float rotation;
 
-        //Dylbro set this to public to allow the screens to manipulate it. Correct me if I'm wrong.
+        // Dylbro set this to public to allow the screens to manipulate it. Correct me if I'm wrong.
         public Vector2 position;
         
-
         public Entity(Texture2D sprite)
         {
             this.sprite = sprite;
+            scale = new Vector2(1.0f);
         }
 
         public Rectangle HitBox()
@@ -29,7 +30,7 @@ namespace Islander.Entity
 
         public Rectangle DrawRect()
         {
-            return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
+            return new Rectangle((int)position.X, (int)position.Y, (int) (sprite.Width * scale.X), (int) (sprite.Height * scale.Y));
         }
 
         public virtual void Update(GameTime gameTime)

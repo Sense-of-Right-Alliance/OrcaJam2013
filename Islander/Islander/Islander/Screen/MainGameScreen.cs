@@ -63,7 +63,7 @@ namespace Islander.Screen
                         break;
                 }
                 player.Island.position = islandVector;
-                player.Boat.position += islandVector;
+                player.Boat.position = islandVector;
             }
         }
 
