@@ -27,27 +27,33 @@ namespace Islander.Screen
         {
             foreach (var player in players)
             {
+                Vector2 islandVector = new Vector2();
                 switch (player.Colour)
                 {
                     //TODO: Place boats and cities where they belong
                     
                     case (Colour.Blue):
-                        player.Island.position.X = width / 4;
-                        player.Island.position.Y = height / 2;
+                        islandVector.X = width / 4;
+                        islandVector.Y = height / 2;
+                        player.Boat.position.X = islandVector.X + 75;
                         break;
                     case (Colour.Green):
-                        player.Island.position.X = width / 2;
-                        player.Island.position.Y = 3 * height / 4;
+                        islandVector.X = width / 2;
+                        islandVector.Y = 3 * height / 4;
+                        player.Boat.position.Y = islandVector.Y - 75;
                         break;
                     case (Colour.Red):
-                        player.Island.position.X = 3 * width / 4;
-                        player.Island.position.Y = height / 2;
+                        islandVector.X = 3 * width / 4;
+                        islandVector.Y = height / 2;
+                        player.Boat.position.X = islandVector.X - 75;
                         break;
                     case (Colour.Yellow):
-                        player.Island.position.X = width / 2;
-                        player.Island.position.Y = width / 4;
+                        islandVector.X = width / 2;
+                        islandVector.Y = width / 4;
+                        player.Boat.position.Y = islandVector.Y + 75;
                         break;
                 }
+                 player.Island.position = islandVector;
             }
         }
 
@@ -65,6 +71,10 @@ namespace Islander.Screen
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
         {
             GraphicsDevice.Clear(Color.Wheat);
+            foreach (var player in players)
+            {
+                player.Draw(gameTime,gameState,spriteBatch);
+            }
            
             base.Draw(gameTime, GraphicsDevice);
         }
