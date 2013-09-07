@@ -107,8 +107,8 @@ namespace Islander
         {
             if (gameState == Islander.GameState.RunningGame)
             {
-                //Boat.Draw(spriteBatch);
-                //Island.Draw(spriteBatch);
+                Boat.Draw(spriteBatch);
+                Island.Draw(spriteBatch);
             }
         }
     }

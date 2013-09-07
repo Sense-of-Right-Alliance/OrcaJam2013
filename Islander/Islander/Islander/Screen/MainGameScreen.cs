@@ -35,6 +35,7 @@ namespace Islander.Screen
             foreach (var player in players)
             {
                 Vector2 islandVector = new Vector2(0.0f,0.0f);
+                
                 switch (player.Colour)
                 {
                     //Places boats and cities in positions matching an xbox controller
@@ -61,6 +62,10 @@ namespace Islander.Screen
                         break;
                 }
                  player.Island.position = islandVector;
+                 if (player.Boat.position.X == 0)
+                     player.Boat.position.X = islandVector.X;
+                 else if (player.Boat.position.Y == 0)
+                     player.Boat.position.Y = islandVector.Y;
             }
         }
 
