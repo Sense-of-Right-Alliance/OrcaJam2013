@@ -77,7 +77,7 @@ namespace Islander
 
             if (!gamePadState.IsConnected)
             {
-                Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
+                //Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
                 return;
             }
             else

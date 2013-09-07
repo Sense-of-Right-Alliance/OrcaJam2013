@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+/* score from bringing artifacts to base, not being hostile hostile to player for 10 seconds, lose points when cargo is dropped */
 
 
 namespace Islander.Entity
@@ -15,15 +16,17 @@ namespace Islander.Entity
     {
         public Colour Colour { get; protected set; }
 
-        private const float MAX_VELOCITY = 1000;
+        private const float MAX_VELOCITY = 10;
 
         private float speed = 10;
         private Vector2 velocity;
         private Vector2 acceleration;
+        private Vector2 dir = Vector2.Zero;
 
         public Boat(Texture2D sprite, Colour colour) : base(sprite)
         {
             Colour = colour;
+            scale = new Vector2(0.5f);
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -58,8 +61,52 @@ namespace Islander.Entity
         {
             base.Update(gameTime);
 
-            position += velocity;
-            velocity += acceleration;
+            position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (VectorMagnitude(velocity) > 0)
+            {
+                dir = velocity;
+                dir.Normalize();
+            }
+
+            if (VectorMagnitude(velocity) > 0 && VectorMagnitude(acceleration) < 1)
+            {
+                acceleration = -dir * 2.0f;
+            }
+
+            if(VectorMagnitude(velocity) < 100)
+                velocity += acceleration;
+            else
+            {
+                velocity -= 1 * dir;
+            }
+
+            rotation = GetRotation();
+        }
+
+        private float GetRotation()
+        {
+            Vector2 up = new Vector2(0.0f, -1.0f);
+            up.Normalize();
+
+            double x = Vector2.Dot(up, dir) / (VectorMagnitude(up) * VectorMagnitude(dir));
+
+            float rotation = 0.0f;
+
+            if (Math.Abs(x) <= 1)
+            {
+                rotation = (float)Math.Acos(x);
+            }
+
+            if (velocity.X < 0)
+                rotation = 270 - rotation;
+
+            return rotation;
+        }
+
+        private double VectorMagnitude(Vector2 v)
+        {
+            return Math.Sqrt((Math.Pow(v.X, 2.0) + Math.Pow(v.Y, 2.0)));
         }
 
         public void HandleInput(KeyboardState keyboardState)
@@ -77,11 +124,11 @@ namespace Islander.Entity
             }
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                moveDir.Y -= 1.0f;
+                moveDir.Y += 1.0f;
             }
             if (keyboardState.IsKeyDown(Keys.S))
             {
-                moveDir.Y += 1.0f;
+                moveDir.Y -= 1.0f;
             }
             
             if (keyboardState.IsKeyDown(Keys.Left))
@@ -113,7 +160,16 @@ namespace Islander.Entity
 
         public void HandleMove(Vector2 leftThumbStick) 
         {
-            acceleration += leftThumbStick * speed;
+            leftThumbStick.Y = -leftThumbStick.Y;
+
+            /*dir = Vector2.Zero;
+            dir.X += leftThumbStick.X;
+            dir.Y -= leftThumbStick.Y;
+
+            if(dir.Length() > 1.0f)
+                dir.Normalize();*/
+
+            acceleration = leftThumbStick * speed;
         }
 
         public void HandleShoot(Vector2 rightThumbStick)
