@@ -19,11 +19,14 @@ namespace Islander
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        List<Player> players;
 
         Screen.BaseScreen currentScreen;
+
         Screen.GameScreen gameScreen;
         Screen.MainMenuScreen mainMenuScreen;
         Screen.GameOverScreen gameOverScreen;
+        List<Screen.BaseScreen> screens;
         
         public Islander()
         {
@@ -39,9 +42,24 @@ namespace Islander
         /// </summary>
         protected override void Initialize()
         {
+            players = new List<Player>()
+            {
+                new Player(PlayerIndex.One),
+                new Player(PlayerIndex.Two),
+                new Player(PlayerIndex.Three),
+                new Player(PlayerIndex.Four)
+            };
+
             gameOverScreen = new Screen.GameOverScreen();
             mainMenuScreen = new Screen.MainMenuScreen();
             gameScreen = new Screen.GameScreen();
+
+            screens = new List<Screen.BaseScreen>()
+            {
+                gameOverScreen,
+                mainMenuScreen,
+                gameScreen
+            };
            
             base.Initialize();
         }
@@ -55,9 +73,9 @@ namespace Islander
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            gameOverScreen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height);
-            mainMenuScreen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height);
-            gameScreen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height);
+            // initialize all screens
+            foreach (Screen.BaseScreen screen in screens)
+                screen.Initialize(Content, spriteBatch, players, Window.ClientBounds.Width, Window.ClientBounds.Height);
 
             currentScreen = mainMenuScreen;
 
@@ -122,7 +140,6 @@ namespace Islander
             currentScreen.Draw();
 
             spriteBatch.End();
-
 
             base.Draw(gameTime);
         }

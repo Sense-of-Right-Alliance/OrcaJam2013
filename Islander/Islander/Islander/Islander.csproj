@@ -107,11 +107,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Objects\Boat.cs" />
-    <Compile Include="Objects\Bullet.cs" />
-    <Compile Include="Objects\Entity.cs" />
-    <Compile Include="Objects\Island.cs" />
-    <Compile Include="Objects\PowerUp.cs" />
+    <Compile Include="Entity\Boat.cs" />
+    <Compile Include="Entity\Bullet.cs" />
+    <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\Island.cs" />
+    <Compile Include="Entity\PowerUp.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Islander.cs" />
