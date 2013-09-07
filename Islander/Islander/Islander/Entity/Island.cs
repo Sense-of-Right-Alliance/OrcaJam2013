@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -15,23 +16,22 @@ namespace Islander.Entity
         // lists of our different island textures
         static List<string> blueIslands = new List<string>()
         {
-            "IslandBlueWave",
-            "IslandBlueBubble",
+            "Bubble",
             // etc.
         };
         static List<string> yellowIslands = new List<string>()
         {
-            "IslandYellowTranquility",
+            "Treasure",
             // etc.
         };
         static List<string> redIslands = new List<string>()
         {
-            "IslandRedBattle",
+            "Fantasy",
             // etc.
         };
         static List<string> greenIslands = new List<string>()
         {
-            "IslandGreenLeaf",
+            "Trident",
             // etc.
         };
 
@@ -65,6 +65,8 @@ namespace Islander.Entity
 
             // load the texture specified from a folder named Islands
             Texture2D sprite = content.Load<Texture2D>("Islands/" + textureName);
+
+            Debug.WriteLine("Island Content Loaded: " + textureName);
 
             // create a new entity using the loaded sprite
             return new Island(sprite, colour);
