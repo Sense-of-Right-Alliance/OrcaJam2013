@@ -12,8 +12,7 @@ namespace Islander.Screen
     {
         public MainGameScreen()
         {
-            /*This line should be unnecessary, because All of the screens are created in Islander.Initialize*/
-            //gameState = Islander.GameState.RunningGame;
+            gameState = Islander.GameState.RunningGame;
       
         }
         
