@@ -17,7 +17,7 @@ namespace Islander.Screen
 
     class BaseScreen
     {
-        public State CurrentState { get; private set; }
+        public State CurrentState { get; protected set; }
 
         protected Texture2D background;
         protected ContentManager content;
@@ -76,7 +76,7 @@ namespace Islander.Screen
 
         protected virtual void HandleInput()
         {
-
+            
         }
     }
 }
