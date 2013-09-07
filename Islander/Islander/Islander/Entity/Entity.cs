@@ -22,7 +22,7 @@ namespace Islander.Entity
 
         public Rectangle HitBox()
         {
-            return new Rectangle((int)position.X, (int)position.Y, sprite.Width, sprite.Height);
+            return new Rectangle((int)position.X - sprite.Width/2, (int)position.Y - sprite.Height/2, sprite.Width, sprite.Height);
         }
 
         public virtual void Update(GameTime gameTime)
