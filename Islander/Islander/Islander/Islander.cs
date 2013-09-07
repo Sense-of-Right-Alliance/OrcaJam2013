@@ -148,6 +148,7 @@ namespace Islander
             if (gameState == GameState.RunningGame)
             {
                 AssignRandomColoursToPlayers();
+                mainGameScreen.StartGame();
             }
 
             this.currentState = gameState;
