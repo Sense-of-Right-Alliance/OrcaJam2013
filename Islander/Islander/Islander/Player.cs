@@ -77,7 +77,7 @@ namespace Islander
 
             if (!gamePadState.IsConnected)
             {
-                //Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
+                Debug.WriteLine("Player " + PlayerIndex.ToString() + "'s controller is disconnected.");
                 return;
             }
             else
@@ -100,8 +100,8 @@ namespace Islander
             }
         }
 
-        /*TODO:Should this need the gamestate? I think the only time draw is getting calle on Players should be explicitly 
-         * in MainGameScreen, which is only ever in the running state.
+        /*TODO:Should this need the gamestate? I think the only time draw is getting calle on Players should be explicity 
+         * in MainGameScreen
         */
         public virtual void Draw(GameTime gameTime, Islander.GameState gameState, SpriteBatch spriteBatch)
         {

@@ -54,8 +54,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Boats\BoatYellow.PNG">
-      <Name>BoatYellow</Name>
+    <Compile Include="Boats\BoatGreen.PNG">
+      <Name>BoatGreen</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -64,8 +64,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Boats\BoatGreen.PNG">
-      <Name>BoatGreen</Name>
+    <Compile Include="Boats\BoatYellow.PNG">
+      <Name>BoatYellow</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
