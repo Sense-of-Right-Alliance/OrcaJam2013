@@ -42,6 +42,7 @@ namespace Islander
 
         public Player[] PlayersByColour { get; set; }
         public bool[] HostileToPlayer { get; protected set; }
+        public Resource[] CollectedResources { get; protected set; }
 
         protected ContentManager content;
         protected TimeSpan bulletDelay;
@@ -54,6 +55,24 @@ namespace Islander
             
             PlayersByColour = null;
             HostileToPlayer = null;
+        }
+
+        public void SetGameColour(Colour colour)
+        {
+            Colour = colour;
+            LoadBullets();
+            Boat = Boat.InitializeFromColour(colour, content);
+            Island = Island.InitializeFromColour(colour, content);
+
+            // initially hostile to all players except self
+            HostileToPlayer = new bool[] { true, true, true, true };
+            HostileToPlayer[(int)Colour] = false;
+
+            // default bullet delay
+            bulletDelay = new TimeSpan(5000000); // 0.5s
+            bulletTimeElapsed = TimeSpan.Zero;
+
+            CollectedResources = new Resource[] { null, null, null, null };
         }
 
         protected void LoadBullets()
@@ -87,20 +106,9 @@ namespace Islander
             Bullets.Remove(bullet);
         }
 
-        public void SetGameColour(Colour colour)
+        public void CollectResource(Resource resource)
         {
-            Colour = colour;
-            LoadBullets();
-            Boat = Boat.InitializeFromColour(colour, content);
-            Island = Island.InitializeFromColour(colour, content);
-
-            // initially hostile to all players except self
-            HostileToPlayer = new bool[] { true, true, true, true };
-            HostileToPlayer[(int)Colour] = false;
-
-            // default bullet delay
-            bulletDelay = new TimeSpan(5000000); // 0.5s
-            bulletTimeElapsed = TimeSpan.Zero;
+            CollectedResources[(int)resource.Colour] = resource;
         }
 
         public virtual void HandleInput(Islander.GameState gameState, GameTime gameTime)
