@@ -214,6 +214,8 @@ namespace Islander
 
                 }*/
 
+
+
                 for (int i = Bullets.Count-1; i >= 0; i--)
                 {
                     Bullets[i].Update(gameTime);
