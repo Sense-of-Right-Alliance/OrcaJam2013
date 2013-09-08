@@ -273,11 +273,6 @@
       <Importer>Mp3Importer</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="SFX\Impact.mp3">
-      <Name>Impact</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
     <Compile Include="SFX\Score Cargo.mp3">
       <Name>Score Cargo</Name>
       <Importer>Mp3Importer</Importer>
@@ -297,16 +292,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SFX\Basic Attack2.mp3">
-      <Name>Basic Attack2</Name>
+    <Compile Include="SFX\Score Cargo2.mp3">
+      <Name>Score Cargo2</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SFX\Score Cargo2.mp3">
-      <Name>Score Cargo2</Name>
-      <Importer>Mp3Importer</Importer>
+    <Compile Include="SFX\Basic Attack2.wav">
+      <Name>Basic Attack2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SFX\Impact.wav">
+      <Name>Impact</Name>
+      <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
