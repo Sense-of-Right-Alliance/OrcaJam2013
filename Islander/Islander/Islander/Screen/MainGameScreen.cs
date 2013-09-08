@@ -285,7 +285,7 @@ namespace Islander.Screen
                 {
                     bullet.Draw(spriteBatch);
                 }
-                updateScore(player.Colour, player.score, player.PlayerIndex);
+                updateScore(player);
             }
 
             foreach (var resource in droppedResources)
@@ -293,28 +293,33 @@ namespace Islander.Screen
                 resource.Draw(spriteBatch);
             }
         }
-        private void updateScore(Colour playerColour, int playerScore, PlayerIndex playerIndex)
+
+        private void updateScore(Player player)
         {
+            Colour playerColour = player.Colour;
+            int playerScore = player.score;
+            string playerName = player.ScoreName;
+
             switch (playerColour)
             {
                 case (Colour.Blue):
-                    outlineFont(playerScore, playerIndex, blueScoreLabelPos, blueScorePos);
-                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", blueScoreLabelPos, Color.Blue);
+                    outlineFont(playerScore, playerName, blueScoreLabelPos, blueScorePos);
+                    spriteBatch.DrawString(scoreFont, playerName + ":", blueScoreLabelPos, Color.Blue);
                     spriteBatch.DrawString(scoreFont, "" + playerScore, blueScorePos, Color.Blue);
                     break;
                 case (Colour.Green):
-                    outlineFont(playerScore, playerIndex, greenScoreLabelPos, greenScorePos);
-                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", greenScoreLabelPos, Color.Green);
+                    outlineFont(playerScore, playerName, greenScoreLabelPos, greenScorePos);
+                    spriteBatch.DrawString(scoreFont, playerName + ":", greenScoreLabelPos, Color.Green);
                     spriteBatch.DrawString(scoreFont, "" + playerScore, greenScorePos, Color.Green);
                     break;
                 case (Colour.Red):
-                    outlineFont(playerScore, playerIndex, redScoreLabelPos, redScorePos);
-                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", redScoreLabelPos, Color.Red);
+                    outlineFont(playerScore, playerName, redScoreLabelPos, redScorePos);
+                    spriteBatch.DrawString(scoreFont, playerName + ":", redScoreLabelPos, Color.Red);
                     spriteBatch.DrawString(scoreFont, "" + playerScore, redScorePos, Color.Red);
                     break;
                 case (Colour.Yellow):
-                    outlineFont(playerScore, playerIndex, yellowScoreLabelPos, yellowScorePos);
-                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", yellowScoreLabelPos, Color.Orange);
+                    outlineFont(playerScore, playerName, yellowScoreLabelPos, yellowScorePos);
+                    spriteBatch.DrawString(scoreFont, playerName + ":", yellowScoreLabelPos, Color.Orange);
                     spriteBatch.DrawString(scoreFont, "" + playerScore, yellowScorePos, Color.Orange);
                     break;
             }
@@ -323,15 +328,15 @@ namespace Islander.Screen
          * Alternatively, make it more general and give it to the other menu screens as well. Your call.
          * Fucking thanks yellow, you bastard.
          */
-        private void outlineFont(int playerScore, PlayerIndex playerIndex, Vector2 scoreLabelPos, Vector2 scorePos)
+        private void outlineFont(int playerScore, string playerName, Vector2 scoreLabelPos, Vector2 scorePos)
         {
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X+1,scoreLabelPos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, playerName + ":", new Vector2(scoreLabelPos.X + 1, scoreLabelPos.Y), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X+1,scorePos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X - 1, scoreLabelPos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, playerName + ":", new Vector2(scoreLabelPos.X - 1, scoreLabelPos.Y), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X - 1, scorePos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y + 1), Color.Black);
+            spriteBatch.DrawString(scoreFont, playerName + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y + 1), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y + 1), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y - 1), Color.Black);
+            spriteBatch.DrawString(scoreFont, playerName + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y - 1), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y - 1), Color.Black);
         }
         /*I told you not to fucking look at it now your eyes are sad.*/

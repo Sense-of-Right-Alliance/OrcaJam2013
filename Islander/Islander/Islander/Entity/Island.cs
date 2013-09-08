@@ -16,41 +16,46 @@ namespace Islander.Entity
 
         public enum IslandType
         {
-            BlueBubble,
-            BlueFantasy,
-            YellowRazor,
-            YellowTreasure,
-            RedLove,
-            RedTrident,
-            GreenHermit,
-            GreenMagnet
+            Bubble,
+            Fantasy,
+            Razor,
+            Treasure,
+            Love,
+            Trident,
+            Hermit,
+            Magnet
         }
 
         public IslandType Type { get; protected set; }
 
         static Dictionary<IslandType, string> blueIslands = new Dictionary<IslandType, string>()
         {
-            {IslandType.BlueBubble, "BlueBubble"},
-            {IslandType.BlueFantasy, "BlueFantasy"},
+            {IslandType.Bubble, "BlueBubble"},
+            {IslandType.Fantasy, "BlueFantasy"},
         };
 
         static Dictionary<IslandType, string> yellowIslands = new Dictionary<IslandType, string>()
         {
-            {IslandType.YellowRazor, "YellowRazor"},
-            {IslandType.YellowTreasure, "YellowTreasure"},
+            {IslandType.Razor, "YellowRazor"},
+            {IslandType.Treasure, "YellowTreasure"},
         };
 
         static Dictionary<IslandType, string> redIslands = new Dictionary<IslandType, string>()
         {
-            {IslandType.RedLove, "RedLove"},
-            {IslandType.RedTrident, "RedTrident"},
+            {IslandType.Love, "RedLove"},
+            {IslandType.Trident, "RedTrident"},
         };
 
         static Dictionary<IslandType, string> greenIslands = new Dictionary<IslandType, string>()
         {
-            {IslandType.GreenHermit, "GreenHermit"},
-            {IslandType.GreenMagnet, "GreenMagnet"},
+            {IslandType.Hermit, "GreenHermit"},
+            {IslandType.Magnet, "GreenMagnet"},
         };
+
+        public string IslandName
+        {
+            get { return Type.ToString(); }
+        }
 
         public Island(Texture2D sprite, Colour colour, IslandType type, Resource resource) : base(sprite)
         {
