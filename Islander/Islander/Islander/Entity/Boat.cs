@@ -113,9 +113,9 @@ namespace Islander.Entity
                 position.X = 1200;
             if (position.Y < 0)
                 position.Y = 0;
-            else if (position.Y > 620)
+            else if (position.Y > 620)//TODO: Seriously so hacky. Please get me screen width.
                 position.Y = 620;
-            //TODO: This is literally killing me. Please let's fix this. My body.
+            //TODO: This is literally killing me. Please let's fix this. My body hurts.
                 
         }
 

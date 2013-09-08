@@ -25,6 +25,7 @@ namespace Islander.Screen
         protected Texture2D background;
         protected ContentManager content;
         protected SpriteBatch spriteBatch;
+        protected SpriteFont scoreFont;
         protected int width;
         protected int height;
         protected List<Player> players;
@@ -63,6 +64,7 @@ namespace Islander.Screen
         protected virtual void LoadContent()
         {
             CurrentState = ScreenState.Initialized;
+            scoreFont = content.Load<SpriteFont>("Arial");
         }
 
         protected virtual void UnloadContent()
