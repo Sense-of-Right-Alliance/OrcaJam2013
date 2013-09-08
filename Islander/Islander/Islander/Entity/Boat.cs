@@ -102,8 +102,21 @@ namespace Islander.Entity
                 velocity -= 1 * opp;
             }
 
+            //Problem Solving!
             if (velocity.Length() > 0.0)
                 rotation = GetRotation();
+
+            //TODO: This will need to be more specific with the width of the boat. Also we should have called them ships
+            if (position.X < 0) 
+                position.X = 0;
+            else if (position.X > 1200)//TODO: SHIT WE NEED SCREEN WIDTH HERE. AAAHHH
+                position.X = 1200;
+            if (position.Y < 0)
+                position.Y = 0;
+            else if (position.Y > 620)
+                position.Y = 620;
+            //TODO: This is literally killing me. Please let's fix this. My body.
+                
         }
 
         private float GetRotation()
