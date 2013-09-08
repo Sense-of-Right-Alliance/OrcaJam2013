@@ -15,8 +15,9 @@ namespace Islander.Entity
 
         public Bullet(Texture2D sprite, Vector2 direction, float speed, bool[] hostileToPlayer) : base(sprite)
         {
-            this.rotation = GetRotation(direction);
+            
             this.velocity = direction * speed;
+            this.rotation = GetRotation(direction);
             this.position = direction;
             this.HostileToPlayer = hostileToPlayer;
             this.scale = new Vector2(0.5f);
@@ -37,7 +38,11 @@ namespace Islander.Entity
             }
 
             if (velocity.X < 0)
-                rotation = 270 - rotation;
+            {
+                float deg = rotation * 100 / Math.PI;
+                rotation = 270.5f - rotation;
+
+            }
 
             return rotation;
         }

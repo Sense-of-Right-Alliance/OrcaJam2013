@@ -155,11 +155,11 @@ namespace Islander
             }
             if (keyboardState.IsKeyDown(Keys.Up))
             {
-                shootDir.Y -= 1.0f;
+                shootDir.Y += 1.0f;
             }
             if (keyboardState.IsKeyDown(Keys.Down))
             {
-                shootDir.Y += 1.0f;
+                shootDir.Y -= 1.0f;
             }
 
             CheckShooting(shootDir);
@@ -169,7 +169,10 @@ namespace Islander
         {
             if (direction.Length() >= 0.5f)
                 if (bulletTimeElapsed > bulletDelay)
+                {
+                    direction.Y = -direction.Y;
                     ShootBullet(direction);
+                }
         }
 
         private void ShootBullet(Vector2 direction)
