@@ -185,5 +185,17 @@ namespace Islander.Entity
 
 
         }*/
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+
+            if (CarriedResource != null)
+            {
+                CarriedResource.SetPosition(this.position);
+                CarriedResource.SetRotation(this.rotation);
+                CarriedResource.Draw(spriteBatch);
+            }
+        }
     }
 }
