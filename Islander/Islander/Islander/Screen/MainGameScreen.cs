@@ -28,9 +28,10 @@ namespace Islander.Screen
         private Vector2 redScorePos;
         private Vector2 yellowScorePos;
 
-        SoundEffect takeCargo;
-        SoundEffect scoreCargo;
-        SoundEffect impactSound;
+        private SoundEffect takeCargo;
+        private SoundEffect scoreCargo;
+        private SoundEffect impactSound;
+
 
         public const int RETURN_RESOURCE = 50;
 
@@ -199,9 +200,12 @@ namespace Islander.Screen
             {
                 foreach (var bullet in bulletList)
                     foreach (var boat in boats)
-                        if (bullet.HostileToPlayer[(int)boat.Colour])
-                            if (bullet.CollidesWith(boat))
-                                BulletBoatCollision(bullet, boat, removedBullets);
+                        if (boat.state == Boat.BoatState.alive)
+                        {
+                            if (bullet.HostileToPlayer[(int)boat.Colour])
+                                if (bullet.CollidesWith(boat))
+                                    BulletBoatCollision(bullet, boat, removedBullets);
+                        }
             }
 
             // remove all bullets that were destroyed

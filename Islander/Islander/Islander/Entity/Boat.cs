@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 /* score from bringing artifacts to base, not being hostile hostile to player for 10 seconds, lose points when cargo is dropped */
 
@@ -75,7 +76,6 @@ namespace Islander.Entity
 
             // load the texture specified from a folder named Boats
             Texture2D sprite = content.Load<Texture2D>("Boats/" + textureName);
-
             Texture2D trailTexture = content.Load<Texture2D>("Boats/BoatTrail");
 
             // create a new entity using the loaded sprite
