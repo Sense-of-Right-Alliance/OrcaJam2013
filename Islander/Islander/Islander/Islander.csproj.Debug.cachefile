@@ -1,5 +1,13 @@
 Content\Menu.xnb
 Content\Background.xnb
+Content\Cargo\BlueCargo.xnb
+Content\Cargo\GreenCargo.xnb
+Content\Cargo\RedCargo.xnb
+Content\Cargo\YellowCargo.xnb
+Content\Tokens\BlueToken.xnb
+Content\Tokens\GreenToken.xnb
+Content\Tokens\RedToken.xnb
+Content\Tokens\YellowToken.xnb
 Content\Boats\BlueBoat.xnb
 Content\Boats\GreenBoat.xnb
 Content\Boats\RedBoat.xnb
@@ -16,20 +24,12 @@ Content\Bullets\YellowDefault.xnb
 Content\Bullets\GreenMagnet.xnb
 Content\Bullets\YellowRazor.xnb
 Content\Bullets\RedTrident.xnb
-Content\Cargo\BlueCargo.xnb
-Content\Cargo\GreenCargo.xnb
-Content\Cargo\RedCargo.xnb
-Content\Cargo\YellowCargo.xnb
-Content\Tokens\BlueToken.xnb
-Content\Tokens\GreenToken.xnb
-Content\Tokens\RedToken.xnb
-Content\Tokens\YellowToken.xnb
 Content\Islands\GreenHermit.xnb
 Content\Islands\RedLove.xnb
 Content\Islands\GreenMagnet.xnb
 Content\Islands\YellowRazor.xnb
-Content\Boats\BoatTrail.xnb
 Content\Arial.xnb
+<<<<<<< HEAD
 Content\Splash Screens\SplashEndgame.xnb
 Content\Splash Screens\SplashHowto.xnb
 Content\Splash Screens\SplashIntro.xnb
@@ -46,3 +46,6 @@ Content\Music\MainMusic.xnb
 Content\SFX\Basic Attack2.xnb
 Content\SFX\Score Cargo2.xnb
 Content\Music\MainMusic.wma
+=======
+Content\Boats\BoatTrail.xnb
+>>>>>>> 0e4f15a00050d6e28cb6edb18a35e1e620c209e5
