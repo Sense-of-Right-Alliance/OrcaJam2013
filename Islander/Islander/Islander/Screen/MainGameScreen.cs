@@ -13,9 +13,6 @@ namespace Islander.Screen
 
     class MainGameScreen : BaseScreen
     {
-        /*CONSTANTS FOR SCORE*/
-        private const int RETURN_RESOURCE = 1000;
-
         protected List<Boat> boats;
         protected List<Island> islands;
         protected List<Resource> droppedResources;
@@ -196,9 +193,8 @@ namespace Islander.Screen
                 {
                     //Plays the collect resource sound. This should maybe be in the CollectResource method
                     scoreCargo.Play();
-                    players[(int)boat.Colour].CollectResource(boat.CarriedResource);
+                    PlayersByColour[(int)boat.Colour].CollectResource(boat.CarriedResource);
                     boat.CarriedResource = null;
-                    players[(int)boat.Colour].score += RETURN_RESOURCE;
                 }
             }
             else
@@ -207,6 +203,7 @@ namespace Islander.Screen
                 {
                     //PLAY THE SOUND
                     takeCargo.Play();
+                    PlayersByColour[(int)island.Colour].score -= 200;
                     boat.CarriedResource = new Resource(island.ResourceType);
                     boat.CarriedResource.IsCarried = true;
                 }
