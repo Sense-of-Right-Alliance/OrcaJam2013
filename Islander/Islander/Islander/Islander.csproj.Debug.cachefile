@@ -12,7 +12,6 @@ Content\Bullets\BlueBubble.xnb
 Content\Bullets\BlueDefault.xnb
 Content\Bullets\GreenDefault.xnb
 Content\Bullets\RedDefault.xnb
-Content\Bullets\YellowDefault.xnb
 Content\Bullets\GreenMagnet.xnb
 Content\Bullets\YellowRazor.xnb
 Content\Bullets\RedTrident.xnb
@@ -28,3 +27,5 @@ Content\Islands\GreenHermit.xnb
 Content\Islands\RedLove.xnb
 Content\Islands\GreenMagnet.xnb
 Content\Islands\YellowRazor.xnb
+Content\Bullets\YellowDefault.xnb
+Content\Boats\BoatTrail.xnb

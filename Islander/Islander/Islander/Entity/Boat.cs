@@ -23,7 +23,7 @@ namespace Islander.Entity
         private Vector2 dir = Vector2.Zero;
 
         private Texture2D trailTexture;
-        private List<BoatTrail> trailEffects { private get; private set; }
+        private List<BoatTrail> trailEffects { get; set; }
 
         public Resource CarriedResource { get; set; }
 
