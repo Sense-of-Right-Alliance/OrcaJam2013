@@ -16,23 +16,23 @@ namespace Islander.Entity
         // lists of our different island textures
         static List<string> blueIslands = new List<string>()
         {
-            "Bubble",
-            "Fantasy",
+            "BlueBubble",
+            "BlueFantasy",
         };
         static List<string> yellowIslands = new List<string>()
         {
-            "Razor",
-            "Treasure",
+            "YellowRazor",
+            "YellowTreasure",
         };
         static List<string> redIslands = new List<string>()
         {
-            "Love",
-            "Trident",
+            "RedLove",
+            "RedTrident",
         };
         static List<string> greenIslands = new List<string>()
         {
-            "Hermit",
-            "Magnet",
+            "GreenHermit",
+            "GreenMagnet",
         };
 
         public Island(Texture2D sprite, Colour colour) : base(sprite)
@@ -65,6 +65,7 @@ namespace Islander.Entity
             }
 
             // load the texture specified from a folder named Islands
+            
             Texture2D sprite = content.Load<Texture2D>("Islands/" + textureName);
             
             Debug.WriteLine("Island Content Loaded: " + textureName);

@@ -49,45 +49,45 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Boats\BoatBlue.PNG">
-      <Name>BoatBlue</Name>
+    <Compile Include="Boats\BlueBoat.PNG">
+      <Name>BlueBoat</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Boats\BoatGreen.PNG">
-      <Name>BoatGreen</Name>
+    <Compile Include="Boats\GreenBoat.PNG">
+      <Name>GreenBoat</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Boats\BoatRed.PNG">
-      <Name>BoatRed</Name>
+    <Compile Include="Boats\RedBoat.PNG">
+      <Name>RedBoat</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Boats\BoatYellow.PNG">
-      <Name>BoatYellow</Name>
+    <Compile Include="Boats\YellowBoat.PNG">
+      <Name>YellowBoat</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Islands\Bubble.PNG">
-      <Name>Bubble</Name>
+    <Compile Include="Islands\BlueBubble.PNG">
+      <Name>BlueBubble</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Islands\Fantasy.PNG">
-      <Name>Fantasy</Name>
+    <Compile Include="Islands\BlueFantasy.PNG">
+      <Name>BlueFantasy</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Islands\Treasure.PNG">
-      <Name>Treasure</Name>
+    <Compile Include="Islands\YellowTreasure.PNG">
+      <Name>YellowTreasure</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Islands\Trident.PNG">
-      <Name>Trident</Name>
+    <Compile Include="Islands\RedTrident.PNG">
+      <Name>RedTrident</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -100,43 +100,43 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bullets\Bubble.PNG">
-      <Name>Bubble</Name>
+    <Compile Include="Bullets\BlueBubble.PNG">
+      <Name>BlueBubble</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\DefaultBlue.PNG">
-      <Name>DefaultBlue</Name>
+    <Compile Include="Bullets\BlueDefault.PNG">
+      <Name>BlueDefault</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\DefaultGreen.PNG">
-      <Name>DefaultGreen</Name>
+    <Compile Include="Bullets\GreenDefault.PNG">
+      <Name>GreenDefault</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\DefaultRed.PNG">
-      <Name>DefaultRed</Name>
+    <Compile Include="Bullets\RedDefault.PNG">
+      <Name>RedDefault</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\DefaultYellow.PNG">
-      <Name>DefaultYellow</Name>
+    <Compile Include="Bullets\YellowDefault.PNG">
+      <Name>YellowDefault</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\Magnet.PNG">
-      <Name>Magnet</Name>
+    <Compile Include="Bullets\GreenMagnet.PNG">
+      <Name>GreenMagnet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\Razor.PNG">
-      <Name>Razor</Name>
+    <Compile Include="Bullets\YellowRazor.PNG">
+      <Name>YellowRazor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\Trident.PNG">
-      <Name>Trident</Name>
+    <Compile Include="Bullets\RedTrident.PNG">
+      <Name>RedTrident</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -186,23 +186,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Islands\Hermit.PNG">
-      <Name>Hermit</Name>
+    <Compile Include="Islands\GreenHermit.PNG">
+      <Name>GreenHermit</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Islands\Love.PNG">
-      <Name>Love</Name>
+    <Compile Include="Islands\RedLove.PNG">
+      <Name>RedLove</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Islands\Magnet.PNG">
-      <Name>Magnet</Name>
+    <Compile Include="Islands\GreenMagnet.PNG">
+      <Name>GreenMagnet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Islands\Razor.PNG">
-      <Name>Razor</Name>
+    <Compile Include="Islands\YellowRazor.PNG">
+      <Name>YellowRazor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
