@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Islander
 {
@@ -39,6 +40,7 @@ namespace Islander
         public Island Island { get; protected set; }
         public List<Bullet> Bullets { get; set; }
         Texture2D bulletSprite;
+        SoundEffect basicAttackSound;
 
         public Player[] PlayersByColour { get; set; }
         public bool[] HostileToPlayer { get; protected set; }
@@ -102,6 +104,9 @@ namespace Islander
             }
             bulletFilename += "Default";
             bulletSprite = content.Load<Texture2D>("Bullets/" + bulletFilename);
+
+            //Loads the bullet sound.
+            basicAttackSound = content.Load<SoundEffect>("SFX/Basic Attack");
         }
 
         public void RemoveBullet(Bullet bullet)
@@ -158,6 +163,7 @@ namespace Islander
             }
         }
 
+        
         public void CheckShooting(KeyboardState keyboardState)
         {
             Vector2 shootDir = Vector2.Zero;
@@ -194,6 +200,8 @@ namespace Islander
 
         private void ShootBullet(Vector2 direction)
         {
+            //Bullet shooting
+            basicAttackSound.Play();
             bulletTimeElapsed = TimeSpan.Zero;
             direction.Normalize();
             Bullet bullet = new Bullet(bulletSprite, direction, BULLET_SPEED, Colour, HostileToPlayer);
