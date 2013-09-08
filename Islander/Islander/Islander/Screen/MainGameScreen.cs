@@ -153,6 +153,8 @@ namespace Islander.Screen
         // check each boat for collisions with islands and resources
         protected void CheckBoatCollisions()
         {
+            var collectedResources = new List<Resource>();
+
             foreach (var boat in boats)
             {
                 foreach (var island in islands)
@@ -160,8 +162,12 @@ namespace Islander.Screen
                         BoatIslandCollision(boat, island);
                 foreach (var resource in droppedResources)
                     if (boat.CollidesWith(resource))
-                        BoatResourceCollision(boat, resource);
+                        BoatResourceCollision(boat, resource, collectedResources);
             }
+
+            // remove all resources that were retrieved
+            foreach (var resource in collectedResources)
+                droppedResources.Remove(resource);
         }
 
         // check each bullet for collisions with boats and leaving the game screen
@@ -176,8 +182,6 @@ namespace Islander.Screen
                         if (bullet.HostileToPlayer[(int)boat.Colour])
                             if (bullet.CollidesWith(boat))
                                 BulletBoatCollision(bullet, boat, removedBullets);
-
-                    
             }
 
             // remove all bullets that were destroyed
@@ -210,9 +214,25 @@ namespace Islander.Screen
             }
         }
 
-        protected void BoatResourceCollision(Boat boat, Resource resource)
+        protected void BoatResourceCollision(Boat boat, Resource resource, List<Resource> collectedResources)
         {
-            // TODO
+            if (boat.Colour == resource.Colour)
+            {
+                takeCargo.Play(); // should be returnCargo
+                PlayersByColour[(int)boat.Colour].score += 200;
+                collectedResources.Add(resource);
+            }
+            else
+            {
+                if (boat.CarriedResource == null) // if not carrying a resource
+                {
+                    //PLAY THE SOUND
+                    takeCargo.Play();
+                    boat.CarriedResource = resource;
+                    boat.CarriedResource.IsCarried = true;
+                    collectedResources.Add(resource);
+                }
+            }
         }
 
         protected void BulletBoatCollision(Bullet bullet, Boat boat, List<Bullet> removedBullets)
