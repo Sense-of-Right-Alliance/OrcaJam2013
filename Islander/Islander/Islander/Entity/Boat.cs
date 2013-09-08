@@ -23,7 +23,7 @@ namespace Islander.Entity
         private Vector2 dir = Vector2.Zero;
 
         private Texture2D trailTexture;
-       private List<BoatTrail> trailEffects { private get; private set; }
+        private List<BoatTrail> trailEffects { get; set; }
 
         public Resource CarriedResource { get; set; }
 
@@ -210,5 +210,17 @@ namespace Islander.Entity
 
 
         }*/
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+
+            if (CarriedResource != null)
+            {
+                CarriedResource.SetPosition(this.position);
+                CarriedResource.SetRotation(this.rotation);
+                CarriedResource.Draw(spriteBatch);
+            }
+        }
     }
 }
