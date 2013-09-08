@@ -15,14 +15,14 @@ namespace Islander.Entity
 
         static Dictionary<Island.IslandType, string> resources = new Dictionary<Island.IslandType, string>()
         {
-            {Island.IslandType.BlueBubble, "BlueCargo"},
-            {Island.IslandType.BlueFantasy, "BlueCargo"},
-            {Island.IslandType.YellowRazor, "YellowCargo"},
-            {Island.IslandType.YellowTreasure, "YellowCargo"},
-            {Island.IslandType.RedLove, "RedCargo"},
-            {Island.IslandType.RedTrident, "RedCargo"},
-            {Island.IslandType.GreenHermit, "GreenCargo"},
-            {Island.IslandType.GreenMagnet, "GreenCargo"},
+            {Island.IslandType.Bubble, "BlueCargo"},
+            {Island.IslandType.Fantasy, "BlueCargo"},
+            {Island.IslandType.Razor, "YellowCargo"},
+            {Island.IslandType.Treasure, "YellowCargo"},
+            {Island.IslandType.Love, "RedCargo"},
+            {Island.IslandType.Trident, "RedCargo"},
+            {Island.IslandType.Hermit, "GreenCargo"},
+            {Island.IslandType.Magnet, "GreenCargo"},
         };
 
         public Resource(Texture2D sprite, Colour colour) : base(sprite)
