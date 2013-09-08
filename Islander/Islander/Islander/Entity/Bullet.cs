@@ -12,13 +12,15 @@ namespace Islander.Entity
     {
         private Vector2 velocity;
         public bool[] HostileToPlayer { get; set; }
+        public Colour Colour { get; protected set; }
 
-        public Bullet(Texture2D sprite, Vector2 direction, float speed, bool[] hostileToPlayer) : base(sprite)
+        public Bullet(Texture2D sprite, Vector2 direction, float speed, Colour colour, bool[] hostileToPlayer) : base(sprite)
         {
             
             this.velocity = direction * speed;
             this.rotation = GetRotation(direction);
             this.position = direction;
+            this.Colour = colour;
             this.HostileToPlayer = hostileToPlayer;
             this.scale = new Vector2(0.5f);
         }
@@ -39,7 +41,7 @@ namespace Islander.Entity
 
             if (velocity.X < 0)
             {
-                float deg = rotation * 100 / Math.PI;
+                float deg =  rotation * 100 / (float) Math.PI;
                 rotation = 270.5f - rotation;
 
             }

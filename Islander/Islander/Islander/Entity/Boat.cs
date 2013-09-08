@@ -39,16 +39,16 @@ namespace Islander.Entity
             switch (colour)
             {
                 case Colour.Blue:
-                    textureName = "BoatBlue";
+                    textureName = "BlueBoat";
                     break;
                 case Colour.Yellow:
-                    textureName = "BoatYellow";
+                    textureName = "YellowBoat";
                     break;
                 case Colour.Red:
-                    textureName = "BoatRed";
+                    textureName = "RedBoat";
                     break;
                 case Colour.Green:
-                    textureName = "BoatGreen";
+                    textureName = "GreenBoat";
                     break;
             }
 
