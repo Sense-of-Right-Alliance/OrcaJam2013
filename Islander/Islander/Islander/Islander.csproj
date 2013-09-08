@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Boat.cs" />
+    <Compile Include="Entity\BoatTrail.cs" />
     <Compile Include="Entity\Bullet.cs" />
     <Compile Include="Entity\EnemyBoat.cs" />
     <Compile Include="Entity\Entity.cs" />

@@ -22,13 +22,19 @@ namespace Islander.Entity
         private Vector2 acceleration;
         private Vector2 dir = Vector2.Zero;
 
+        private Texture2D trailTexture;
+        private List<BoatTrail> trailEffects { private get; private set; }
+
         public Resource CarriedResource { get; set; }
 
-        public Boat(Texture2D sprite, Colour colour) : base(sprite)
+        public Boat(Texture2D sprite,Texture2D trail, Colour colour) : base(sprite)
         {
             Colour = colour;
             scale = new Vector2(0.5f);
             CarriedResource = null;
+
+            trailTexture = trail;
+            trailEffects = new List<BoatTrail>();
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -55,8 +61,10 @@ namespace Islander.Entity
             // load the texture specified from a folder named Boats
             Texture2D sprite = content.Load<Texture2D>("Boats/" + textureName);
 
+            Texture2D trailTexture = content.Load<Texture2D>("Boats/BoatTrail");
+
             // create a new entity using the loaded sprite
-            return new Boat(sprite, colour);
+            return new Boat(sprite, trailTexture, colour);
         }
 
         public override void Update(GameTime gameTime)
@@ -113,7 +121,11 @@ namespace Islander.Entity
             }
 
             if (dir.X < 0)
-                rotation = 270 - rotation;
+            {
+                float deg = rotation * 180 / (float)Math.PI;
+                deg = 360 - deg;
+                rotation = deg * (float)Math.PI / 180;
+            }
 
             return rotation;
         }
