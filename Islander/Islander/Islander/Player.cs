@@ -161,11 +161,11 @@ namespace Islander
             }
             if (keyboardState.IsKeyDown(Keys.Up))
             {
-                shootDir.Y -= 1.0f;
+                shootDir.Y += 1.0f;
             }
             if (keyboardState.IsKeyDown(Keys.Down))
             {
-                shootDir.Y += 1.0f;
+                shootDir.Y -= 1.0f;
             }
 
             CheckShooting(shootDir);
@@ -175,7 +175,10 @@ namespace Islander
         {
             if (direction.Length() >= 0.5f)
                 if (bulletTimeElapsed > bulletDelay)
+                {
+                    direction.Y = -direction.Y;
                     ShootBullet(direction);
+                }
         }
 
         private void ShootBullet(Vector2 direction)
@@ -194,8 +197,18 @@ namespace Islander
             {
                 Boat.Update(gameTime);
                 Island.Update(gameTime);
-                foreach (Bullet bullet in Bullets)
-                    bullet.Update(gameTime);
+                /*foreach (Bullet bullet in Bullets)
+                {
+                    
+
+                }*/
+
+                for (int i = Bullets.Count-1; i >= 0; i--)
+                {
+                    Bullets[i].Update(gameTime);
+                    if (Bullets[i].done)
+                        RemoveBullet(Bullets[i]);
+                }
             }
         }
     }
