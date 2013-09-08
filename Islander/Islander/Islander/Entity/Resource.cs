@@ -13,39 +13,53 @@ namespace Islander.Entity
         public Colour Colour { get; protected set; }
         public bool IsCarried { get; set; }
 
+        static Dictionary<Island.IslandType, string> resources = new Dictionary<Island.IslandType, string>()
+        {
+            {Island.IslandType.BlueBubble, "BlueCargo"},
+            {Island.IslandType.BlueFantasy, "BlueCargo"},
+            {Island.IslandType.YellowRazor, "YellowCargo"},
+            {Island.IslandType.YellowTreasure, "YellowCargo"},
+            {Island.IslandType.RedLove, "RedCargo"},
+            {Island.IslandType.RedTrident, "RedCargo"},
+            {Island.IslandType.GreenHermit, "GreenCargo"},
+            {Island.IslandType.GreenMagnet, "GreenCargo"},
+        };
+
         public Resource(Texture2D sprite, Colour colour) : base(sprite)
         {
             Colour = colour;
             scale = new Vector2(0.5f);
-            IsCarried = true;
+            IsCarried = false;
+        }
+
+        public Resource(Resource resource) : base(resource.sprite)
+        {
+            Colour = resource.Colour;
+            scale = resource.scale;
+            IsCarried = resource.IsCarried;
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
-        public static Resource InitializeFromColour(Colour colour, ContentManager content)
+        public static Resource InitializeFromIslandType(Colour colour, Island.IslandType islandType, ContentManager content)
         {
             // retrieve texture name matching specified colour
-            string textureName = "";
-            switch (colour)
-            {
-                case Colour.Blue:
-                    textureName = "ResourceBlue";
-                    break;
-                case Colour.Yellow:
-                    textureName = "ResourceYellow";
-                    break;
-                case Colour.Red:
-                    textureName = "ResourceRed";
-                    break;
-                case Colour.Green:
-                    textureName = "ResourceGreen";
-                    break;
-            }
+            string textureName = resources[islandType];
 
             // load the texture specified from a folder named Resources
-            Texture2D sprite = content.Load<Texture2D>("Resources/" + textureName);
+            Texture2D sprite = content.Load<Texture2D>("Cargo/" + textureName);
 
             // create a new entity using the loaded sprite
             return new Resource(sprite, colour);
+        }
+
+        public void SetRotation(float rotation)
+        {
+            this.rotation = rotation;
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            this.position = position;
         }
     }
 }

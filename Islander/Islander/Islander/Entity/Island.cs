@@ -12,33 +12,52 @@ namespace Islander.Entity
     class Island : Entity
     {
         public Colour Colour { get; protected set; }
+        public Resource ResourceType { get; protected set; }
 
-        // lists of our different island textures
-        static List<string> blueIslands = new List<string>()
+        public enum IslandType
         {
-            "BlueBubble",
-            "BlueFantasy",
-        };
-        static List<string> yellowIslands = new List<string>()
+            BlueBubble,
+            BlueFantasy,
+            YellowRazor,
+            YellowTreasure,
+            RedLove,
+            RedTrident,
+            GreenHermit,
+            GreenMagnet
+        }
+
+        public IslandType Type { get; protected set; }
+
+        static Dictionary<IslandType, string> blueIslands = new Dictionary<IslandType, string>()
         {
-            "YellowRazor",
-            "YellowTreasure",
-        };
-        static List<string> redIslands = new List<string>()
-        {
-            "RedLove",
-            "RedTrident",
-        };
-        static List<string> greenIslands = new List<string>()
-        {
-            "GreenHermit",
-            "GreenMagnet",
+            {IslandType.BlueBubble, "BlueBubble"},
+            {IslandType.BlueFantasy, "BlueFantasy"},
         };
 
-        public Island(Texture2D sprite, Colour colour) : base(sprite)
+        static Dictionary<IslandType, string> yellowIslands = new Dictionary<IslandType, string>()
+        {
+            {IslandType.YellowRazor, "YellowRazor"},
+            {IslandType.YellowTreasure, "YellowTreasure"},
+        };
+
+        static Dictionary<IslandType, string> redIslands = new Dictionary<IslandType, string>()
+        {
+            {IslandType.RedLove, "RedLove"},
+            {IslandType.RedTrident, "RedTrident"},
+        };
+
+        static Dictionary<IslandType, string> greenIslands = new Dictionary<IslandType, string>()
+        {
+            {IslandType.GreenHermit, "GreenHermit"},
+            {IslandType.GreenMagnet, "GreenMagnet"},
+        };
+
+        public Island(Texture2D sprite, Colour colour, IslandType type, Resource resource) : base(sprite)
         {
             Colour = colour;
             scale = new Vector2(0.5f);
+            ResourceType = resource;
+            Type = type;
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -48,30 +67,36 @@ namespace Islander.Entity
             // choosing randomly using random number generator to choose fron the islands available
             var rng = new Random();
             string textureName = "";
+            Dictionary<IslandType, string> islands = null;
             switch (colour)
             {
                 case Colour.Blue:
-                    textureName = blueIslands[rng.Next(blueIslands.Count)];
+                    islands = blueIslands;
                     break;
                 case Colour.Yellow:
-                    textureName = yellowIslands[rng.Next(yellowIslands.Count)];
+                    islands = yellowIslands;
                     break;
                 case Colour.Red:
-                    textureName = redIslands[rng.Next(redIslands.Count)];
+                    islands = redIslands;
                     break;
                 case Colour.Green:
-                    textureName = greenIslands[rng.Next(greenIslands.Count)];
+                    islands = greenIslands;
                     break;
             }
+            // retrieve a random islandtype matching the colour and the associated texture
+            IslandType type = islands.Keys.ToList()[rng.Next(islands.Count)];
+            textureName = islands[type];
 
             // load the texture specified from a folder named Islands
-            
             Texture2D sprite = content.Load<Texture2D>("Islands/" + textureName);
             
-            Debug.WriteLine("Island Content Loaded: " + textureName);
+            //Debug.WriteLine("Island Content Loaded: " + textureName);
+
+            // create a resource for the selected islandtype
+            Resource resource = Resource.InitializeFromIslandType(colour, type, content);
 
             // create a new entity using the loaded sprite
-            return new Island(sprite, colour);
+            return new Island(sprite, colour, type, resource);
         }
 
         public override void Update(GameTime gameTime)

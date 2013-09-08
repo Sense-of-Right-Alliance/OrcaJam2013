@@ -59,7 +59,7 @@ namespace Islander.Screen
                 {
                     // Place boats and cities in positions matching an xbox controller
                     case (Colour.Blue):
-                        islandVector.X = width / 4;
+                        islandVector.X = width / 8;
                         islandVector.Y = height / 2;
                         player.Boat.position.X += 75;
                         break;
@@ -69,7 +69,7 @@ namespace Islander.Screen
                         player.Boat.position.Y -= 75;
                         break;
                     case (Colour.Red):
-                        islandVector.X = 3 * width / 4;
+                        islandVector.X = 7 * width / 8;
                         islandVector.Y = height / 2;
                         player.Boat.position.X -= 75;
                         break;
@@ -79,6 +79,7 @@ namespace Islander.Screen
                         player.Boat.position.Y += 75;
                         break;
                 }
+                islandVector.Y -= 70;
                 player.Island.position = islandVector;
                 player.Boat.position = islandVector;
             }
@@ -142,7 +143,22 @@ namespace Islander.Screen
 
         protected void BoatIslandCollision(Boat boat, Island island)
         {
-            // TODO
+            if (boat.Colour == island.Colour)
+            {
+                if (boat.CarriedResource != null) // if carrying a resource
+                {
+                    players[(int)boat.Colour].CollectResource(boat.CarriedResource);
+                    boat.CarriedResource = null;
+                }
+            }
+            else
+            {
+                if (boat.CarriedResource == null) // if not carrying a resource
+                {
+                    boat.CarriedResource = new Resource(island.ResourceType);
+                    boat.CarriedResource.IsCarried = true;
+                }
+            }
         }
 
         protected void BoatResourceCollision(Boat boat, Resource resource)
