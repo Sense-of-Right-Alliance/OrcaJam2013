@@ -120,11 +120,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Bullets\YellowDefault.PNG">
-      <Name>YellowDefault</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Bullets\GreenMagnet.PNG">
       <Name>GreenMagnet</Name>
       <Importer>TextureImporter</Importer>
@@ -203,6 +198,20 @@
     </Compile>
     <Compile Include="Islands\YellowRazor.PNG">
       <Name>YellowRazor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bullets\YellowDefault.PNG">
+      <Name>YellowDefault</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Boats\BoatTrail.png">
+      <Name>BoatTrail</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
