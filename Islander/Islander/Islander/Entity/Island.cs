@@ -18,22 +18,21 @@ namespace Islander.Entity
         {
             "Bubble",
             "Fantasy",
-            // etc.
         };
         static List<string> yellowIslands = new List<string>()
         {
+            "Razor",
             "Treasure",
-            // etc.
         };
         static List<string> redIslands = new List<string>()
         {
+            "Love",
             "Trident",
-            // etc.
         };
         static List<string> greenIslands = new List<string>()
         {
-            "Fantasy", // todo: replace with a real green island
-            // etc.
+            "Hermit",
+            "Magnet",
         };
 
         public Island(Texture2D sprite, Colour colour) : base(sprite)

@@ -142,51 +142,70 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cargo\Blue Cargo.PNG">
-      <Name>Blue Cargo</Name>
+    <Compile Include="Cargo\BlueCargo.PNG">
+      <Name>BlueCargo</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Cargo\Green Cargo.PNG">
-      <Name>Green Cargo</Name>
+    <Compile Include="Cargo\GreenCargo.PNG">
+      <Name>GreenCargo</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Cargo\Red Cargo.PNG">
-      <Name>Red Cargo</Name>
+    <Compile Include="Cargo\RedCargo.PNG">
+      <Name>RedCargo</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Cargo\Yellow Cargo.PNG">
-      <Name>Yellow Cargo</Name>
+    <Compile Include="Cargo\YellowCargo.PNG">
+      <Name>YellowCargo</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlueToken.PNG">
+    <Compile Include="Tokens\BlueToken.PNG">
       <Name>BlueToken</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="GreenToken.PNG">
+    <Compile Include="Tokens\GreenToken.PNG">
       <Name>GreenToken</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="RedToken.PNG">
+    <Compile Include="Tokens\RedToken.PNG">
       <Name>RedToken</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="YellowToken.PNG">
+    <Compile Include="Tokens\YellowToken.PNG">
       <Name>YellowToken</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Score Tokens\" />
+    <Compile Include="Islands\Hermit.PNG">
+      <Name>Hermit</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Islands\Love.PNG">
+      <Name>Love</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Islands\Magnet.PNG">
+      <Name>Magnet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Islands\Razor.PNG">
+      <Name>Razor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

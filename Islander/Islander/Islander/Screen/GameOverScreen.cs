@@ -9,9 +9,9 @@ namespace Islander.Screen
 {
     class GameOverScreen : MenuScreen
     {
-        public GameOverScreen()
+        public GameOverScreen(Islander.GameState gameState)
         {
-            gameState = Islander.GameState.OnGameOver;
+            GameState = gameState;
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)

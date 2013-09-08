@@ -19,6 +19,8 @@ namespace Islander.Screen
             Finished
         }
         public ScreenState CurrentState { get; protected set; }
+        public Player[] PlayersByColour { get; set; }
+        public Islander.GameState GameState { get; protected set; }
 
         protected Texture2D background;
         protected ContentManager content;
@@ -26,7 +28,6 @@ namespace Islander.Screen
         protected int width;
         protected int height;
         protected List<Player> players;
-        protected Islander.GameState gameState;
         protected TimeSpan timeElapsed;
 
         public BaseScreen()
@@ -34,7 +35,6 @@ namespace Islander.Screen
             CurrentState = ScreenState.Uninitialized;
         }
 
-        // 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch, int width, int height, List<Player> players)
         {
             this.content = content;
@@ -42,6 +42,8 @@ namespace Islander.Screen
             this.width = width;
             this.height = height;
             this.players = players;
+
+            PlayersByColour = null;
 
             LoadContent();
         }
@@ -73,11 +75,11 @@ namespace Islander.Screen
             timeElapsed += gameTime.ElapsedGameTime;
 
             if (timeElapsed.TotalSeconds > 0.25) // don't respond to input for first quarter second after creation
-                HandleInput();
+                HandleInput(gameTime);
 
             // pass Update to players
             foreach (var player in players)
-                player.Update(gameTime, gameState);
+                player.Update(gameTime, GameState);
         }
 
         public virtual void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
@@ -86,12 +88,12 @@ namespace Islander.Screen
                 spriteBatch.Draw(background, new Rectangle(0, 0, width, height), Color.White);
         }
 
-        protected virtual void HandleInput()
+        protected virtual void HandleInput(GameTime gameTime)
         {
             // handle each player's input
             foreach (var player in players)
             {
-                player.HandleInput(gameState);
+                player.HandleInput(GameState, gameTime);
                 
                 // check if the player has any messages to pass on
                 switch (player.Message)
