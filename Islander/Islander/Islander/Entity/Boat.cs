@@ -63,7 +63,7 @@ namespace Islander.Entity
 
             position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (VectorMagnitude(velocity) > 0)
+            if (velocity.Length() > 1)
             {
                 dir = velocity;
                 dir.Normalize();
@@ -71,17 +71,29 @@ namespace Islander.Entity
 
             if (VectorMagnitude(velocity) > 0 && VectorMagnitude(acceleration) < 1)
             {
-                acceleration = -dir * 2.0f;
+
+                if (velocity.Length() < 1.0f)
+                {
+                    velocity *= 0.0f;
+                    acceleration *= 0.0f;
+                }
+                else
+                {
+                    acceleration = -dir * velocity.Length() / 100;
+                }
             }
 
             if(VectorMagnitude(velocity) < 100)
                 velocity += acceleration;
-            else
+            else if (velocity.Length() > 1)
             {
-                velocity -= 1 * dir;
+                Vector2 opp = velocity;
+                opp.Normalize();
+                velocity -= 1 * opp;
             }
 
-            rotation = GetRotation();
+            if (velocity.Length() > 0.0)
+                rotation = GetRotation();
         }
 
         private float GetRotation()
@@ -98,7 +110,7 @@ namespace Islander.Entity
                 rotation = (float)Math.Acos(x);
             }
 
-            if (velocity.X < 0)
+            if (dir.X < 0)
                 rotation = 270 - rotation;
 
             return rotation;
