@@ -79,7 +79,7 @@ namespace Islander
             base.Initialize();
             //CREATE THE MEDIA PLAYER
             MediaPlayer.Volume = 1.0f;
-            MediaPlayer.Play(mainMenuScreen.menuMusic);
+            //MediaPlayer.Play(mainMenuScreen.menuMusic);
         }
 
         /// <summary>
