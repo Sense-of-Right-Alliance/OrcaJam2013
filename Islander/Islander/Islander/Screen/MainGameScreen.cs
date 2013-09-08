@@ -8,13 +8,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Screen
 {
+    using Entity;
+
     class MainGameScreen : BaseScreen
     {
-        public MainGameScreen()
+        protected List<Boat> boats;
+        protected List<Island> islands;
+        protected List<Resource> droppedResources;
+        protected List<List<Bullet>> bulletLists;
+
+        public MainGameScreen(Islander.GameState gameState)
         {
-            /*This line should be unnecessary, because All of the screens are created in Islander.Initialize*/
-            gameState = Islander.GameState.RunningGame;
-      
+            GameState = gameState;
         }
 
         protected override void LoadContent()
@@ -29,6 +34,18 @@ namespace Islander.Screen
         {
             base.StartRunning();
             PositionPlayers();
+
+            // initialize collections of boats, islands, bullets
+            boats = new List<Boat>();
+            islands = new List<Island>();
+            bulletLists = new List<List<Bullet>>();
+            droppedResources = new List<Resource>();
+            foreach (var player in players)
+            {
+                boats.Add(player.Boat);
+                islands.Add(player.Island);
+                bulletLists.Add(player.Bullets);
+            }
         }
 
         private void PositionPlayers()
@@ -71,11 +88,63 @@ namespace Islander.Screen
         {
             timeElapsed += gameTime.ElapsedGameTime;
             if (timeElapsed.TotalSeconds > 0.25)
-                base.HandleInput();
+                base.HandleInput(gameTime);
+
+            CheckCollisions();
 
             // pass Update to players
             foreach (var player in players)
-                player.Update(gameTime, gameState);
+                player.Update(gameTime, GameState);
+        }
+
+        // checks entities for collisions with other entities
+        protected void CheckCollisions()
+        {
+            CheckBoatCollisions();
+
+            CheckBulletCollisions();
+        }
+
+        // check each boat for collisions with islands and resources
+        protected void CheckBoatCollisions()
+        {
+            foreach (var boat in boats)
+            {
+                foreach (var island in islands)
+                    if (boat.CollidesWith(island))
+                        BoatIslandCollision(boat, island);
+                foreach (var resource in droppedResources)
+                    if (boat.CollidesWith(resource))
+                        BoatResourceCollision(boat, resource);
+            }
+        }
+
+        // check each bullet for collisions with boats
+        protected void CheckBulletCollisions()
+        {
+            foreach (var bulletList in bulletLists)
+            {
+                foreach (var bullet in bulletList)
+                    foreach (var boat in boats)
+                        if (bullet.HostileToPlayer[(int)boat.Colour])
+                            if (bullet.CollidesWith(boat))
+                                BulletBoatCollision(bullet, boat);
+            }
+        }
+
+        protected void BoatIslandCollision(Boat boat, Island island)
+        {
+            // TODO
+        }
+
+        protected void BoatResourceCollision(Boat boat, Resource resource)
+        {
+            // TODO
+        }
+
+        protected void BulletBoatCollision(Bullet bullet, Boat boat)
+        {
+            // TODO
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
@@ -89,7 +158,7 @@ namespace Islander.Screen
                 player.Island.Draw(spriteBatch);
                 player.Boat.Draw(spriteBatch);
                 //DrawBullets tells the player to 
-                foreach (var bullet in player.bullets)
+                foreach (var bullet in player.Bullets)
                 {
                     bullet.Draw(spriteBatch);
                 }
