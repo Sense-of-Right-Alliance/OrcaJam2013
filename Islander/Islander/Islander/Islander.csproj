@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Entity\Boat.cs" />
     <Compile Include="Entity\Bullet.cs" />
+    <Compile Include="Entity\EnemyBoat.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\Island.cs" />
     <Compile Include="Entity\PowerUp.cs" />

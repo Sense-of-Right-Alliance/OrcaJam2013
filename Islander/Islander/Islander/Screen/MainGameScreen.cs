@@ -15,12 +15,11 @@ namespace Islander.Screen
         protected List<Boat> boats;
         protected List<Island> islands;
         protected List<Resource> droppedResources;
-        protected new Dictionary<Colour, List<Bullet>> bulletLists;
+        protected List<List<Bullet>> bulletLists;
 
-        public MainGameScreen()
+        public MainGameScreen(Islander.GameState gameState)
         {
-            /*This line should be unnecessary, because All of the screens are created in Islander.Initialize*/
-            gameState = Islander.GameState.RunningGame;
+            GameState = gameState;
         }
 
         protected override void LoadContent()
@@ -39,7 +38,7 @@ namespace Islander.Screen
             // initialize collections of boats, islands, bullets
             boats = new List<Boat>();
             islands = new List<Island>();
-            bulletLists = new Dictionary<Colour, List<Bullet>>();
+            bulletLists = new List<List<Bullet>>();
             droppedResources = new List<Resource>();
             foreach (var player in players)
             {
@@ -89,13 +88,13 @@ namespace Islander.Screen
         {
             timeElapsed += gameTime.ElapsedGameTime;
             if (timeElapsed.TotalSeconds > 0.25)
-                base.HandleInput();
+                base.HandleInput(gameTime);
 
             CheckCollisions();
 
             // pass Update to players
             foreach (var player in players)
-                player.Update(gameTime, gameState);
+                player.Update(gameTime, GameState);
         }
 
         // checks entities for collisions with other entities
@@ -123,14 +122,13 @@ namespace Islander.Screen
         // check each bullet for collisions with boats
         protected void CheckBulletCollisions()
         {
-            foreach (var colourBulletList in bulletLists)
+            foreach (var bulletList in bulletLists)
             {
-                //foreach (var boat in boats)
-                //    if (colourBulletList.Key
-                //    foreach (var colourBulletList in bulletList)
-                //        if (PlayersByColour[colourBulletList
-                //        if (bullet.CollidesWith(boat))
-                //            BulletBoatCollision(bullet, boat);
+                foreach (var bullet in bulletList)
+                    foreach (var boat in boats)
+                        if (bullet.HostileToPlayer[(int)boat.Colour])
+                            if (bullet.CollidesWith(boat))
+                                BulletBoatCollision(bullet, boat);
             }
         }
 
@@ -159,6 +157,11 @@ namespace Islander.Screen
             {
                 player.Island.Draw(spriteBatch);
                 player.Boat.Draw(spriteBatch);
+                //DrawBullets tells the player to 
+                foreach (var bullet in player.Bullets)
+                {
+                    bullet.Draw(spriteBatch);
+                }
             }
         }
     }

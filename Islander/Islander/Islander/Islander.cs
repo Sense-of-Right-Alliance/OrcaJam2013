@@ -66,14 +66,14 @@ namespace Islander
             };
 
             // collection of screens
-            mainMenuScreen = new MainMenuScreen();
-            mainGameScreen = new MainGameScreen();
-            gameOverScreen = new GameOverScreen();
+            mainMenuScreen = new MainMenuScreen(GameState.OnMainMenu);
+            mainGameScreen = new MainGameScreen(GameState.RunningGame);
+            gameOverScreen = new GameOverScreen(GameState.OnGameOver);
             screens = new Dictionary<GameState, BaseScreen>()
             {
-                {GameState.OnMainMenu, mainMenuScreen},
-                {GameState.RunningGame, mainGameScreen},
-                {GameState.OnGameOver, gameOverScreen}
+                {mainMenuScreen.GameState, mainMenuScreen},
+                {mainGameScreen.GameState, mainGameScreen},
+                {gameOverScreen.GameState, gameOverScreen}
             };
             
             base.Initialize();

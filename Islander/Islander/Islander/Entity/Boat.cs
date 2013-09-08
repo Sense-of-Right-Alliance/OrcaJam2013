@@ -114,7 +114,6 @@ namespace Islander.Entity
         public void HandleInput(KeyboardState keyboardState)
         {
             Vector2 moveDir = Vector2.Zero;
-            Vector2 shootDir = Vector2.Zero;
             
             if (keyboardState.IsKeyDown(Keys.A))
             {
@@ -132,32 +131,14 @@ namespace Islander.Entity
             {
                 moveDir.Y -= 1.0f;
             }
-            
-            if (keyboardState.IsKeyDown(Keys.Left))
-            {
-                shootDir.X -= 1.0f;
-            }
-            if (keyboardState.IsKeyDown(Keys.Right))
-            {
-                shootDir.X += 1.0f;
-            }
-            if (keyboardState.IsKeyDown(Keys.Up))
-            {
-                shootDir.Y -= 1.0f;
-            }
-            if (keyboardState.IsKeyDown(Keys.Down))
-            {
-                shootDir.Y += 1.0f;
-            }
 
-            HandleInput(moveDir, shootDir);
+            HandleInput(moveDir);
 
         }
 
-        public void HandleInput(Vector2 leftThumbStick, Vector2 rightThumbStick)
+        public void HandleInput(Vector2 leftThumbStick)
         {
             HandleMove(leftThumbStick);
-            HandleShoot(rightThumbStick);
         }
 
         public void HandleMove(Vector2 leftThumbStick) 
@@ -172,23 +153,6 @@ namespace Islander.Entity
                 dir.Normalize();*/
 
             acceleration = leftThumbStick * speed;
-        }
-
-        public void HandleShoot(Vector2 rightThumbStick)
-        {
-            double x = rightThumbStick.X;
-            double y = rightThumbStick.Y;
-
-            double mag = Math.Sqrt((Math.Pow(x,2.0) + Math.Pow(y,2.0)));
-            if (mag > 0.5)
-            {
-                ShootBullet(rightThumbStick);
-            }
-        }
-
-        private void ShootBullet(Vector2 dir)
-        {
-
         }
 
         /*public void HandleInput(InputState input, int index)
