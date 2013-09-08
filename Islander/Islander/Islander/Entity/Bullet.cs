@@ -12,9 +12,10 @@ namespace Islander.Entity
     {
         private Vector2 velocity;
 
-        public Bullet(Texture2D sprite, Vector2 direction, float speed) : base(sprite)
+        public Bullet(Texture2D sprite, Vector2 position, float speed) : base(sprite)
         {
-            velocity = direction * speed;
+            velocity = position * speed;
+            this.position = position;
         }
 
         public override void Update(GameTime gameTime)
