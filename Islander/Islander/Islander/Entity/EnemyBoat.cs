@@ -31,6 +31,10 @@ namespace Islander.Entity
         public override void Update(GameTime gameTime)
         {
             //base.Update(gameTime);
+            //Why are you always null what that doesn't even make sense
+            //You bastard you're null right now
+            //Goddamn Enums can't be null what the hell
+            //What are you
             if (target == null)
                 chooseTarget();
 
@@ -48,6 +52,8 @@ namespace Islander.Entity
              * If we do end up using this, then the point of this line is to find the direction of the target from the enemy ship.
              * Also this class really needs access to the player list.*/
             //velocity = position - players[target];
+
+            //Where did I even hear that would work? Strange days.
 
             //Later iterations can use pathfinding/boids algorithm to follow it a little more intelligently.
         }
