@@ -1,4 +1,5 @@
 Content\Menu.xnb
+Content\Background.xnb
 Content\Boats\BlueBoat.xnb
 Content\Boats\GreenBoat.xnb
 Content\Boats\RedBoat.xnb
@@ -7,11 +8,11 @@ Content\Islands\BlueBubble.xnb
 Content\Islands\BlueFantasy.xnb
 Content\Islands\YellowTreasure.xnb
 Content\Islands\RedTrident.xnb
-Content\Background.xnb
 Content\Bullets\BlueBubble.xnb
 Content\Bullets\BlueDefault.xnb
 Content\Bullets\GreenDefault.xnb
 Content\Bullets\RedDefault.xnb
+Content\Bullets\YellowDefault.xnb
 Content\Bullets\GreenMagnet.xnb
 Content\Bullets\YellowRazor.xnb
 Content\Bullets\RedTrident.xnb
@@ -27,5 +28,5 @@ Content\Islands\GreenHermit.xnb
 Content\Islands\RedLove.xnb
 Content\Islands\GreenMagnet.xnb
 Content\Islands\YellowRazor.xnb
-Content\Bullets\YellowDefault.xnb
 Content\Boats\BoatTrail.xnb
+Content\Arial.xnb

@@ -12,10 +12,23 @@ namespace Islander.Screen
 
     class MainGameScreen : BaseScreen
     {
+        /*CONSTANTS FOR SCORE*/
+        private const int RETURN_RESOURCE = 1000;
+
         protected List<Boat> boats;
         protected List<Island> islands;
         protected List<Resource> droppedResources;
         protected List<List<Bullet>> bulletLists;
+
+        //Do we need all these vector2's? I didn't want to calculate the pos greenScoreLabel = new Vector2(blueScoreLabel.X, blueScoreLabel.Y + 50) EVERY update loop.
+        private Vector2 blueScoreLabelPos;
+        private Vector2 greenScoreLabelPos;
+        private Vector2 redScoreLabelPos;
+        private Vector2 yellowScoreLabelPos;
+        private Vector2 blueScorePos;
+        private Vector2 greenScorePos;
+        private Vector2 redScorePos;
+        private Vector2 yellowScorePos;
 
         public MainGameScreen(Islander.GameState gameState)
         {
@@ -25,7 +38,6 @@ namespace Islander.Screen
         protected override void LoadContent()
         {
             base.LoadContent();
-
             background = content.Load<Texture2D>("Background");
         }
 
@@ -46,6 +58,26 @@ namespace Islander.Screen
                 islands.Add(player.Island);
                 bulletLists.Add(player.Bullets);
             }
+
+            //Initialize UI elements.
+            blueScoreLabelPos.Y = (13 * height / 16) + 2; //MAGIC NUMBERS
+            blueScoreLabelPos.X = 4 * width / 11;
+            blueScorePos.X = blueScoreLabelPos.X + width/4;
+            blueScorePos.Y = blueScoreLabelPos.Y;
+            yellowScoreLabelPos.Y = blueScoreLabelPos.Y + (height / 20) - 2; //MAGIC NUMBERS
+            yellowScoreLabelPos.X = blueScoreLabelPos.X;
+            yellowScorePos.X = blueScoreLabelPos.X + width / 4;
+            yellowScorePos.Y = yellowScoreLabelPos.Y;
+            redScoreLabelPos.Y = blueScoreLabelPos.Y + (height / 10) - 3; //MAGIC NUMBERS
+            redScoreLabelPos.X = blueScoreLabelPos.X;
+            redScorePos.X = blueScoreLabelPos.X + width / 4;
+            redScorePos.Y = redScoreLabelPos.Y;
+            greenScoreLabelPos.Y = blueScoreLabelPos.Y + (height / 7); //GREEN LABEL
+            greenScoreLabelPos.X = blueScoreLabelPos.X;
+            greenScorePos.X = blueScoreLabelPos.X + width / 4;
+            greenScorePos.Y = greenScoreLabelPos.Y;
+
+
         }
 
         private void PositionPlayers()
@@ -95,14 +127,19 @@ namespace Islander.Screen
 
             // pass Update to players
             foreach (var player in players)
+            {
+                /*This maybe should only be updated from Player? That would mean that it would only refresh 
+                 * when the player increases or decreases their score, as opposed to every update.
+                 * On the flip side, that would mean that Player would be in control of UI elements, which really should be in
+                 * their own class. /shrug */
                 player.Update(gameTime, GameState);
+            }
         }
 
         // checks entities for collisions with other entities
         protected void CheckCollisions()
         {
             CheckBoatCollisions();
-
             CheckBulletCollisions();
         }
 
@@ -149,6 +186,7 @@ namespace Islander.Screen
                 {
                     players[(int)boat.Colour].CollectResource(boat.CarriedResource);
                     boat.CarriedResource = null;
+                    players[(int)boat.Colour].score += RETURN_RESOURCE;
                 }
             }
             else
@@ -183,12 +221,54 @@ namespace Islander.Screen
             {
                 player.Island.Draw(spriteBatch);
                 player.Boat.Draw(spriteBatch);
-                //DrawBullets tells the player to 
                 foreach (var bullet in player.Bullets)
                 {
                     bullet.Draw(spriteBatch);
                 }
+                updateScore(player.Colour, player.score, player.PlayerIndex);
             }
+        }
+        private void updateScore(Colour playerColour, int playerScore, PlayerIndex playerIndex)
+        {
+            /*TODO: Put the players score in it's corresponding textbox.*/
+            switch (playerColour)
+            {
+                case (Colour.Blue):
+                    outlineFont(playerScore, playerIndex, blueScoreLabelPos, blueScorePos);
+                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", blueScoreLabelPos, Color.Blue);
+                    spriteBatch.DrawString(scoreFont, "" + playerScore, blueScorePos, Color.Blue);
+                    break;
+                case (Colour.Green):
+                    outlineFont(playerScore, playerIndex, greenScoreLabelPos, greenScorePos);
+                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", greenScoreLabelPos, Color.Green);
+                    spriteBatch.DrawString(scoreFont, "" + playerScore, greenScorePos, Color.Green);
+                    break;
+                case (Colour.Red):
+                    outlineFont(playerScore, playerIndex, redScoreLabelPos, redScorePos);
+                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", redScoreLabelPos, Color.Red);
+                    spriteBatch.DrawString(scoreFont, "" + playerScore, redScorePos, Color.Red);
+                    break;
+                case (Colour.Yellow):
+                    outlineFont(playerScore, playerIndex, yellowScoreLabelPos, yellowScorePos);
+                    spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", yellowScoreLabelPos, Color.Orange);
+                    spriteBatch.DrawString(scoreFont, "" + playerScore, yellowScorePos, Color.Orange);
+                    break;
+            }
+        }
+        /*Don't look at this method. Seriously just don't. Ignore the fact that it's run 4 times every frame. Don't even worry about it.
+         * Alternatively, make it more general and give it to the other menu screens as well. Your call.
+         * Fucking thanks yellow, you bastard.
+         */
+        private void outlineFont(int playerScore, PlayerIndex playerIndex, Vector2 scoreLabelPos, Vector2 scorePos)
+        {
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X+1,scoreLabelPos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X+1,scorePos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X - 1, scoreLabelPos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X - 1, scorePos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y + 1), Color.Black);
+            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y + 1), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y - 1), Color.Black);
+            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y - 1), Color.Black);
         }
     }
 }

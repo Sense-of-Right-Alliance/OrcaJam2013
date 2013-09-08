@@ -48,10 +48,13 @@ namespace Islander
         protected TimeSpan bulletDelay;
         protected TimeSpan bulletTimeElapsed;
 
+        public int score { get; set; }
+
         public Player(PlayerIndex playerIndex, ContentManager content)
         {
             PlayerIndex = playerIndex;
             this.content = content;
+            this.score = 0;
             
             PlayersByColour = null;
             HostileToPlayer = null;
