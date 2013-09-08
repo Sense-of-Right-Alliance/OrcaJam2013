@@ -77,6 +77,9 @@ namespace Islander
             };
             
             base.Initialize();
+            //CREATE THE MEDIA PLAYER
+            MediaPlayer.Volume = 1.0f;
+            MediaPlayer.Play(mainMenuScreen.menuMusic);
         }
 
         /// <summary>
@@ -133,11 +136,21 @@ namespace Islander
                 currentScreen.Reset();
 
                 if (currentScreen == mainMenuScreen)
+                {
+                    //MediaPlayer.Stop();
+                    //MediaPlayer.Play(mainMenuScreen.menuMusic);   SELECT THE SONG TO PLAY FOR GAMEPLAY
                     SetGameState(GameState.RunningGame);
+                }
                 else if (currentScreen == mainGameScreen)
+                {
+                    //MediaPlayer.Stop();
                     SetGameState(GameState.OnGameOver);
+                }
                 else if (currentScreen == gameOverScreen)
+                {
+                    //MediaPlayer.Play(mainMenuScreen.menuMusic);
                     SetGameState(GameState.OnMainMenu);
+                }
             }
         }
 

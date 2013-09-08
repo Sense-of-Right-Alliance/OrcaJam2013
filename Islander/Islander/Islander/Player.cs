@@ -16,9 +16,9 @@ namespace Islander
     enum Colour
     {
         Blue,
-        Yellow,
+        Green,
         Red,
-        Green
+        Yellow
     }
 
     class Player
@@ -28,6 +28,8 @@ namespace Islander
             NoMessage,
             SkipToNextScreen
         }
+        /*CONSTANTS FOR SCORE*/
+        private const int RETURN_RESOURCE = 1000;
 
         private const float BULLET_SPEED = 15;
 
@@ -117,6 +119,7 @@ namespace Islander
         public void CollectResource(Resource resource)
         {
             CollectedResources[(int)resource.Colour] = resource;
+            score += RETURN_RESOURCE;
         }
 
         public virtual void HandleInput(Islander.GameState gameState, GameTime gameTime)
