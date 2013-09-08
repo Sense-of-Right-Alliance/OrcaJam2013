@@ -47,7 +47,7 @@ namespace Islander.Entity
             /*TODO: This line is just straight up wrong, couldn't quite find the math on it.
              * If we do end up using this, then the point of this line is to find the direction of the target from the enemy ship.
              * Also this class really needs access to the player list.*/
-            velocity = position - players[target];
+            //velocity = position - players[target];
 
             //Later iterations can use pathfinding/boids algorithm to follow it a little more intelligently.
         }
@@ -58,7 +58,7 @@ namespace Islander.Entity
             //Closest Player
             Colour min = Colour.Blue;
             Vector2 minDistance = new Vector2(2000.0f);
-            foreach (var player in players)
+            /*foreach (var player in players)
             {
                 Vector2 distanceToPlayer = Vector2.Distance(position, player.position);
                 if (distanceToPlayer < minDistance)
@@ -66,7 +66,7 @@ namespace Islander.Entity
                     minDistance = distanceToPlayer;
                     minColour = player.Colour;
                 }
-            }
+            }*/
         }
 
     }
