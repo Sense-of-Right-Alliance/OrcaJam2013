@@ -11,17 +11,24 @@ namespace Islander.Entity
     class Bullet : Entity
     {
         private Vector2 velocity;
+        private float timer = 0.0f;
+        private float lifeTime = 0.4f;
+        private Vector2 start;
         public bool[] HostileToPlayer { get; set; }
         public Colour Colour { get; protected set; }
+        public bool done = false;
 
         public Bullet(Texture2D sprite, Vector2 direction, float speed, Colour colour, bool[] hostileToPlayer) : base(sprite)
         {
-            this.rotation = GetRotation(direction);
+            
             this.velocity = direction * speed;
+            this.rotation = GetRotation(direction);
             this.position = direction;
             this.Colour = colour;
             this.HostileToPlayer = hostileToPlayer;
             this.scale = new Vector2(0.5f);
+
+            start = position;
         }
 
         private float GetRotation(Vector2 direction)
@@ -39,7 +46,12 @@ namespace Islander.Entity
             }
 
             if (velocity.X < 0)
-                rotation = 270 - rotation;
+            {
+                float deg =  rotation * 180 / (float)Math.PI;
+                deg = 360 - deg;
+                rotation = deg * (float)Math.PI/180;
+
+            }
 
             return rotation;
         }
@@ -53,7 +65,15 @@ namespace Islander.Entity
         {
             base.Update(gameTime);
 
+
             position += velocity;
+
+
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(timer >= lifeTime) 
+            {
+                done = true;
+            }
         }
     }
 }
