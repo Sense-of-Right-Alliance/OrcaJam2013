@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Islander.Screen
 {
@@ -30,6 +31,11 @@ namespace Islander.Screen
         private Vector2 redScorePos;
         private Vector2 yellowScorePos;
 
+        SoundEffect takeCargo;
+        SoundEffect scoreCargo;
+        SoundEffect impactSound;
+
+
         public MainGameScreen(Islander.GameState gameState)
         {
             GameState = gameState;
@@ -39,6 +45,9 @@ namespace Islander.Screen
         {
             base.LoadContent();
             background = content.Load<Texture2D>("Background");
+            takeCargo = content.Load<SoundEffect>("SFX/Take Cargo");
+            scoreCargo = content.Load<SoundEffect>("SFX/Score Cargo");
+            impactSound = content.Load<SoundEffect>("SFX/Impact");
         }
 
         // Function that sets up the game, including positioning all initial boats and islands
@@ -170,7 +179,7 @@ namespace Islander.Screen
                             if (bullet.CollidesWith(boat))
                                 BulletBoatCollision(bullet, boat, removedBullets);
 
-                    // TODO: check if bullet has left game screen
+                    
             }
 
             // remove all bullets that were destroyed
@@ -184,6 +193,8 @@ namespace Islander.Screen
             {
                 if (boat.CarriedResource != null) // if carrying a resource
                 {
+                    //Plays the collect resource sound. This should maybe be in the CollectResource method
+                    scoreCargo.Play();
                     players[(int)boat.Colour].CollectResource(boat.CarriedResource);
                     boat.CarriedResource = null;
                     players[(int)boat.Colour].score += RETURN_RESOURCE;
@@ -193,6 +204,8 @@ namespace Islander.Screen
             {
                 if (boat.CarriedResource == null) // if not carrying a resource
                 {
+                    //PLAY THE SOUND
+                    takeCargo.Play();
                     boat.CarriedResource = new Resource(island.ResourceType);
                     boat.CarriedResource.IsCarried = true;
                 }
@@ -208,7 +221,11 @@ namespace Islander.Screen
         {
             // TODO
             if (bullet.HostileToPlayer[(int)boat.Colour])
+            {
+                //Plays the sound!
+                impactSound.Play();
                 removedBullets.Add(bullet);
+            }
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
@@ -270,5 +287,6 @@ namespace Islander.Screen
             spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y - 1), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y - 1), Color.Black);
         }
+        /*I told you not to fucking look at it now your eyes are sad.*/
     }
 }
