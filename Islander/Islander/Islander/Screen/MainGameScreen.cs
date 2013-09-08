@@ -43,6 +43,7 @@ namespace Islander.Screen
 
         protected override void LoadContent()
         {
+            SoundEffect.MasterVolume = 0.5f;
             base.LoadContent();
             background = content.Load<Texture2D>("Background");
             takeCargo = content.Load<SoundEffect>("SFX/Take Cargo");
@@ -247,7 +248,6 @@ namespace Islander.Screen
         }
         private void updateScore(Colour playerColour, int playerScore, PlayerIndex playerIndex)
         {
-            /*TODO: Put the players score in it's corresponding textbox.*/
             switch (playerColour)
             {
                 case (Colour.Blue):
