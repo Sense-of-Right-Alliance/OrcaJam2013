@@ -62,23 +62,29 @@ namespace Islander
             Bullets = new List<Bullet>();
 
             // load default bullet sprite
-            String bulletFilename = "Default";
+            String bulletFilename = "";
             switch (Colour)
             {
                 case Colour.Blue:
-                    bulletFilename += "Blue";
+                    bulletFilename = "Blue";
                     break;
                 case Colour.Yellow:
-                    bulletFilename += "Yellow";
+                    bulletFilename = "Yellow";
                     break;
                 case Colour.Red:
-                    bulletFilename += "Red";
+                    bulletFilename = "Red";
                     break;
                 case Colour.Green:
-                    bulletFilename += "Green";
+                    bulletFilename = "Green";
                     break;
             }
+            bulletFilename += "Default";
             bulletSprite = content.Load<Texture2D>("Bullets/" + bulletFilename);
+        }
+
+        public void RemoveBullet(Bullet bullet)
+        {
+            Bullets.Remove(bullet);
         }
 
         public void SetGameColour(Colour colour)
@@ -176,7 +182,7 @@ namespace Islander
         {
             bulletTimeElapsed = TimeSpan.Zero;
             direction.Normalize();
-            Bullet bullet = new Bullet(bulletSprite, direction, BULLET_SPEED, HostileToPlayer);
+            Bullet bullet = new Bullet(bulletSprite, direction, BULLET_SPEED, Colour, HostileToPlayer);
             bullet.position *= 5;
             bullet.position += Boat.position;
             Bullets.Add(bullet);
