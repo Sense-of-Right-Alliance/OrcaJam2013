@@ -197,8 +197,18 @@ namespace Islander
             {
                 Boat.Update(gameTime);
                 Island.Update(gameTime);
-                foreach (Bullet bullet in Bullets)
-                    bullet.Update(gameTime);
+                /*foreach (Bullet bullet in Bullets)
+                {
+                    
+
+                }*/
+
+                for (int i = Bullets.Count-1; i >= 0; i--)
+                {
+                    Bullets[i].Update(gameTime);
+                    if (Bullets[i].done)
+                        RemoveBullet(Bullets[i]);
+                }
             }
         }
     }
