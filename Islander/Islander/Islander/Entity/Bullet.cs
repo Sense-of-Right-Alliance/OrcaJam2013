@@ -12,12 +12,14 @@ namespace Islander.Entity
     {
         private Vector2 velocity;
         public bool[] HostileToPlayer { get; set; }
+        public Colour Colour { get; protected set; }
 
-        public Bullet(Texture2D sprite, Vector2 direction, float speed, bool[] hostileToPlayer) : base(sprite)
+        public Bullet(Texture2D sprite, Vector2 direction, float speed, Colour colour, bool[] hostileToPlayer) : base(sprite)
         {
             this.rotation = GetRotation(direction);
             this.velocity = direction * speed;
             this.position = direction;
+            this.Colour = colour;
             this.HostileToPlayer = hostileToPlayer;
             this.scale = new Vector2(0.5f);
         }

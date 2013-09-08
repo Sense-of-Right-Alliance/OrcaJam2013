@@ -119,17 +119,25 @@ namespace Islander.Screen
             }
         }
 
-        // check each bullet for collisions with boats
+        // check each bullet for collisions with boats and leaving the game screen
         protected void CheckBulletCollisions()
         {
+            var removedBullets = new List<Bullet>();
+
             foreach (var bulletList in bulletLists)
             {
                 foreach (var bullet in bulletList)
                     foreach (var boat in boats)
                         if (bullet.HostileToPlayer[(int)boat.Colour])
                             if (bullet.CollidesWith(boat))
-                                BulletBoatCollision(bullet, boat);
+                                BulletBoatCollision(bullet, boat, removedBullets);
+
+                    // TODO: check if bullet has left game screen
             }
+
+            // remove all bullets that were destroyed
+            foreach (var bullet in removedBullets)
+                PlayersByColour[(int)bullet.Colour].RemoveBullet(bullet);
         }
 
         protected void BoatIslandCollision(Boat boat, Island island)
@@ -142,9 +150,11 @@ namespace Islander.Screen
             // TODO
         }
 
-        protected void BulletBoatCollision(Bullet bullet, Boat boat)
+        protected void BulletBoatCollision(Bullet bullet, Boat boat, List<Bullet> removedBullets)
         {
             // TODO
+            if (bullet.HostileToPlayer[(int)boat.Colour])
+                removedBullets.Add(bullet);
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
