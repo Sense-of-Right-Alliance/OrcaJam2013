@@ -44,7 +44,7 @@ namespace Islander.Screen
             base.LoadContent();
             background = content.Load<Texture2D>("Background");
             takeCargo = content.Load<SoundEffect>("SFX/Take Cargo");
-            scoreCargo = content.Load<SoundEffect>("SFX/Score Cargo");
+            scoreCargo = content.Load<SoundEffect>("SFX/Score Cargo2");
             impactSound = content.Load<SoundEffect>("SFX/Impact");
         }
 

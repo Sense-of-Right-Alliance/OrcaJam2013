@@ -108,7 +108,7 @@ namespace Islander
             bulletSprite = content.Load<Texture2D>("Bullets/" + bulletFilename);
 
             //Loads the bullet sound.
-            basicAttackSound = content.Load<SoundEffect>("SFX/Basic Attack");
+            basicAttackSound = content.Load<SoundEffect>("SFX/Basic Attack2");
         }
 
         public void RemoveBullet(Bullet bullet)
