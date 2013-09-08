@@ -32,6 +32,8 @@ namespace Islander.Screen
         SoundEffect scoreCargo;
         SoundEffect impactSound;
 
+        public const int RETURN_RESOURCE = 50;
+
 
         public MainGameScreen(Islander.GameState gameState)
         {
@@ -140,6 +142,21 @@ namespace Islander.Screen
                  * On the flip side, that would mean that Player would be in control of UI elements, which really should be in
                  * their own class. /shrug */
                 player.Update(gameTime, GameState);
+
+                if (player.Boat.state == Boat.BoatState.dead)
+                {
+                    player.Boat.WaitForRespawn(player.Island.position);
+                    if (player.Boat.CarriedResource != null)
+                    {
+                        droppedResources.Add(player.Boat.CarriedResource);
+                        player.Boat.CarriedResource = null;
+                    }
+                }
+            }
+
+            foreach (var resource in droppedResources)
+            {
+                resource.Update(gameTime);
             }
         }
 
@@ -153,15 +170,24 @@ namespace Islander.Screen
         // check each boat for collisions with islands and resources
         protected void CheckBoatCollisions()
         {
+            var collectedResources = new List<Resource>();
+
             foreach (var boat in boats)
             {
-                foreach (var island in islands)
-                    if (boat.CollidesWith(island))
-                        BoatIslandCollision(boat, island);
-                foreach (var resource in droppedResources)
-                    if (boat.CollidesWith(resource))
-                        BoatResourceCollision(boat, resource);
+                if (boat.state == Boat.BoatState.alive)
+                {
+                    foreach (var island in islands)
+                        if (boat.CollidesWith(island))
+                            BoatIslandCollision(boat, island);
+                    foreach (var resource in droppedResources)
+                        if (boat.CollidesWith(resource))
+                            BoatResourceCollision(boat, resource, collectedResources);
+                }
             }
+
+            // remove all resources that were retrieved
+            foreach (var resource in collectedResources)
+                droppedResources.Remove(resource);
         }
 
         // check each bullet for collisions with boats and leaving the game screen
@@ -176,8 +202,6 @@ namespace Islander.Screen
                         if (bullet.HostileToPlayer[(int)boat.Colour])
                             if (bullet.CollidesWith(boat))
                                 BulletBoatCollision(bullet, boat, removedBullets);
-
-                    
             }
 
             // remove all bullets that were destroyed
@@ -194,6 +218,10 @@ namespace Islander.Screen
                     //Plays the collect resource sound. This should maybe be in the CollectResource method
                     scoreCargo.Play();
                     PlayersByColour[(int)boat.Colour].CollectResource(boat.CarriedResource);
+                    
+                    if(boat.CarriedResource.Colour != boat.Colour)
+                        PlayersByColour[(int)boat.Colour].score += RETURN_RESOURCE;
+
                     boat.CarriedResource = null;
                 }
             }
@@ -210,9 +238,25 @@ namespace Islander.Screen
             }
         }
 
-        protected void BoatResourceCollision(Boat boat, Resource resource)
+        protected void BoatResourceCollision(Boat boat, Resource resource, List<Resource> collectedResources)
         {
-            // TODO
+            if (boat.Colour == resource.Colour)
+            {
+                takeCargo.Play(); // should be returnCargo
+                PlayersByColour[(int)boat.Colour].score += 200;
+                collectedResources.Add(resource);
+            }
+            else
+            {
+                if (boat.CarriedResource == null) // if not carrying a resource
+                {
+                    //PLAY THE SOUND
+                    takeCargo.Play();
+                    boat.CarriedResource = resource;
+                    boat.CarriedResource.IsCarried = true;
+                    collectedResources.Add(resource);
+                }
+            }
         }
 
         protected void BulletBoatCollision(Bullet bullet, Boat boat, List<Bullet> removedBullets)
@@ -223,6 +267,7 @@ namespace Islander.Screen
                 //Plays the sound!
                 impactSound.Play();
                 removedBullets.Add(bullet);
+                boat.Hit();
             }
         }
 
@@ -241,6 +286,11 @@ namespace Islander.Screen
                     bullet.Draw(spriteBatch);
                 }
                 updateScore(player.Colour, player.score, player.PlayerIndex);
+            }
+
+            foreach (var resource in droppedResources)
+            {
+                resource.Draw(spriteBatch);
             }
         }
         private void updateScore(Colour playerColour, int playerScore, PlayerIndex playerIndex)

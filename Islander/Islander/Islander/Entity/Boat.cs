@@ -13,9 +13,22 @@ namespace Islander.Entity
 {
     class Boat : Entity
     {
+        public enum BoatState
+        {
+            uninitialized,
+            alive,
+            dead,
+            respawning
+        }
+
         public Colour Colour { get; protected set; }
 
         private const float MAX_VELOCITY = 10;
+        private const float SPAWN_TIME = 3.0f;
+
+        private int hits = 0;
+        public BoatState state { get; protected set; }
+        private float spawnTimer = 0.0f;
 
         private float speed = 10;
         private Vector2 velocity;
@@ -35,6 +48,8 @@ namespace Islander.Entity
 
             trailTexture = trail;
             trailEffects = new List<BoatTrail>();
+
+            state = BoatState.alive;
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -67,10 +82,45 @@ namespace Islander.Entity
             return new Boat(sprite, trailTexture, colour);
         }
 
+        public void Hit()
+        {
+            hits++;
+            if (hits >= 5)
+            {
+                state = BoatState.dead;
+            }
+        }
+
+        public void WaitForRespawn(Vector2 spawnPosition)
+        {
+            position = spawnPosition;
+            state = BoatState.respawning;
+            hits = 0;
+            spawnTimer = 0.0f;
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
+            if (state == BoatState.respawning)
+            {
+                spawnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (spawnTimer >= SPAWN_TIME)
+                {
+                    state = BoatState.alive;
+                }
+            }
+            else if (state == BoatState.alive)
+            {
+                HandleMove(gameTime);
+            }
+
+                
+        }
+
+        private void HandleMove(GameTime gameTime)
+        {
             position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (velocity.Length() > 1)
@@ -93,7 +143,7 @@ namespace Islander.Entity
                 }
             }
 
-            if(VectorMagnitude(velocity) < 100)
+            if (VectorMagnitude(velocity) < 100)
                 velocity += acceleration;
             else if (velocity.Length() > 1)
             {
@@ -107,7 +157,7 @@ namespace Islander.Entity
                 rotation = GetRotation();
 
             //TODO: This will need to be more specific with the width of the boat. Also we should have called them ships
-            if (position.X < 0) 
+            if (position.X < 0)
                 position.X = 0;
             else if (position.X > 1200)//TODO: SHIT WE NEED SCREEN WIDTH HERE. AAAHHH
                 position.X = 1200;
@@ -116,7 +166,6 @@ namespace Islander.Entity
             else if (position.Y > 620)//TODO: Seriously so hacky. Please get me screen width.
                 position.Y = 620;
             //TODO: This is literally killing me. Please let's fix this. My body hurts.
-                
         }
 
         private float GetRotation()
@@ -213,7 +262,10 @@ namespace Islander.Entity
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (state == BoatState.alive)
+            {
+                base.Draw(spriteBatch);
+            }
 
             if (CarriedResource != null)
             {
