@@ -43,6 +43,7 @@ namespace Islander
 
             graphics.PreferredBackBufferWidth = 1200;
             graphics.PreferredBackBufferHeight = 768;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
             SetGameState(GameState.Uninitialized);

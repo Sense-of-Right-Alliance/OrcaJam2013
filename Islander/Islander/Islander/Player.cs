@@ -205,12 +205,15 @@ namespace Islander
 
         public void CheckShooting(Vector2 direction)
         {
-            if (direction.Length() >= 0.5f)
-                if (bulletTimeElapsed > bulletDelay)
-                {
-                    direction.Y = -direction.Y;
-                    ShootBullet(direction);
-                }
+            if (Boat.state == Boat.BoatState.alive)
+            {
+                if (direction.Length() >= 0.5f)
+                    if (bulletTimeElapsed > bulletDelay)
+                    {
+                        direction.Y = -direction.Y;
+                        ShootBullet(direction);
+                    }
+            }
         }
 
         private void ShootBullet(Vector2 direction)
