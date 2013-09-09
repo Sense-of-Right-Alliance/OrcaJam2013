@@ -64,6 +64,18 @@ namespace Islander
             HostileToPlayer = null;
         }
 
+        // returns name to display on scoreboard
+        public string ScoreName
+        {
+            get
+            {
+                if (Island == null)
+                    return "Player " + PlayerIndex;
+                else
+                    return "P" + ((int)PlayerIndex + 1) + " " + Island.IslandName + " Island";
+            }
+        }
+
         public void SetGameColour(Colour colour)
         {
             Colour = colour;
