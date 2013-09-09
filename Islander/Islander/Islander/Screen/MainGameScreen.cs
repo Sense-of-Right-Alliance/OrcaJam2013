@@ -28,6 +28,9 @@ namespace Islander.Screen
         private Vector2 redScorePos;
         private Vector2 yellowScorePos;
 
+        private const float GAME_TIME = 120.0f;
+        private float gameTimer = 120.0f;
+
         private SoundEffect takeCargo;
         private SoundEffect scoreCargo;
         private SoundEffect impactSound;
@@ -127,11 +130,28 @@ namespace Islander.Screen
             }
         }
 
+        protected override void HandleInput(GameTime gameTime)
+        {
+            // handle each player's input
+            foreach (var player in players)
+            {
+                player.HandleInput(GameState, gameTime);
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             timeElapsed += gameTime.ElapsedGameTime;
             if (timeElapsed.TotalSeconds > 0.25)
-                base.HandleInput(gameTime);
+                HandleInput(gameTime);
+
+            gameTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (gameTimer <= 0)
+            {
+                //TODO: end game
+                gameTimer = GAME_TIME;
+                CurrentState = ScreenState.Finished;
+            }
 
             CheckCollisions();
 
@@ -223,8 +243,8 @@ namespace Islander.Screen
                     scoreCargo.Play();
                     PlayersByColour[(int)boat.Colour].CollectResource(boat.CarriedResource);
                     
-                    if(boat.CarriedResource.Colour != boat.Colour)
-                        PlayersByColour[(int)boat.Colour].score += RETURN_RESOURCE;
+                   // if(boat.CarriedResource.Colour != boat.Colour)
+                     //   PlayersByColour[(int)boat.Colour].score += RETURN_RESOURCE;
 
                     boat.CarriedResource = null;
                 }
@@ -296,6 +316,10 @@ namespace Islander.Screen
             {
                 resource.Draw(spriteBatch);
             }
+
+            float t = (float)Math.Floor((double)gameTimer);
+
+            spriteBatch.DrawString(scoreFont, "" + t, new Vector2(width / 2 - scoreFont.MeasureString("" + t).X / 2, height / 60), Color.Black);
         }
 
         private void updateScore(Player player)
