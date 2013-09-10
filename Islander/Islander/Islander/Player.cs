@@ -53,6 +53,8 @@ namespace Islander
         protected TimeSpan bulletTimeElapsed;
 
         public int score { get; set; }
+        public int screenWidth { get; set; }
+        public int screenHeight { get; set; }
 
         public Player(PlayerIndex playerIndex, ContentManager content)
         {
@@ -80,7 +82,7 @@ namespace Islander
         {
             Colour = colour;
             LoadBullets();
-            Boat = Boat.InitializeFromColour(colour, content);
+            Boat = Boat.InitializeFromColour(colour, content,screenWidth,screenHeight);
             Island = Island.InitializeFromColour(colour, content);
 
             // initially hostile to all players except self

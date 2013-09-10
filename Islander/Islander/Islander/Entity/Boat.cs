@@ -36,12 +36,15 @@ namespace Islander.Entity
         private Vector2 acceleration;
         private Vector2 dir = Vector2.Zero;
 
+        protected int screenWidth;
+        protected int screenHeight;
+
         private Texture2D trailTexture;
         private List<BoatTrail> trailEffects { get; set; }
 
         public Resource CarriedResource { get; set; }
 
-        public Boat(Texture2D sprite,Texture2D trail, Colour colour) : base(sprite)
+        public Boat(Texture2D sprite,Texture2D trail, Colour colour,int screenWidth,int screenHeight) : base(sprite)
         {
             Colour = colour;
             scale = new Vector2(0.5f);
@@ -51,10 +54,13 @@ namespace Islander.Entity
             trailEffects = new List<BoatTrail>();
 
             state = BoatState.alive;
+
+            this.screenWidth = screenWidth;
+            this.screenHeight = screenHeight;
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
-        public static Boat InitializeFromColour(Colour colour, ContentManager content)
+        public static Boat InitializeFromColour(Colour colour, ContentManager content,int screenWidth,int screenHeight)
         {
             // retrieve texture name matching specified colour
             string textureName = "";
@@ -79,7 +85,7 @@ namespace Islander.Entity
             Texture2D trailTexture = content.Load<Texture2D>("Boats/BoatTrail");
 
             // create a new entity using the loaded sprite
-            return new Boat(sprite, trailTexture, colour);
+            return new Boat(sprite, trailTexture, colour,screenWidth,screenHeight);
         }
 
         public void Hit()
@@ -156,16 +162,15 @@ namespace Islander.Entity
             if (velocity.Length() > 0.0)
                 rotation = GetRotation();
 
-            //TODO: This will need to be more specific with the width of the boat. Also we should have called them ships
+            //Now has proper screenWidth and screenHeight
             if (position.X < 0)
                 position.X = 0;
-            else if (position.X > 1200)//TODO: SHIT WE NEED SCREEN WIDTH HERE. AAAHHH
-                position.X = 1200;
+            else if (position.X > screenWidth)
+                position.X = screenWidth;
             if (position.Y < 0)
                 position.Y = 0;
-            else if (position.Y > 620)//TODO: Seriously so hacky. Please get me screen width.
-                position.Y = 620;
-            //TODO: This is literally killing me. Please let's fix this. My body hurts.
+            else if (position.Y > screenHeight)
+                position.Y = screenHeight;
         }
 
         private float GetRotation()

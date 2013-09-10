@@ -26,8 +26,8 @@ namespace Islander.Screen
         protected ContentManager content;
         protected SpriteBatch spriteBatch;
         protected SpriteFont scoreFont;
-        protected int width;
-        protected int height;
+        public int width { get; protected set; }
+        public int height { get; protected set; }
         protected List<Player> players;
         protected TimeSpan timeElapsed;
 
@@ -85,6 +85,8 @@ namespace Islander.Screen
         }
 
         public virtual void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
+
+
         {
             if (background != null)
                 spriteBatch.Draw(background, new Rectangle(0, 0, width, height), Color.White);
