@@ -78,9 +78,10 @@ namespace Islander
             };
             
             base.Initialize();
+
             //CREATE THE MEDIA PLAYER
             MediaPlayer.Volume = 1.0f;
-            //MediaPlayer.Play(mainMenuScreen.menuMusic);
+            MediaPlayer.Play(mainMenuScreen.menuMusic);
         }
 
         /// <summary>
@@ -99,6 +100,12 @@ namespace Islander
             // TODO: use this.Content to load your game content here
             SetGameState(GameState.OnMainMenu);
             currentScreen.StartRunning();
+
+            foreach (var player in players)
+            {
+                player.screenWidth = currentScreen.width;
+                player.screenHeight = currentScreen.height;
+            }
         }
 
         /// <summary>
