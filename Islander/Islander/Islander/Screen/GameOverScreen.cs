@@ -83,13 +83,13 @@ namespace Islander.Screen
             thirdColour = GetXNAColor(players[(int)thirdPlayerNumber].Colour);
 
             outlineFont(firstScore, firstPlayerNumber, firstPlayerNamePos, firstPlayerScorePos);
-            spriteBatch.DrawString(scoreFont, "Player " + firstPlayerNumber + ":", firstPlayerNamePos, firstColour);
+            spriteBatch.DrawString(scoreFont, "Player " + firstPlayerNumber, firstPlayerNamePos, firstColour);
             outlineFont(secondScore, secondPlayerNumber, secondPlayerNamePos, secondPlayerScorePos);
             spriteBatch.DrawString(scoreFont, "" + firstScore, firstPlayerScorePos, firstColour);
-            spriteBatch.DrawString(scoreFont, "Player " + secondPlayerNumber + ":", secondPlayerNamePos, secondColour);
+            spriteBatch.DrawString(scoreFont, "Player " + secondPlayerNumber, secondPlayerNamePos, secondColour);
             spriteBatch.DrawString(scoreFont, "" + secondScore, secondPlayerScorePos, secondColour);
             outlineFont(0,thirdPlayerNumber, thirdPlayerNamePos, new Vector2 (5000.0f,2000.0f));
-            spriteBatch.DrawString(scoreFont, "Player " + thirdPlayerNumber + ":", thirdPlayerNamePos, thirdColour);
+            spriteBatch.DrawString(scoreFont, "Player " + thirdPlayerNumber, thirdPlayerNamePos, thirdColour);
             
         }
 
@@ -121,13 +121,13 @@ namespace Islander.Screen
          
         private void outlineFont(int playerScore, PlayerIndex playerIndex, Vector2 scoreLabelPos, Vector2 scorePos)
         {
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X+1,scoreLabelPos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X+1,scoreLabelPos.Y), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X + 1, scorePos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X - 1, scoreLabelPos.Y), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X - 1, scoreLabelPos.Y), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X - 1, scorePos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y + 1), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X, scoreLabelPos.Y + 1), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y + 1), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex + ":", new Vector2(scoreLabelPos.X, scoreLabelPos.Y - 1), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X, scoreLabelPos.Y - 1), Color.Black);
             spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y - 1), Color.Black);
         }
     }
