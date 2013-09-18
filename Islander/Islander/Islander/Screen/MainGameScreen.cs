@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Islander.Screen
 {
@@ -17,6 +19,10 @@ namespace Islander.Screen
         protected List<Island> islands;
         protected List<Resource> droppedResources;
         protected List<List<Bullet>> bulletLists;
+        protected List<PowerUp> powerUps;
+
+        private float powerUpTimer = 0.0f;
+        private Texture2D speedPowerUp;
 
         //Do we need all these vector2's? I didn't want to calculate the pos greenScoreLabel = new Vector2(blueScoreLabel.X, blueScoreLabel.Y + 50) EVERY update loop.
         private Vector2 blueScoreLabelPos;
@@ -28,12 +34,15 @@ namespace Islander.Screen
         private Vector2 redScorePos;
         private Vector2 yellowScorePos;
 
-        private const float GAME_TIME = 120.0f;
-        private float gameTimer = 120.0f;
+        private const float GAME_TIME = 180.0f;
+        private float gameTimer = 180.0f;
+
+        public Song gameMusic;
 
         private SoundEffect takeCargo;
         private SoundEffect scoreCargo;
         private SoundEffect impactSound;
+        private SoundEffect dieSound;
 
 
         public const int RETURN_RESOURCE = 50;
@@ -48,10 +57,16 @@ namespace Islander.Screen
         {
             SoundEffect.MasterVolume = 0.5f;
             base.LoadContent();
+
+            gameMusic = content.Load<Song>("Music/The Zandali");
+
             background = content.Load<Texture2D>("Background");
             takeCargo = content.Load<SoundEffect>("SFX/Take Cargo");
             scoreCargo = content.Load<SoundEffect>("SFX/Score Cargo2");
             impactSound = content.Load<SoundEffect>("SFX/Impact");
+            dieSound = content.Load<SoundEffect>("SFX/Die");
+
+            speedPowerUp = content.Load<Texture2D>("Cargo/BlueCargo");
         }
 
         // Function that sets up the game, including positioning all initial boats and islands
@@ -65,6 +80,7 @@ namespace Islander.Screen
             islands = new List<Island>();
             bulletLists = new List<List<Bullet>>();
             droppedResources = new List<Resource>();
+            powerUps = new List<PowerUp>();
             foreach (var player in players)
             {
                 boats.Add(player.Boat);
@@ -127,16 +143,19 @@ namespace Islander.Screen
                 islandVector.Y -= 70;
                 player.Island.position = islandVector;
                 player.Boat.position = islandVector;
+                player.Boat.Start();
+                player.Island.StartIsland();
             }
         }
 
         protected override void HandleInput(GameTime gameTime)
         {
+            base.HandleInput(gameTime);
             // handle each player's input
-            foreach (var player in players)
+            /*foreach (var player in players)
             {
                 player.HandleInput(GameState, gameTime);
-            }
+            }*/
         }
 
         public override void Update(GameTime gameTime)
@@ -153,6 +172,28 @@ namespace Islander.Screen
                 CurrentState = ScreenState.Finished;
             }
 
+            powerUpTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (powerUpTimer >= 30.0f)
+            {
+                powerUpTimer = 0.0f;
+                powerUps.Add(new PowerUp(speedPowerUp, new Vector2(width/2, 3*height/7)));
+            }
+
+            foreach (var powerUp in powerUps)
+            {
+                powerUp.Update(gameTime);
+            }
+
+            // check if player has collected all resources
+            foreach (Player p in players)
+            {
+                if (p.Island.HasAllResources)
+                {
+                    gameTimer = GAME_TIME;
+                    CurrentState = ScreenState.Finished;
+                }
+            }
+
             CheckCollisions();
 
             // pass Update to players
@@ -166,11 +207,15 @@ namespace Islander.Screen
 
                 if (player.Boat.state == Boat.BoatState.dead)
                 {
+                    dieSound.Play();
                     player.Boat.WaitForRespawn(player.Island.position);
-                    if (player.Boat.CarriedResource != null)
+                    if (player.Boat.carriedResources.Count > 0)
                     {
-                        droppedResources.Add(player.Boat.CarriedResource);
-                        player.Boat.CarriedResource = null;
+                        foreach (Resource r in player.Boat.carriedResources)
+                        {
+                            droppedResources.Add(r);
+                        }
+                        player.Boat.carriedResources.Clear();
                     }
                 }
             }
@@ -192,6 +237,7 @@ namespace Islander.Screen
         protected void CheckBoatCollisions()
         {
             var collectedResources = new List<Resource>();
+            var collectedPowerUps = new List<PowerUp>();
 
             foreach (var boat in boats)
             {
@@ -203,12 +249,24 @@ namespace Islander.Screen
                     foreach (var resource in droppedResources)
                         if (boat.CollidesWith(resource))
                             BoatResourceCollision(boat, resource, collectedResources);
+                    foreach (var powerUp in powerUps)
+                        if (boat.CollidesWith(powerUp))
+                            BoatPowerUpCollision(boat, powerUp, collectedPowerUps);
                 }
             }
 
             // remove all resources that were retrieved
             foreach (var resource in collectedResources)
                 droppedResources.Remove(resource);
+            // remove all powerups that were retrieved
+            foreach (var powerUp in collectedPowerUps)
+                powerUps.Remove(powerUp);
+        }
+
+        protected void BoatPowerUpCollision(Boat boat, PowerUp powerUp, List<PowerUp> collectedPowerUps)
+        {
+            boat.GainPowerUp(powerUp);
+            collectedPowerUps.Add(powerUp);
         }
 
         // check each bullet for collisions with boats and leaving the game screen
@@ -237,27 +295,41 @@ namespace Islander.Screen
         {
             if (boat.Colour == island.Colour)
             {
-                if (boat.CarriedResource != null) // if carrying a resource
+                if (boat.carriedResources.Count > 0)//(boat.CarriedResource != null) // if carrying a resource
                 {
                     //Plays the collect resource sound. This should maybe be in the CollectResource method
                     scoreCargo.Play();
-                    PlayersByColour[(int)boat.Colour].CollectResource(boat.CarriedResource);
+
+                    foreach (Resource r in boat.carriedResources)
+                    {
+                        PlayersByColour[(int)boat.Colour].CollectResource(r);
+                        island.AddResource(r);
+                    }
+                    //PlayersByColour[(int)boat.Colour].CollectResource(boat.CarriedResource);
+                    //island.AddResource(boat.CarriedResource);
+
+
                     
                    // if(boat.CarriedResource.Colour != boat.Colour)
                      //   PlayersByColour[(int)boat.Colour].score += RETURN_RESOURCE;
 
-                    boat.CarriedResource = null;
+                    //boat.CarriedResource = null;
+                    boat.carriedResources.Clear();
                 }
             }
             else
             {
-                if (boat.CarriedResource == null) // if not carrying a resource
+                if(!boat.CheckResourceIsCarried(island.ResourceType.islandType))//!boat.carriedResources.Contains(island.ResourceType))//if (boat.CarriedResource == null) // if not carrying a resource
                 {
                     //PLAY THE SOUND
                     takeCargo.Play();
                     PlayersByColour[(int)island.Colour].score -= 200;
-                    boat.CarriedResource = new Resource(island.ResourceType);
-                    boat.CarriedResource.IsCarried = true;
+                    Resource r = new Resource(island.ResourceType);
+                    boat.carriedResources.Add(r);
+                    r.IsCarried = true;
+                    r.position = boat.position;
+                    //boat.CarriedResource = new Resource(island.ResourceType);
+                    //boat.CarriedResource.IsCarried = true;
                 }
             }
         }
@@ -291,9 +363,11 @@ namespace Islander.Screen
                 //Plays the sound!
                 impactSound.Play();
                 removedBullets.Add(bullet);
-                boat.Hit();
+                boat.Hit(bullet);
             }
         }
+
+
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
         {
@@ -315,6 +389,11 @@ namespace Islander.Screen
             foreach (var resource in droppedResources)
             {
                 resource.Draw(spriteBatch);
+            }
+
+            foreach (var powerUp in powerUps)
+            {
+                powerUp.Draw(spriteBatch);
             }
 
             float t = (float)Math.Floor((double)gameTimer);

@@ -108,13 +108,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Boat.cs" />
-    <Compile Include="Entity\BoatTrail.cs" />
+    <Compile Include="Entity\Splatter.cs" />
     <Compile Include="Entity\Bullet.cs" />
     <Compile Include="Entity\EnemyBoat.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\Island.cs" />
     <Compile Include="Entity\PowerUp.cs" />
     <Compile Include="Entity\Resource.cs" />
+    <Compile Include="Entity\Token.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

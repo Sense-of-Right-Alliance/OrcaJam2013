@@ -31,7 +31,7 @@ namespace Islander
         /*CONSTANTS FOR SCORE*/
         private const int RETURN_RESOURCE = 1000;
 
-        private const float BULLET_SPEED = 15;
+        private const float BULLET_SPEED = 5;
 
         public Colour Colour { get; protected set; }
         public PlayerIndex PlayerIndex { get; protected set; }
@@ -42,7 +42,13 @@ namespace Islander
         public Island Island { get; protected set; }
         public List<Bullet> Bullets { get; set; }
         Texture2D bulletSprite;
+        Texture2D tridentSprite;
+        Texture2D bubbleSprite;
+        Texture2D razorSprite;
+        Texture2D magnetSprite;
         SoundEffect basicAttackSound;
+
+        public Bullet.BulletType bulletType = Bullet.BulletType.Normal;
 
         public Player[] PlayersByColour { get; set; }
         public bool[] HostileToPlayer { get; protected set; }
@@ -121,6 +127,11 @@ namespace Islander
             bulletFilename += "Default";
             bulletSprite = content.Load<Texture2D>("Bullets/" + bulletFilename);
 
+            tridentSprite = content.Load<Texture2D>("Bullets/RedTrident");
+            bubbleSprite = content.Load<Texture2D>("Bullets/BlueBubble");
+            razorSprite = content.Load<Texture2D>("Bullets/YellowRazor");
+            magnetSprite = content.Load<Texture2D>("Bullets/GreenMagnet");
+
             //Loads the bullet sound.
             basicAttackSound = content.Load<SoundEffect>("SFX/Basic Attack2");
         }
@@ -134,6 +145,23 @@ namespace Islander
         {
             CollectedResources[(int)resource.Colour] = resource;
             score += RETURN_RESOURCE;
+
+
+            switch (resource.islandType)
+            {
+                case(Island.IslandType.Trident):
+                    bulletType = Bullet.BulletType.Trident;
+                    break;
+                case (Island.IslandType.Bubble):
+                    bulletType = Bullet.BulletType.Bubble;
+                    break;
+                case (Island.IslandType.Razor):
+                    bulletType = Bullet.BulletType.Razor;
+                    break;
+                case (Island.IslandType.Magnet):
+                    bulletType = Bullet.BulletType.Magnet;
+                    break;
+            }
         }
 
         public virtual void HandleInput(Islander.GameState gameState, GameTime gameTime)
@@ -220,11 +248,91 @@ namespace Islander
 
         private void ShootBullet(Vector2 direction)
         {
+
+            switch (bulletType)
+            {
+                case(Bullet.BulletType.Normal):
+                    ShootNormal(direction);
+                    break;
+                case(Bullet.BulletType.Trident):
+                    ShootTrident(direction);
+                    break;
+                case (Bullet.BulletType.Bubble):
+                    ShootBubble(direction);
+                    break;
+                case (Bullet.BulletType.Razor):
+                    ShootRazor(direction);
+                    break;
+                case (Bullet.BulletType.Magnet):
+                    ShootMagnet(direction);
+                    break;
+            }
+
+        }
+
+        private void ShootNormal(Vector2 direction)
+        {
             //Bullet shooting
             basicAttackSound.Play();
             bulletTimeElapsed = TimeSpan.Zero;
             direction.Normalize();
-            Bullet bullet = new Bullet(bulletSprite, direction, BULLET_SPEED, Colour, HostileToPlayer);
+            Bullet bullet = new Bullet(bulletSprite, direction, BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType,0.5f,this);
+            bullet.position *= 5;
+            bullet.position += Boat.position;
+            Bullets.Add(bullet);
+        }
+
+        private void ShootTrident(Vector2 direction)
+        {
+            //Bullet shooting
+            basicAttackSound.Play();
+            bulletTimeElapsed = TimeSpan.Zero;
+            direction.Normalize();
+            Bullet bullet = new Bullet(tridentSprite, direction, BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType, 0.5f, this);
+
+            Bullet lbullet = new Bullet(tridentSprite, RotateVector(direction, (float)Math.PI / 6), BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType, 0.5f, this);
+            Bullet rbullet = new Bullet(tridentSprite, RotateVector(direction, -(float)Math.PI / 6), BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType, 0.5f, this);
+
+            bullet.position *= 5;
+            bullet.position += Boat.position;
+            lbullet.position *= 5;
+            lbullet.position += Boat.position;
+            rbullet.position *= 5;
+            rbullet.position += Boat.position;
+
+            Bullets.Add(bullet);
+            Bullets.Add(lbullet);
+            Bullets.Add(rbullet);
+        }
+        private void ShootBubble(Vector2 direction)
+        {
+            //Bullet shooting
+            basicAttackSound.Play();
+            bulletTimeElapsed = TimeSpan.Zero;
+            direction.Normalize();
+            Bullet bullet = new Bullet(bubbleSprite, direction, BULLET_SPEED - 1, 0.5f, Colour, HostileToPlayer, bulletType, 0.7f, this);
+            bullet.position *= 5;
+            bullet.position += Boat.position;
+            Bullets.Add(bullet);
+        }
+        private void ShootRazor(Vector2 direction)
+        {
+            //Bullet shooting
+            basicAttackSound.Play();
+            bulletTimeElapsed = TimeSpan.Zero;
+            direction.Normalize();
+            Bullet bullet = new Bullet(razorSprite, direction, BULLET_SPEED + 2, 0.35f, Colour, HostileToPlayer, bulletType, 0.6f, this);
+            bullet.position *= 5;
+            bullet.position += Boat.position;
+            Bullets.Add(bullet);
+        }
+        private void ShootMagnet(Vector2 direction)
+        {
+            //Bullet shooting
+            basicAttackSound.Play();
+            bulletTimeElapsed = TimeSpan.Zero;
+            direction.Normalize();
+            Bullet bullet = new Bullet(magnetSprite, direction, BULLET_SPEED,0.5f, Colour, HostileToPlayer, bulletType, 0.6f, this);
             bullet.position *= 5;
             bullet.position += Boat.position;
             Bullets.Add(bullet);
@@ -250,7 +358,29 @@ namespace Islander
                     if (Bullets[i].done)
                         RemoveBullet(Bullets[i]);
                 }
+
+           
             }
         }
+
+
+
+
+
+        public static Vector2 RotateVector(Vector2 vector, float radians)
+        {
+            float angle = VectorToAngle(vector) + radians;
+            return AngleToVector(angle) * vector.Length();
+        }
+
+        static public Vector2 AngleToVector(float angle)
+        {
+            return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+        }
+
+        static public float VectorToAngle(Vector2 vector)
+        {
+            return (float)Math.Atan2(vector.Y, vector.X);
+        } 
     }
 }

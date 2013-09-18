@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +13,7 @@ namespace Islander.Entity
     {
         public Colour Colour { get; protected set; }
         public bool IsCarried { get; set; }
+        public Island.IslandType islandType;
 
         static Dictionary<Island.IslandType, string> resources = new Dictionary<Island.IslandType, string>()
         {
@@ -25,18 +27,23 @@ namespace Islander.Entity
             {Island.IslandType.Magnet, "GreenCargo"},
         };
 
-        public Resource(Texture2D sprite, Colour colour) : base(sprite)
+        public Resource(Texture2D sprite, Colour colour, Island.IslandType islandType) : base(sprite)
         {
             Colour = colour;
-            scale = new Vector2(0.5f);
+            scale = new Vector2(0.3f);
             IsCarried = false;
+
+            this.islandType = islandType;
+            Debug.WriteLine("Resource Island Type = " + islandType);
         }
 
+        // Create a copy from this resource
         public Resource(Resource resource) : base(resource.sprite)
         {
             Colour = resource.Colour;
             scale = resource.scale;
             IsCarried = resource.IsCarried;
+            islandType = resource.islandType;
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -49,7 +56,7 @@ namespace Islander.Entity
             Texture2D sprite = content.Load<Texture2D>("Cargo/" + textureName);
 
             // create a new entity using the loaded sprite
-            return new Resource(sprite, colour);
+            return new Resource(sprite, colour, islandType);
         }
 
         public void SetRotation(float rotation)

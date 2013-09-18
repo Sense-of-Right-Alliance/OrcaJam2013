@@ -48,6 +48,7 @@ namespace Islander.Screen
         {
             base.Draw(gameTime, GraphicsDevice);
             //TODO: We need a function for this
+            bool collectedAll = false;
             firstScore = -10000;
             firstPlayerNumber = PlayerIndex.One;
             secondScore = -10000;
@@ -57,7 +58,9 @@ namespace Islander.Screen
             
             foreach(var player in players)
             {
-                if(player.score >= firstScore){
+                if(player.Island.HasAllResources || player.score >= firstScore){
+                    if (player.Island.HasAllResources)
+                        collectedAll = true;
                     thirdScore = secondScore;
                     secondScore = firstScore;
                     firstScore = player.score;
@@ -85,7 +88,10 @@ namespace Islander.Screen
             outlineFont(firstScore, firstPlayerNumber, firstPlayerNamePos, firstPlayerScorePos);
             spriteBatch.DrawString(scoreFont, "Player " + firstPlayerNumber, firstPlayerNamePos, firstColour);
             outlineFont(secondScore, secondPlayerNumber, secondPlayerNamePos, secondPlayerScorePos);
-            spriteBatch.DrawString(scoreFont, "" + firstScore, firstPlayerScorePos, firstColour);
+            if(collectedAll)
+                spriteBatch.DrawString(scoreFont, "Trade Victory!!", new Vector2(firstPlayerScorePos.X - width/20, firstPlayerScorePos.Y), firstColour);
+            else
+                spriteBatch.DrawString(scoreFont, "" + firstScore, firstPlayerScorePos, firstColour);
             spriteBatch.DrawString(scoreFont, "Player " + secondPlayerNumber, secondPlayerNamePos, secondColour);
             spriteBatch.DrawString(scoreFont, "" + secondScore, secondPlayerScorePos, secondColour);
             outlineFont(0,thirdPlayerNumber, thirdPlayerNamePos, new Vector2 (5000.0f,2000.0f));
