@@ -13,9 +13,12 @@ namespace Islander.Entity
         protected Texture2D sprite;
         protected Vector2 scale;
         protected float rotation;
+        protected float alpha = 1.0f;
 
         // Dylbro set this to public to allow the screens to manipulate it. Correct me if I'm wrong.
         public Vector2 position;
+
+        public float Rotation { get{ return rotation; } }
         
         public Entity(Texture2D sprite)
         {
@@ -45,7 +48,9 @@ namespace Islander.Entity
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, DrawRect(), new Rectangle(0,0,sprite.Width,sprite.Height), Color.White, rotation, new Vector2(sprite.Width/2,sprite.Height/2), SpriteEffects.None, 1);
+            Color c = Color.White;
+            c *= alpha;
+            spriteBatch.Draw(sprite, DrawRect(), new Rectangle(0,0,sprite.Width,sprite.Height), c, rotation, new Vector2(sprite.Width/2,sprite.Height/2), SpriteEffects.None, 1);
         }
     }
 }

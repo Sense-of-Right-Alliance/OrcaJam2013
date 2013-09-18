@@ -10,15 +10,29 @@ namespace Islander.Entity
 {
     class Bullet : Entity
     {
+        public enum BulletType
+        {
+            Normal,
+            Trident,
+            Bubble,
+            Razor,
+            Magnet
+        }
+
+        public BulletType type = BulletType.Normal;
+
         private Vector2 velocity;
         private float timer = 0.0f;
-        private float lifeTime = 0.4f;
+        private float lifeTime = 0.5f;
         private Vector2 start;
         public bool[] HostileToPlayer { get; set; }
         public Colour Colour { get; protected set; }
         public bool done = false;
+        private Player player;
 
-        public Bullet(Texture2D sprite, Vector2 direction, float speed, Colour colour, bool[] hostileToPlayer) : base(sprite)
+        public Vector2 dir;
+
+        public Bullet(Texture2D sprite, Vector2 direction, float speed, float time, Colour colour, bool[] hostileToPlayer, BulletType type, float scale, Player p) : base(sprite)
         {
             
             this.velocity = direction * speed;
@@ -26,7 +40,13 @@ namespace Islander.Entity
             this.position = direction;
             this.Colour = colour;
             this.HostileToPlayer = hostileToPlayer;
-            this.scale = new Vector2(0.5f);
+            this.scale = new Vector2(scale);
+            this.type = type;
+            this.player = p;
+            this.lifeTime = time;
+
+
+            dir = direction;
 
             start = position;
         }
@@ -65,6 +85,9 @@ namespace Islander.Entity
         {
             base.Update(gameTime);
 
+            if (type == BulletType.Magnet)
+                UpdateMagnet(gameTime);
+
 
             position += velocity;
 
@@ -74,6 +97,43 @@ namespace Islander.Entity
             {
                 done = true;
             }
+        }
+
+        private void UpdateMagnet(GameTime gameTime)
+        {
+            if (timer > 0.2f)
+            {
+                Boat b = GetClosestBoatInRadius(position, 100.0f);
+                if (b != null)
+                {
+                    Vector2 towards = b.position - position;
+                    towards.Normalize();
+                    velocity += towards * 0.2f;
+
+                    dir = velocity;
+                    dir.Normalize();
+                }
+            }
+        }
+
+        public Boat GetClosestBoatInRadius(Vector2 pos, float r)
+        {
+            Boat b = null;
+            float dist = 999.0f;
+            foreach (Player p in player.PlayersByColour)
+            {
+                if(p != player)
+                {
+                    float d = (p.Boat.position - pos).Length();
+                    if (d < r && d < dist)
+                    {
+                        dist = d;
+                        b = p.Boat;
+                    }
+                }
+            }
+
+            return b;
         }
     }
 }

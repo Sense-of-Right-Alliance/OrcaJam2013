@@ -8,15 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Islander.Entity
 {
-    class PowerUp : Entity
+    class Token : Entity
     {
+
         private float fadeToggle = 1.0f;
 
-        public PowerUp(Texture2D sprite, Vector2 pos) : base(sprite)
+        public Token(Texture2D sprite)
+            : base(sprite)
         {
             alpha = 0.5f;
             scale = new Vector2(0.5f);
-            position = pos;
         }
 
         public override void Update(GameTime gameTime)
@@ -37,6 +38,11 @@ namespace Islander.Entity
                 fadeToggle = 1.0f;
             }
 
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
         }
     }
 }
