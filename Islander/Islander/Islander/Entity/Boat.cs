@@ -169,8 +169,8 @@ namespace Islander.Entity
                 position.X = screenWidth;
             if (position.Y < 0)
                 position.Y = 0;
-            else if (position.Y > screenHeight)
-                position.Y = screenHeight;
+            else if (position.Y > (float)screenHeight*4.0f/5.0f)
+                position.Y = (float)screenHeight*4.0f/5.0f;
         }
 
         private float GetRotation()
