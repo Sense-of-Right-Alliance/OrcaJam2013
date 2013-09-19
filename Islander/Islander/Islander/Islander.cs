@@ -145,18 +145,20 @@ namespace Islander
 
                 if (currentScreen == mainMenuScreen)
                 {
-                    //MediaPlayer.Stop();
-                    //MediaPlayer.Play(mainMenuScreen.menuMusic);   SELECT THE SONG TO PLAY FOR GAMEPLAY
+                    MediaPlayer.Stop();
+                    MediaPlayer.Volume = 0.8f;
+                    MediaPlayer.Play(mainGameScreen.gameMusic);  // SELECT THE SONG TO PLAY FOR GAMEPLAY
                     SetGameState(GameState.RunningGame);
                 }
                 else if (currentScreen == mainGameScreen)
                 {
-                    //MediaPlayer.Stop();
+                    MediaPlayer.Stop();
                     SetGameState(GameState.OnGameOver);
                 }
                 else if (currentScreen == gameOverScreen)
                 {
-                    //MediaPlayer.Play(mainMenuScreen.menuMusic);
+                    MediaPlayer.Volume = 1.0f;
+                    MediaPlayer.Play(mainMenuScreen.menuMusic);
                     SetGameState(GameState.OnMainMenu);
                 }
             }
