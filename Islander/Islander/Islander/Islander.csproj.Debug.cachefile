@@ -1,13 +1,5 @@
 Content\Menu.xnb
-Content\Background.xnb
-Content\Cargo\BlueCargo.xnb
-Content\Cargo\GreenCargo.xnb
-Content\Cargo\RedCargo.xnb
-Content\Cargo\YellowCargo.xnb
-Content\Tokens\BlueToken.xnb
-Content\Tokens\GreenToken.xnb
-Content\Tokens\RedToken.xnb
-Content\Tokens\YellowToken.xnb
+Content\Arial.xnb
 Content\Boats\BlueBoat.xnb
 Content\Boats\GreenBoat.xnb
 Content\Boats\RedBoat.xnb
@@ -16,20 +8,28 @@ Content\Islands\BlueBubble.xnb
 Content\Islands\BlueFantasy.xnb
 Content\Islands\YellowTreasure.xnb
 Content\Islands\RedTrident.xnb
+Content\Background.xnb
 Content\Bullets\BlueBubble.xnb
 Content\Bullets\BlueDefault.xnb
 Content\Bullets\GreenDefault.xnb
 Content\Bullets\RedDefault.xnb
-Content\Bullets\YellowDefault.xnb
 Content\Bullets\GreenMagnet.xnb
 Content\Bullets\YellowRazor.xnb
 Content\Bullets\RedTrident.xnb
+Content\Cargo\BlueCargo.xnb
+Content\Cargo\GreenCargo.xnb
+Content\Cargo\RedCargo.xnb
+Content\Cargo\YellowCargo.xnb
+Content\Tokens\BlueToken.xnb
+Content\Tokens\GreenToken.xnb
+Content\Tokens\RedToken.xnb
+Content\Tokens\YellowToken.xnb
 Content\Islands\GreenHermit.xnb
 Content\Islands\RedLove.xnb
 Content\Islands\GreenMagnet.xnb
 Content\Islands\YellowRazor.xnb
-Content\Arial.xnb
-<<<<<<< HEAD
+Content\Bullets\YellowDefault.xnb
+Content\Boats\BoatTrail.xnb
 Content\Splash Screens\SplashEndgame.xnb
 Content\Splash Screens\SplashHowto.xnb
 Content\Splash Screens\SplashIntro.xnb
@@ -41,11 +41,14 @@ Content\SFX\Basic Attack.xnb
 Content\SFX\Die.xnb
 Content\SFX\Score Cargo.xnb
 Content\SFX\Take Cargo.xnb
-Content\Music\MainMusic.xnb
 Content\SFX\Score Cargo2.xnb
+Content\Music\MainMusic.xnb
 Content\SFX\Basic Attack2.xnb
 Content\SFX\Impact.xnb
+Content\BoatTrails\BlueTrail.xnb
+Content\BoatTrails\GreenTrail.xnb
+Content\BoatTrails\RedTrail.xnb
+Content\BoatTrails\YellowTrail.xnb
+Content\Music\The Zandali.xnb
 Content\Music\MainMusic.wma
-=======
-Content\Boats\BoatTrail.xnb
->>>>>>> 0e4f15a00050d6e28cb6edb18a35e1e620c209e5
+Content\Music\The Zandali.wma
