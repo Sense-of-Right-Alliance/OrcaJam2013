@@ -120,7 +120,7 @@ namespace Islander.Screen
                 {
                     // Place boats and cities in positions matching an xbox controller
                     case (Colour.Blue):
-                        islandVector.X = width / 8;
+                        islandVector.X = width / 4;
                         islandVector.Y = height / 2;
                         player.Boat.position.X += 75;
                         break;
@@ -130,7 +130,7 @@ namespace Islander.Screen
                         player.Boat.position.Y -= 75;
                         break;
                     case (Colour.Red):
-                        islandVector.X = 7 * width / 8;
+                        islandVector.X = 3 * width / 4;
                         islandVector.Y = height / 2;
                         player.Boat.position.X -= 75;
                         break;
@@ -344,14 +344,18 @@ namespace Islander.Screen
             }
             else
             {
-                if (boat.CarriedResource == null) // if not carrying a resource
-                {
+                //if (boat.CarriedResource == null) // if not carrying a resource
+                //{
                     //PLAY THE SOUND
                     takeCargo.Play();
-                    boat.CarriedResource = resource;
-                    boat.CarriedResource.IsCarried = true;
+                    boat.carriedResources.Add(resource);
+                    resource.IsCarried = true;
                     collectedResources.Add(resource);
-                }
+
+                    //boat.CarriedResource = resource;
+                    //boat.CarriedResource.IsCarried = true;
+                    //collectedResources.Add(resource);
+                //}
             }
         }
 

@@ -96,8 +96,10 @@ namespace Islander
             HostileToPlayer[(int)Colour] = false;
 
             // default bullet delay
-            bulletDelay = new TimeSpan(5000000); // 0.5s
+            bulletDelay = new TimeSpan(8000000); // 0.5s
             bulletTimeElapsed = TimeSpan.Zero;
+
+            bulletType = Bullet.BulletType.Normal;
 
             CollectedResources = new Resource[] { null, null, null, null };
         }
@@ -248,95 +250,39 @@ namespace Islander
 
         private void ShootBullet(Vector2 direction)
         {
+            //Bullet shooting
+            basicAttackSound.Play();
+            bulletTimeElapsed = TimeSpan.Zero;
+            direction.Normalize();
 
+            Bullet[] bullet = new Bullet[0];
             switch (bulletType)
             {
                 case(Bullet.BulletType.Normal):
-                    ShootNormal(direction);
+                    bullet = Bullet.CreateBullet(bulletSprite, bulletType, direction, Colour, HostileToPlayer, this);
                     break;
                 case(Bullet.BulletType.Trident):
-                    ShootTrident(direction);
+                    bullet = Bullet.CreateBullet(tridentSprite, bulletType, direction, Colour, HostileToPlayer, this);
                     break;
                 case (Bullet.BulletType.Bubble):
-                    ShootBubble(direction);
+                    bullet = Bullet.CreateBullet(bubbleSprite, bulletType, direction, Colour, HostileToPlayer, this);
                     break;
                 case (Bullet.BulletType.Razor):
-                    ShootRazor(direction);
+                    bullet = Bullet.CreateBullet(razorSprite, bulletType, direction, Colour, HostileToPlayer, this);
                     break;
                 case (Bullet.BulletType.Magnet):
-                    ShootMagnet(direction);
+                    bullet = Bullet.CreateBullet(magnetSprite, bulletType, direction, Colour, HostileToPlayer, this);
                     break;
             }
 
+            for(int i = 0; i < bullet.Length; i++)
+            {
+                bullet[i].position *= 5;
+                bullet[i].position += Boat.position;
+                Bullets.Add(bullet[i]);
+            }
         }
 
-        private void ShootNormal(Vector2 direction)
-        {
-            //Bullet shooting
-            basicAttackSound.Play();
-            bulletTimeElapsed = TimeSpan.Zero;
-            direction.Normalize();
-            Bullet bullet = new Bullet(bulletSprite, direction, BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType,0.5f,this);
-            bullet.position *= 5;
-            bullet.position += Boat.position;
-            Bullets.Add(bullet);
-        }
-
-        private void ShootTrident(Vector2 direction)
-        {
-            //Bullet shooting
-            basicAttackSound.Play();
-            bulletTimeElapsed = TimeSpan.Zero;
-            direction.Normalize();
-            Bullet bullet = new Bullet(tridentSprite, direction, BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType, 0.5f, this);
-
-            Bullet lbullet = new Bullet(tridentSprite, RotateVector(direction, (float)Math.PI / 6), BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType, 0.5f, this);
-            Bullet rbullet = new Bullet(tridentSprite, RotateVector(direction, -(float)Math.PI / 6), BULLET_SPEED, 0.5f, Colour, HostileToPlayer, bulletType, 0.5f, this);
-
-            bullet.position *= 5;
-            bullet.position += Boat.position;
-            lbullet.position *= 5;
-            lbullet.position += Boat.position;
-            rbullet.position *= 5;
-            rbullet.position += Boat.position;
-
-            Bullets.Add(bullet);
-            Bullets.Add(lbullet);
-            Bullets.Add(rbullet);
-        }
-        private void ShootBubble(Vector2 direction)
-        {
-            //Bullet shooting
-            basicAttackSound.Play();
-            bulletTimeElapsed = TimeSpan.Zero;
-            direction.Normalize();
-            Bullet bullet = new Bullet(bubbleSprite, direction, BULLET_SPEED - 1, 0.5f, Colour, HostileToPlayer, bulletType, 0.7f, this);
-            bullet.position *= 5;
-            bullet.position += Boat.position;
-            Bullets.Add(bullet);
-        }
-        private void ShootRazor(Vector2 direction)
-        {
-            //Bullet shooting
-            basicAttackSound.Play();
-            bulletTimeElapsed = TimeSpan.Zero;
-            direction.Normalize();
-            Bullet bullet = new Bullet(razorSprite, direction, BULLET_SPEED + 2, 0.35f, Colour, HostileToPlayer, bulletType, 0.6f, this);
-            bullet.position *= 5;
-            bullet.position += Boat.position;
-            Bullets.Add(bullet);
-        }
-        private void ShootMagnet(Vector2 direction)
-        {
-            //Bullet shooting
-            basicAttackSound.Play();
-            bulletTimeElapsed = TimeSpan.Zero;
-            direction.Normalize();
-            Bullet bullet = new Bullet(magnetSprite, direction, BULLET_SPEED,0.5f, Colour, HostileToPlayer, bulletType, 0.6f, this);
-            bullet.position *= 5;
-            bullet.position += Boat.position;
-            Bullets.Add(bullet);
-        }
 
         public virtual void Update(GameTime gameTime, Islander.GameState gameState)
         {
@@ -362,25 +308,5 @@ namespace Islander
            
             }
         }
-
-
-
-
-
-        public static Vector2 RotateVector(Vector2 vector, float radians)
-        {
-            float angle = VectorToAngle(vector) + radians;
-            return AngleToVector(angle) * vector.Length();
-        }
-
-        static public Vector2 AngleToVector(float angle)
-        {
-            return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-        }
-
-        static public float VectorToAngle(Vector2 vector)
-        {
-            return (float)Math.Atan2(vector.Y, vector.X);
-        } 
     }
 }
