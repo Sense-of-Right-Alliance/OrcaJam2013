@@ -13,7 +13,7 @@ namespace Islander.Entity
     {
         public Colour Colour { get; protected set; }
         public bool IsCarried { get; set; }
-        public Island.IslandType islandType;
+        public Island.IslandType IslandType { get; protected set; }
 
         static Dictionary<Island.IslandType, string> resources = new Dictionary<Island.IslandType, string>()
         {
@@ -30,20 +30,24 @@ namespace Islander.Entity
         public Resource(Texture2D sprite, Colour colour, Island.IslandType islandType) : base(sprite)
         {
             Colour = colour;
-            scale = new Vector2(0.3f);
+            Scale = new Vector2(0.3f);
             IsCarried = false;
+            IslandType = islandType;
 
-            this.islandType = islandType;
             Debug.WriteLine("Resource Island Type = " + islandType);
         }
 
-        // Create a copy from this resource
-        public Resource(Resource resource) : base(resource.sprite)
+        // creates a copy of the given resource
+        public static Resource Copy(Resource resource)
         {
-            Colour = resource.Colour;
-            scale = resource.scale;
-            IsCarried = resource.IsCarried;
-            islandType = resource.islandType;
+            return new Resource(resource.sprite, resource.Colour, resource.IslandType)
+            {
+                Alpha = resource.Alpha,
+                Position = resource.Position,
+                Rotation = resource.Rotation,
+                Scale = resource.Scale,
+                IsCarried = resource.IsCarried,
+            };
         }
 
         // creates a new boat matching the specified colour, loading the sprite from the contentmanager
@@ -61,12 +65,12 @@ namespace Islander.Entity
 
         public void SetRotation(float rotation)
         {
-            this.rotation = rotation;
+            this.Rotation = rotation;
         }
 
         public void SetPosition(Vector2 position)
         {
-            this.position = position;
+            this.Position = position;
         }
     }
 }

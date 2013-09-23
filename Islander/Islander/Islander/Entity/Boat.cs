@@ -16,23 +16,19 @@ namespace Islander.Entity
     {
         public enum BoatState
         {
-            uninitialized,
-            alive,
-            dead,
-            respawning
+            Uninitialized,
+            Alive,
+            Dead,
+            Respawning
         }
-
-
 
         public Colour Colour { get; protected set; }
 
         private const float DEFAULT_MAX_VELOCITY = 50;
         private const float SPAWN_TIME = 3.0f;
 
-        public string bulletType;
-
         private int hits = 0;
-        public BoatState state { get; protected set; }
+        public BoatState State { get; protected set; }
         private float spawnTimer = 0.0f;
 
         private float maxVelocity = DEFAULT_MAX_VELOCITY;
@@ -55,16 +51,12 @@ namespace Islander.Entity
         private const float POWER_UP_TIME = 10.0f;
         public bool hasPowerUp = false;
 
-
-        public Resource CarriedResource { get; set; }
-
-        public List<Resource> carriedResources;
+        public List<Resource> CarriedResources { get; protected set; }
 
         public Boat(Texture2D sprite,Texture2D trail, Texture2D splatter, Colour colour,int screenWidth,int screenHeight) : base(sprite)
         {
             Colour = colour;
-            scale = new Vector2(0.5f);
-            CarriedResource = null;
+            Scale = new Vector2(0.5f);
 
             trailTexture = trail;
             trailEffects = new List<Splatter>();
@@ -77,9 +69,9 @@ namespace Islander.Entity
 
             deathSplatter = new Splatter(splatter,0.5f);
 
-            state = BoatState.alive;
+            State = BoatState.Alive;
 
-            carriedResources = new List<Resource>();
+            CarriedResources = new List<Resource>();
 
             this.screenWidth = screenWidth;
             this.screenHeight = screenHeight;
@@ -127,7 +119,7 @@ namespace Islander.Entity
 
         public void Start()
         {
-            lastTrail = position;
+            lastTrail = Position;
         }
 
         public void Hit(Bullet b)
@@ -135,8 +127,8 @@ namespace Islander.Entity
             hits++;
             if (hits >= 5)
             {
-                state = BoatState.dead;
-                deathSplatter.CreateDeathSplatter(position + (60.0f * b.dir) , b.Rotation);
+                State = BoatState.Dead;
+                deathSplatter.CreateDeathSplatter(Position + (60.0f * b.dir) , b.Rotation);
             }
 
             switch (b.type)
@@ -149,8 +141,8 @@ namespace Islander.Entity
 
         public void WaitForRespawn(Vector2 spawnPosition)
         {
-            position = spawnPosition;
-            state = BoatState.respawning;
+            Position = spawnPosition;
+            State = BoatState.Respawning;
             hits = 0;
             spawnTimer = 0.0f;
         }
@@ -166,15 +158,15 @@ namespace Islander.Entity
         {
             base.Update(gameTime);
 
-            if (state == BoatState.respawning)
+            if (State == BoatState.Respawning)
             {
                 spawnTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (spawnTimer >= SPAWN_TIME)
                 {
-                    state = BoatState.alive;
+                    State = BoatState.Alive;
                 }
             }
-            else if (state == BoatState.alive)
+            else if (State == BoatState.Alive)
             {
                 HandleMove(gameTime);
             }
@@ -194,28 +186,27 @@ namespace Islander.Entity
                 }
             }
 
-
-            for (int i = 0; i < carriedResources.Count; i++) 
+            for (int i = 0; i < CarriedResources.Count; i++) 
             {
-                Resource resource = carriedResources[i];
+                Resource resource = CarriedResources[i];
                 Vector2 target = Vector2.Zero;
-                if(i == 0)
-                    target = position;
+                if (i == 0)
+                    target = Position;
                 else
-                    target = carriedResources[i-1].position;
+                    target = CarriedResources[i-1].Position;
 
-                if ((target - resource.position).Length() > 30.0f)
+                if ((target - resource.Position).Length() > 30.0f)
                 {
-                    Vector2 dir = (target - resource.position);
+                    Vector2 dir = (target - resource.Position);
                     dir.Normalize();
-                    resource.position += dir * 2.0f;
+                    resource.Position += dir * 2.0f;
                 }
             }
         }
 
         private void HandleMove(GameTime gameTime)
         {
-            position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (velocity.Length() > 1)
             {
@@ -248,28 +239,28 @@ namespace Islander.Entity
 
             //Problem Solving!
             if (velocity.Length() > 0.0)
-                rotation = GetRotation();
+                Rotation = GetRotation();
 
             //Now has proper screenWidth and screenHeight
-            if (position.X < 0)
-                position.X = 0;
-            else if (position.X > screenWidth)
-                position.X = screenWidth;
-            if (position.Y < 0)
-                position.Y = 0;
-            else if (position.Y > (float)screenHeight*4.0f/5.0f)
-                position.Y = (float)screenHeight*4.0f/5.0f;
+            if (Position.X < 0)
+                PositionX = 0;
+            else if (Position.X > screenWidth)
+                PositionX = screenWidth;
+            if (Position.Y < 0)
+                PositionY = 0;
+            else if (Position.Y > (float)screenHeight * 4.0f / 5.0f)
+                PositionY = (float)screenHeight * 4.0f / 5.0f;
 
             HandleTrail();
         }
 
         private void HandleTrail()
         {
-            Vector2 d = position - lastTrail;
+            Vector2 d = Position - lastTrail;
             if (d.Length() > 20)
             {
-                trailEffects[trailIndex].CreateDeathSplatter(position, rotation);
-                lastTrail = position;
+                trailEffects[trailIndex].CreateDeathSplatter(Position, Rotation);
+                lastTrail = Position;
                 trailIndex++;
                 if (trailIndex >= trailEffects.Count)
                     trailIndex = 0;
@@ -364,48 +355,38 @@ namespace Islander.Entity
             bulletDir.X += gamePadState.Thumbsticks.Right.X;
             bulletDir.Y += gamePadState.Thumbsticks.Right.Y;
 
-
-
         }*/
 
-        public bool CheckResourceIsCarried(Island.IslandType type)
+        // check if the boat carries a resource of the same type as the one specified
+        public bool CarriesResource(Resource resource)
         {
-            foreach (Resource r in carriedResources)
-            {
-                if (r.islandType == type)
+            foreach (var carriedResource in CarriedResources)
+                if (carriedResource.IslandType == resource.IslandType)
                     return true;
-            }
 
             return false;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Draw trail
-            foreach (Splatter s in trailEffects)
-                s.Draw(spriteBatch);
+            // draw trail
+            foreach (var trailEffect in trailEffects)
+                trailEffect.Draw(spriteBatch);
 
-            //Draw death splatter
+            // draw death splatter
             deathSplatter.Draw(spriteBatch);
 
-
-            if (state == BoatState.alive)
+            if (State == BoatState.Alive)
             {
                 base.Draw(spriteBatch);
             }
 
-            /*if (CarriedResource != null)
+            foreach (var resource in CarriedResources)
             {
-                CarriedResource.SetPosition(this.position);
-                CarriedResource.SetRotation(this.rotation);
-                CarriedResource.Draw(spriteBatch);
-            }*/
-            foreach (Resource r in carriedResources)
-            {
-                r.Draw(spriteBatch);
+                //resource.Position = this.Position;
+                //resource.Rotation = this.Rotation;
+                resource.Draw(spriteBatch);
             }
-
-
         }
     }
 }
