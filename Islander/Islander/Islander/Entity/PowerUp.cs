@@ -14,26 +14,26 @@ namespace Islander.Entity
 
         public PowerUp(Texture2D sprite, Vector2 pos) : base(sprite)
         {
-            alpha = 0.5f;
-            scale = new Vector2(0.5f);
-            position = pos;
+            Alpha = 0.5f;
+            Scale = new Vector2(0.5f);
+            Position = pos;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            alpha += fadeToggle * (1.0f / 1.0f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Alpha += fadeToggle * (1.0f / 1.0f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (alpha >= 1.0f)
+            if (Alpha >= 1.0f)
             {
-                alpha = 1.0f;
+                Alpha = 1.0f;
                 fadeToggle = -1.0f;
             }
 
-            if (alpha <= 0.5f)
+            if (Alpha <= 0.5f)
             {
-                alpha = 0.5f;
+                Alpha = 0.5f;
                 fadeToggle = 1.0f;
             }
 

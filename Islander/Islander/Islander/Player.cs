@@ -58,7 +58,7 @@ namespace Islander
         protected TimeSpan bulletDelay;
         protected TimeSpan bulletTimeElapsed;
 
-        public int score { get; set; }
+        public int Score { get; set; }
         public int screenWidth { get; set; }
         public int screenHeight { get; set; }
 
@@ -66,7 +66,7 @@ namespace Islander
         {
             PlayerIndex = playerIndex;
             this.content = content;
-            this.score = 0;
+            this.Score = 0;
             
             PlayersByColour = null;
             HostileToPlayer = null;
@@ -146,10 +146,10 @@ namespace Islander
         public void CollectResource(Resource resource)
         {
             CollectedResources[(int)resource.Colour] = resource;
-            score += RETURN_RESOURCE;
+            Score += RETURN_RESOURCE;
 
 
-            switch (resource.islandType)
+            switch (resource.IslandType)
             {
                 case(Island.IslandType.Trident):
                     bulletType = Bullet.BulletType.Trident;
@@ -210,7 +210,6 @@ namespace Islander
             }
         }
 
-        
         public void CheckShooting(KeyboardState keyboardState)
         {
             Vector2 shootDir = Vector2.Zero;
@@ -237,20 +236,19 @@ namespace Islander
 
         public void CheckShooting(Vector2 direction)
         {
-            if (Boat.state == Boat.BoatState.alive)
+            if (Boat.State == Boat.BoatState.Alive && direction.Length() >= 0.5f)
             {
-                if (direction.Length() >= 0.5f)
-                    if (bulletTimeElapsed > bulletDelay)
-                    {
-                        direction.Y = -direction.Y;
-                        ShootBullet(direction);
-                    }
+                if (bulletTimeElapsed > bulletDelay)
+                {
+                    direction.Y = -direction.Y;
+                    ShootBullet(direction);
+                }
             }
         }
 
         private void ShootBullet(Vector2 direction)
         {
-            //Bullet shooting
+            // Bullet shooting
             basicAttackSound.Play();
             bulletTimeElapsed = TimeSpan.Zero;
             direction.Normalize();
@@ -277,12 +275,11 @@ namespace Islander
 
             for(int i = 0; i < bullet.Length; i++)
             {
-                bullet[i].position *= 5;
-                bullet[i].position += Boat.position;
+                bullet[i].Position *= 5;
+                bullet[i].Position += Boat.Position;
                 Bullets.Add(bullet[i]);
             }
         }
-
 
         public virtual void Update(GameTime gameTime, Islander.GameState gameState)
         {
@@ -290,22 +287,16 @@ namespace Islander
             {
                 Boat.Update(gameTime);
                 Island.Update(gameTime);
-                /*foreach (Bullet bullet in Bullets)
+
+                // update bullets and remove any that have expired
+                var expiredBullets = new List<Bullet>();
+                foreach (var bullet in Bullets)
                 {
-                    
-
-                }*/
-
-
-
-                for (int i = Bullets.Count-1; i >= 0; i--)
-                {
-                    Bullets[i].Update(gameTime);
-                    if (Bullets[i].done)
-                        RemoveBullet(Bullets[i]);
+                    bullet.Update(gameTime);
+                    if (bullet.Expired) expiredBullets.Add(bullet);
                 }
-
-           
+                foreach (var bullet in expiredBullets)
+                    RemoveBullet(bullet);
             }
         }
     }

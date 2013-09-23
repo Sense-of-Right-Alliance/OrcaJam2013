@@ -9,23 +9,16 @@ namespace Islander.Screen
 {
     class GameOverScreen : MenuScreen
     {
-        PlayerIndex firstPlayerNumber;
-        PlayerIndex secondPlayerNumber;
-        PlayerIndex thirdPlayerNumber;
+        List<List<Vector2?>> playerTextPositions;
 
-        int firstScore;
-        int secondScore;
-        int thirdScore;
+        static List<Vector2> outlineOffsets = new List<Vector2>()
+        {
+            new Vector2(1,0),
+            new Vector2(-1,0),
+            new Vector2(0,1),
+            new Vector2(0,-1),
+        };
 
-        Vector2 firstPlayerNamePos;
-        Vector2 firstPlayerScorePos;
-        Vector2 secondPlayerNamePos;
-        Vector2 secondPlayerScorePos;
-        Vector2 thirdPlayerNamePos;
-
-        Color firstColour;
-        Color secondColour;
-        Color thirdColour;
         public GameOverScreen(Islander.GameState gameState)
         {
             GameState = gameState;
@@ -35,70 +28,63 @@ namespace Islander.Screen
         {
             base.LoadContent();
             background = content.Load<Texture2D>("Splash Screens/SplashEndgame");
-            /*Set PlayerName+Score Vector positions*/
-            firstPlayerNamePos = new Vector2((int)(width * 0.125), (int)(height * 0.38));
-            firstPlayerScorePos = new Vector2((int)(width * 0.76), (int)(height * 0.39));
-            secondPlayerNamePos = new Vector2((int)(width * 0.125), (int)(height * 0.52));
-            secondPlayerScorePos = new Vector2((int)(width * 0.76), (int)(height * 0.53));
-            thirdPlayerNamePos = new Vector2((int)(width * 0.125), (int)(height * 0.66));
-            
+
+            // set positions for player names and text
+            playerTextPositions = new List<List<Vector2?>>()
+            {
+                new List<Vector2?>()
+                {
+                    new Vector2((int)(width * 0.125), (int)(height * 0.38)),
+                    new Vector2((int)(width * 0.76), (int)(height * 0.39)),
+                },
+                new List<Vector2?>()
+                {
+                    new Vector2((int)(width * 0.125), (int)(height * 0.52)),
+                    new Vector2((int)(width * 0.76), (int)(height * 0.53)),
+                },
+                new List<Vector2?>()
+                {
+                    new Vector2((int)(width * 0.125), (int)(height * 0.66)),
+                    null,
+                },
+            };
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
         {
             base.Draw(gameTime, GraphicsDevice);
-            //TODO: We need a function for this
-            bool collectedAll = false;
-            firstScore = -10000;
-            firstPlayerNumber = PlayerIndex.One;
-            secondScore = -10000;
-            secondPlayerNumber = PlayerIndex.One;
-            thirdScore = -10000;
-            thirdPlayerNumber = PlayerIndex.One;
-            
-            foreach(var player in players)
+
+            int playerNum = 0;
+            var playersByScore = players
+                .OrderByDescending(u => u.Island.HasAllTokens) // order players by those who have all the tokens
+                .ThenByDescending(u => u.Score) // then by those who have the highest score
+                .Take(playerTextPositions.Count) // ignore the 4th player
+                .Select( // organize our results
+                    u => new
+                    {
+                        player = u,
+                        score = u.Score,
+                        name = u.ScoreName,
+                        fontColour = GetXNAColor(u.Colour),
+                        namePosition = playerTextPositions[playerNum][0],
+                        scorePosition = playerTextPositions[playerNum][1],
+                        resultsStanding = playerNum++,
+                        tradeVictory = u.Island.HasAllTokens
+                    });
+
+            foreach (var player in playersByScore)
             {
-                if(player.Island.HasAllResources || player.score >= firstScore){
-                    if (player.Island.HasAllResources)
-                        collectedAll = true;
-                    thirdScore = secondScore;
-                    secondScore = firstScore;
-                    firstScore = player.score;
-                    thirdPlayerNumber = secondPlayerNumber;
-                    secondPlayerNumber = firstPlayerNumber;
-                    firstPlayerNumber = player.PlayerIndex;
-                }
-                else if (player.score >= secondScore)
+                DrawPlayerName(player.name, player.namePosition, player.fontColour);
+                if (player.tradeVictory)
                 {
-                    thirdScore = secondScore;
-                    secondScore = player.score;
-                    thirdPlayerNumber = secondPlayerNumber;
-                    secondPlayerNumber = player.PlayerIndex;
+                    DrawOutlinedString("Trade Victory!!", player.scorePosition - new Vector2(width / 20, 0), player.fontColour);
                 }
-                else if (player.score >= thirdScore)
+                else // draw score
                 {
-                    thirdScore = player.score;
-                    thirdPlayerNumber = player.PlayerIndex;
+                    DrawPlayerScore(player.score, player.scorePosition, player.fontColour);
                 }
             }
-            firstColour = GetXNAColor(players[(int)firstPlayerNumber].Colour);
-            secondColour = GetXNAColor(players[(int)secondPlayerNumber].Colour);
-            thirdColour = GetXNAColor(players[(int)thirdPlayerNumber].Colour);
-
-            outlineFont(firstScore, firstPlayerNumber, firstPlayerNamePos, firstPlayerScorePos);
-            spriteBatch.DrawString(scoreFont, "Player " + firstPlayerNumber, firstPlayerNamePos, firstColour);
-            outlineFont(secondScore, secondPlayerNumber, secondPlayerNamePos, secondPlayerScorePos);
-            if(collectedAll)
-                spriteBatch.DrawString(scoreFont, "Trade Victory!!", new Vector2(firstPlayerScorePos.X - width/20, firstPlayerScorePos.Y), firstColour);
-            else
-                spriteBatch.DrawString(scoreFont, "" + firstScore, firstPlayerScorePos, firstColour);
-            spriteBatch.DrawString(scoreFont, "Player " + secondPlayerNumber, secondPlayerNamePos, secondColour);
-            spriteBatch.DrawString(scoreFont, "" + secondScore, secondPlayerScorePos, secondColour);
-            outlineFont(0,thirdPlayerNumber, thirdPlayerNamePos, new Vector2 (5000.0f,2000.0f));
-            spriteBatch.DrawString(scoreFont, "Player " + thirdPlayerNumber, thirdPlayerNamePos, thirdColour);
-            
         }
-
 
         private Color GetXNAColor(Colour c)
         {
@@ -112,29 +98,36 @@ namespace Islander.Screen
                     x = Color.Green;
                     break;
                 case (Colour.Red):
-                    x =Color.Red;
+                    x = Color.Red;
                     break;
                 case (Colour.Yellow):
                     x = Color.Yellow;
                     break;
             }
-            
             return x;
         }
-        /*Don't look at this method. Seriously just don't. Ignore the fact that it's run 4 times every frame. Don't even worry about it.
-         * Alternatively, make it more general and give it to the other menu screens as well. Your call.
-         * Fucking thanks yellow, you bastard.*/
-         
-        private void outlineFont(int playerScore, PlayerIndex playerIndex, Vector2 scoreLabelPos, Vector2 scorePos)
+
+        private void DrawPlayerName(string playerName, Vector2? position, Color fontColour)
         {
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X+1,scoreLabelPos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X + 1, scorePos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X - 1, scoreLabelPos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X - 1, scorePos.Y), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X, scoreLabelPos.Y + 1), Color.Black);
-            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y + 1), Color.Black);
-            spriteBatch.DrawString(scoreFont, "Player " + playerIndex, new Vector2(scoreLabelPos.X, scoreLabelPos.Y - 1), Color.Black);
-            spriteBatch.DrawString(scoreFont, "" + playerScore, new Vector2(scorePos.X, scorePos.Y - 1), Color.Black);
+            DrawOutlinedString(playerName, position, fontColour);
+        }
+
+        private void DrawPlayerScore(int playerScore, Vector2? position, Color fontColour)
+        {
+            DrawOutlinedString(playerScore.ToString(), position, fontColour);
+        }
+
+        // draws an outlined string at a position
+        private void DrawOutlinedString(string text, Vector2? position, Color fontColour)
+        {
+            if (position != null)
+            {
+                // draw outline
+                foreach (var offset in outlineOffsets)
+                    spriteBatch.DrawString(scoreFont, text, position.Value + offset, Color.Black);
+                // draw string
+                spriteBatch.DrawString(scoreFont, text, position.Value, fontColour);
+            }
         }
     }
 }

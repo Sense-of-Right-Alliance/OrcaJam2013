@@ -47,7 +47,7 @@ namespace Islander.Entity
         private Vector2 start;
         public bool[] HostileToPlayer { get; set; }
         public Colour Colour { get; protected set; }
-        public bool done = false;
+        public bool Expired { get; set; }
         private Player player;
 
         public Vector2 dir;
@@ -56,11 +56,11 @@ namespace Islander.Entity
         {
             
             this.velocity = direction * speed;
-            this.rotation = GetRotation(direction);
-            this.position = direction;
+            this.Rotation = GetRotation(direction);
+            this.Position = direction;
             this.Colour = colour;
             this.HostileToPlayer = hostileToPlayer;
-            this.scale = new Vector2(scale);
+            this.Scale = new Vector2(scale);
             this.type = type;
             this.player = p;
             this.lifeTime = time;
@@ -68,7 +68,7 @@ namespace Islander.Entity
 
             dir = direction;
 
-            start = position;
+            start = Position;
         }
 
         // passes in texture because loading content for each bullet is slow!
@@ -202,13 +202,13 @@ namespace Islander.Entity
                 UpdateMagnet(gameTime);
 
 
-            position += velocity;
+            Position += velocity;
 
 
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if(timer >= lifeTime) 
             {
-                done = true;
+                Expired = true;
             }
         }
 
@@ -216,10 +216,10 @@ namespace Islander.Entity
         {
             if (timer > 0.2f)
             {
-                Boat b = GetClosestBoatInRadius(position, 100.0f);
+                Boat b = GetClosestBoatInRadius(Position, 100.0f);
                 if (b != null)
                 {
-                    Vector2 towards = b.position - position;
+                    Vector2 towards = b.Position - Position;
                     towards.Normalize();
                     velocity += towards * 0.2f;
 
@@ -229,19 +229,19 @@ namespace Islander.Entity
             }
         }
 
-        public Boat GetClosestBoatInRadius(Vector2 pos, float r)
+        public Boat GetClosestBoatInRadius(Vector2 pos, float radius)
         {
             Boat b = null;
             float dist = 999.0f;
-            foreach (Player p in player.PlayersByColour)
+            foreach (var otherPlayer in player.PlayersByColour)
             {
-                if(p != player)
+                if (otherPlayer != player)
                 {
-                    float d = (p.Boat.position - pos).Length();
-                    if (d < r && d < dist)
+                    float d = (otherPlayer.Boat.Position - pos).Length();
+                    if (d < radius && d < dist)
                     {
                         dist = d;
-                        b = p.Boat;
+                        b = otherPlayer.Boat;
                     }
                 }
             }

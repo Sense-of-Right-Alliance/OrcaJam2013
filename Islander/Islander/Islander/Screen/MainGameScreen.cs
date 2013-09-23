@@ -37,6 +37,8 @@ namespace Islander.Screen
         private const float GAME_TIME = 180.0f;
         private float gameTimer = 180.0f;
 
+        private const bool BOATS_CARRY_MULTIPLE_RESOURCES = false;
+
         public Song gameMusic;
 
         private SoundEffect takeCargo;
@@ -44,9 +46,7 @@ namespace Islander.Screen
         private SoundEffect impactSound;
         private SoundEffect dieSound;
 
-
         public const int RETURN_RESOURCE = 50;
-
 
         public MainGameScreen(Islander.GameState gameState)
         {
@@ -88,10 +88,10 @@ namespace Islander.Screen
                 bulletLists.Add(player.Bullets);
             }
 
-            //Initialize UI elements.
+            // initialize UI elements
             blueScoreLabelPos.Y = (13 * height / 16) + 2; //MAGIC NUMBERS
             blueScoreLabelPos.X = 4 * width / 11;
-            blueScorePos.X = blueScoreLabelPos.X + width/4;
+            blueScorePos.X = blueScoreLabelPos.X + width / 4;
             blueScorePos.Y = blueScoreLabelPos.Y;
             yellowScoreLabelPos.Y = blueScoreLabelPos.Y + (height / 20) - 2; //MAGIC NUMBERS
             yellowScoreLabelPos.X = blueScoreLabelPos.X;
@@ -106,7 +106,11 @@ namespace Islander.Screen
             greenScorePos.X = blueScoreLabelPos.X + width / 4;
             greenScorePos.Y = greenScoreLabelPos.Y;
 
-
+            // tell entities to start
+            foreach (var player in players)
+            {
+                player.Boat.Start();
+            }
         }
 
         private void PositionPlayers()
@@ -114,7 +118,7 @@ namespace Islander.Screen
             foreach (var player in players)
             {
                 Vector2 islandVector = new Vector2(0.0f, 0.0f);
-                player.Boat.position = new Vector2(0.0f, 0.0f);
+                player.Boat.Position = new Vector2(0.0f, 0.0f);
                 
                 switch (player.Colour)
                 {
@@ -122,29 +126,27 @@ namespace Islander.Screen
                     case (Colour.Blue):
                         islandVector.X = width / 4;
                         islandVector.Y = height / 2;
-                        player.Boat.position.X += 75;
+                        player.Boat.PositionX += 75;
                         break;
                     case (Colour.Green):
                         islandVector.X = width / 2;
                         islandVector.Y = 3 * height / 4;
-                        player.Boat.position.Y -= 75;
+                        player.Boat.PositionY -= 75;
                         break;
                     case (Colour.Red):
                         islandVector.X = 3 * width / 4;
                         islandVector.Y = height / 2;
-                        player.Boat.position.X -= 75;
+                        player.Boat.PositionX -= 75;
                         break;
                     case (Colour.Yellow):
                         islandVector.X = width / 2;
                         islandVector.Y = height / 4;
-                        player.Boat.position.Y += 75;
+                        player.Boat.PositionY += 75;
                         break;
                 }
                 islandVector.Y -= 70;
-                player.Island.position = islandVector;
-                player.Boat.position = islandVector;
-                player.Boat.Start();
-                player.Island.StartIsland();
+                player.Island.Position = islandVector;
+                player.Boat.Position = islandVector;
             }
         }
 
@@ -185,9 +187,9 @@ namespace Islander.Screen
             }
 
             // check if player has collected all resources
-            foreach (Player p in players)
+            foreach (var player in players)
             {
-                if (p.Island.HasAllResources)
+                if (player.Island.HasAllTokens)
                 {
                     gameTimer = GAME_TIME;
                     CurrentState = ScreenState.Finished;
@@ -205,17 +207,17 @@ namespace Islander.Screen
                  * their own class. /shrug */
                 player.Update(gameTime, GameState);
 
-                if (player.Boat.state == Boat.BoatState.dead)
+                if (player.Boat.State == Boat.BoatState.Dead)
                 {
                     dieSound.Play();
-                    player.Boat.WaitForRespawn(player.Island.position);
-                    if (player.Boat.carriedResources.Count > 0)
+                    player.Boat.WaitForRespawn(player.Island.Position);
+                    if (player.Boat.CarriedResources.Count > 0)
                     {
-                        foreach (Resource r in player.Boat.carriedResources)
+                        foreach (var resource in player.Boat.CarriedResources)
                         {
-                            droppedResources.Add(r);
+                            droppedResources.Add(resource);
                         }
-                        player.Boat.carriedResources.Clear();
+                        player.Boat.CarriedResources.Clear();
                     }
                 }
             }
@@ -236,19 +238,19 @@ namespace Islander.Screen
         // check each boat for collisions with islands and resources
         protected void CheckBoatCollisions()
         {
-            var collectedResources = new List<Resource>();
+            var retrievedResources = new List<Resource>();
             var collectedPowerUps = new List<PowerUp>();
 
             foreach (var boat in boats)
             {
-                if (boat.state == Boat.BoatState.alive)
+                if (boat.State == Boat.BoatState.Alive)
                 {
                     foreach (var island in islands)
                         if (boat.CollidesWith(island))
                             BoatIslandCollision(boat, island);
                     foreach (var resource in droppedResources)
                         if (boat.CollidesWith(resource))
-                            BoatResourceCollision(boat, resource, collectedResources);
+                            BoatResourceCollision(boat, resource, retrievedResources);
                     foreach (var powerUp in powerUps)
                         if (boat.CollidesWith(powerUp))
                             BoatPowerUpCollision(boat, powerUp, collectedPowerUps);
@@ -256,7 +258,7 @@ namespace Islander.Screen
             }
 
             // remove all resources that were retrieved
-            foreach (var resource in collectedResources)
+            foreach (var resource in retrievedResources)
                 droppedResources.Remove(resource);
             // remove all powerups that were retrieved
             foreach (var powerUp in collectedPowerUps)
@@ -278,7 +280,7 @@ namespace Islander.Screen
             {
                 foreach (var bullet in bulletList)
                     foreach (var boat in boats)
-                        if (boat.state == Boat.BoatState.alive)
+                        if (boat.State == Boat.BoatState.Alive)
                         {
                             if (bullet.HostileToPlayer[(int)boat.Colour])
                                 if (bullet.CollidesWith(boat))
@@ -293,85 +295,67 @@ namespace Islander.Screen
 
         protected void BoatIslandCollision(Boat boat, Island island)
         {
-            if (boat.Colour == island.Colour)
+            if (boat.Colour == island.Colour) // island matches boat colour
             {
-                if (boat.carriedResources.Count > 0)//(boat.CarriedResource != null) // if carrying a resource
+                if (boat.CarriedResources.Count > 0) // if carrying a resource
                 {
-                    //Plays the collect resource sound. This should maybe be in the CollectResource method
+                    // plays the collect resource sound. This should maybe be in the CollectResource method
                     scoreCargo.Play();
 
-                    foreach (Resource r in boat.carriedResources)
+                    // collect all carried resources
+                    foreach (var resource in boat.CarriedResources)
                     {
-                        PlayersByColour[(int)boat.Colour].CollectResource(r);
-                        island.AddResource(r);
+                        PlayersByColour[(int)boat.Colour].CollectResource(resource);
+                        island.AddToken(Token.Copy(PlayersByColour[(int)resource.Colour].Island.TokenType));
                     }
-                    //PlayersByColour[(int)boat.Colour].CollectResource(boat.CarriedResource);
-                    //island.AddResource(boat.CarriedResource);
-
-
-                    
-                   // if(boat.CarriedResource.Colour != boat.Colour)
-                     //   PlayersByColour[(int)boat.Colour].score += RETURN_RESOURCE;
-
-                    //boat.CarriedResource = null;
-                    boat.carriedResources.Clear();
+                    boat.CarriedResources.Clear();
                 }
             }
-            else
+            else // island does not match boat colour
             {
-                if(!boat.CheckResourceIsCarried(island.ResourceType.islandType))//!boat.carriedResources.Contains(island.ResourceType))//if (boat.CarriedResource == null) // if not carrying a resource
+                // retrieve resource if allowed
+                if (!boat.CarriesResource(island.ResourceType) && (boat.CarriedResources.Count == 0 || BOATS_CARRY_MULTIPLE_RESOURCES))
                 {
-                    //PLAY THE SOUND
-                    takeCargo.Play();
-                    PlayersByColour[(int)island.Colour].score -= 200;
-                    Resource r = new Resource(island.ResourceType);
-                    boat.carriedResources.Add(r);
-                    r.IsCarried = true;
-                    r.position = boat.position;
-                    //boat.CarriedResource = new Resource(island.ResourceType);
-                    //boat.CarriedResource.IsCarried = true;
+                    takeCargo.Play(); // play the sound
+                    PlayersByColour[(int)island.Colour].Score -= 200;
+                    Resource resource = Resource.Copy(island.ResourceType);
+                    resource.IsCarried = true;
+                    resource.Position = boat.Position;
+                    boat.CarriedResources.Add(resource);
                 }
             }
         }
 
-        protected void BoatResourceCollision(Boat boat, Resource resource, List<Resource> collectedResources)
+        protected void BoatResourceCollision(Boat boat, Resource resource, List<Resource> retrievedResources)
         {
-            if (boat.Colour == resource.Colour)
+            if (boat.Colour == resource.Colour) // resource matches boat colour
             {
                 takeCargo.Play(); // should be returnCargo
-                PlayersByColour[(int)boat.Colour].score += 200;
-                collectedResources.Add(resource);
+                PlayersByColour[(int)boat.Colour].Score += 200;
+                retrievedResources.Add(resource);
             }
-            else
+            else // resource does not match boat colour
             {
-                //if (boat.CarriedResource == null) // if not carrying a resource
-                //{
-                    //PLAY THE SOUND
-                    takeCargo.Play();
-                    boat.carriedResources.Add(resource);
+                // retrieve resource if allowed
+                if (!boat.CarriesResource(resource) && (boat.CarriedResources.Count == 0 || BOATS_CARRY_MULTIPLE_RESOURCES))
+                {
+                    takeCargo.Play(); // play the sound
+                    boat.CarriedResources.Add(resource);
                     resource.IsCarried = true;
-                    collectedResources.Add(resource);
-
-                    //boat.CarriedResource = resource;
-                    //boat.CarriedResource.IsCarried = true;
-                    //collectedResources.Add(resource);
-                //}
+                    retrievedResources.Add(resource);
+                }
             }
         }
 
         protected void BulletBoatCollision(Bullet bullet, Boat boat, List<Bullet> removedBullets)
         {
-            // TODO
             if (bullet.HostileToPlayer[(int)boat.Colour])
             {
-                //Plays the sound!
-                impactSound.Play();
+                impactSound.Play(); // play the sound
                 removedBullets.Add(bullet);
                 boat.Hit(bullet);
             }
         }
-
-
 
         public override void Draw(GameTime gameTime, GraphicsDevice GraphicsDevice)
         {
@@ -400,15 +384,15 @@ namespace Islander.Screen
                 powerUp.Draw(spriteBatch);
             }
 
-            float t = (float)Math.Floor((double)gameTimer);
+            float time = (float)Math.Floor(gameTimer);
 
-            spriteBatch.DrawString(scoreFont, "" + t, new Vector2(width / 2 - scoreFont.MeasureString("" + t).X / 2, height / 60), Color.Black);
+            spriteBatch.DrawString(scoreFont, "" + time, new Vector2(width / 2 - scoreFont.MeasureString("" + time).X / 2, height / 60), Color.Black);
         }
 
         private void updateScore(Player player)
         {
             Colour playerColour = player.Colour;
-            int playerScore = player.score;
+            int playerScore = player.Score;
             string playerName = player.ScoreName;
 
             switch (playerColour)
@@ -435,6 +419,7 @@ namespace Islander.Screen
                     break;
             }
         }
+
         /*Don't look at this method. Seriously just don't. Ignore the fact that it's run 4 times every frame. Don't even worry about it.
          * Alternatively, make it more general and give it to the other menu screens as well. Your call.
          * Fucking thanks yellow, you bastard.
