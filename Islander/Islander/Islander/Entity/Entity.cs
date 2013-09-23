@@ -10,20 +10,19 @@ namespace Islander.Entity
 {
     class Entity
     {
+        public virtual Vector2 Position { get; set; }
+        public float PositionX { get { return Position.X; } set { Position = new Vector2(value, Position.Y); } }
+        public float PositionY { get { return Position.Y; } set { Position = new Vector2(Position.X, value); } }
+        public Vector2 Scale { get; set; }
+        public float Rotation { get; set; }
+        public float Alpha { get; set; }
         protected Texture2D sprite;
-        protected Vector2 scale;
-        protected float rotation;
-        protected float alpha = 1.0f;
-
-        // Dylbro set this to public to allow the screens to manipulate it. Correct me if I'm wrong.
-        public Vector2 position;
-
-        public float Rotation { get{ return rotation; } }
         
         public Entity(Texture2D sprite)
         {
             this.sprite = sprite;
-            scale = new Vector2(1.0f);
+            Scale = new Vector2(1.0f);
+            Alpha = 1.0f;
         }
 
         public bool CollidesWith(Entity otherEntity)
@@ -33,12 +32,12 @@ namespace Islander.Entity
 
         public Rectangle HitBox()
         {
-            return new Rectangle((int)(position.X - sprite.Width * scale.X / 2), (int)(position.Y - sprite.Height * scale.Y / 2), (int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
+            return new Rectangle((int)(Position.X - sprite.Width * Scale.X / 2), (int)(Position.Y - sprite.Height * Scale.Y / 2), (int)(sprite.Width * Scale.X), (int)(sprite.Height * Scale.Y));
         }
 
         public Rectangle DrawRect()
         {
-            return new Rectangle((int)position.X, (int)position.Y, (int) (sprite.Width * scale.X), (int) (sprite.Height * scale.Y));
+            return new Rectangle((int)Position.X, (int)Position.Y, (int) (sprite.Width * Scale.X), (int) (sprite.Height * Scale.Y));
         }
 
         public virtual void Update(GameTime gameTime)
@@ -49,8 +48,8 @@ namespace Islander.Entity
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             Color c = Color.White;
-            c *= alpha;
-            spriteBatch.Draw(sprite, DrawRect(), new Rectangle(0,0,sprite.Width,sprite.Height), c, rotation, new Vector2(sprite.Width/2,sprite.Height/2), SpriteEffects.None, 1);
+            c *= Alpha;
+            spriteBatch.Draw(sprite, DrawRect(), new Rectangle(0,0,sprite.Width,sprite.Height), c, Rotation, new Vector2(sprite.Width/2,sprite.Height/2), SpriteEffects.None, 1);
         }
     }
 }

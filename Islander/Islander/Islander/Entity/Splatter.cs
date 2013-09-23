@@ -29,18 +29,18 @@ namespace Islander.Entity
         public Splatter(Texture2D sprite, float s)
             : base(sprite)
         {
-            scale = new Vector2(s);
+            Scale = new Vector2(s);
 
             state = SplatterState.Done;
 
-            alpha = 0.0f;
+            Alpha = 0.0f;
         }
 
         public void CreateDeathSplatter(Vector2 pos, float rotation)
         {
-            base.position = pos;
-            base.rotation = rotation;
-            alpha = 0.0f;
+            base.Position = pos;
+            base.Rotation = rotation;
+            Alpha = 0.0f;
             timer = 0.0f;
             state = SplatterState.In;
         }
@@ -66,10 +66,10 @@ namespace Islander.Entity
 
         private void AnimateIn(GameTime gameTime)
         {
-            alpha += (1.0f / IN_TIME) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (alpha >= 1.0f)
+            Alpha += (1.0f / IN_TIME) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (Alpha >= 1.0f)
             {
-                alpha = 1.0f;
+                Alpha = 1.0f;
                 state = SplatterState.Idle;
             }
         }
@@ -85,10 +85,10 @@ namespace Islander.Entity
 
         private void AnimateOut(GameTime gameTime)
         {
-            alpha -= (1.0f / OUT_TIME) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (alpha <= 0.0f)
+            Alpha -= (1.0f / OUT_TIME) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (Alpha <= 0.0f)
             {
-                alpha = 0.0f;
+                Alpha = 0.0f;
                 state = SplatterState.Done;
             }
         }

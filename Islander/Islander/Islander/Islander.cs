@@ -43,7 +43,7 @@ namespace Islander
 
             graphics.PreferredBackBufferWidth = 1200;
             graphics.PreferredBackBufferHeight = 768;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
             SetGameState(GameState.Uninitialized);
@@ -94,7 +94,7 @@ namespace Islander
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // initialize all screens
-            foreach (BaseScreen screen in screens.Values)
+            foreach (var screen in screens.Values)
                 screen.Initialize(Content, spriteBatch, Window.ClientBounds.Width, Window.ClientBounds.Height, players);
 
             // TODO: use this.Content to load your game content here
